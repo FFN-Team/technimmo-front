@@ -1,30 +1,49 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   state = {
-    get : {}
+    biens : []
   }
 
   componentDidMount(){
-    fetch('localhost:9001/bien')
-    .then((response) => {
-      return response.json()
-    })
+    fetch('http://localhost:9001/bien')
+    .then(response => response.json())
     .then((result) => {
-      this.setState({get: result})
+      this.setState({biens: result})
     })
   }
+
 
   render() {
     return (
       <div className='App'>
-        <h1>Biens : </h1>
-        {this.state.get.nomBien}
+        <h1>Biens :</h1>
+        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <thead>
+            <tr>
+              <th style={tableCellStyle}>Nom</th>
+              <th style={tableCellStyle}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.biens.map((bien, index) => (
+              <tr key={index}>
+                <td style={tableCellStyle}>{bien.nomBien}</td>
+                <td style={tableCellStyle}>{bien.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   }
 }
+
+const tableCellStyle = {
+  border: '1px solid #ddd',
+  padding: '8px',
+  textAlign: 'left',
+};
 
 export default App;
