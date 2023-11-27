@@ -7,7 +7,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    fetch('http://localhost:9001/bien')
+    fetch('http://localhost:9001/api/v1/biens')
     .then(response => response.json())
     .then((result) => {
       this.setState({biens: result})
