@@ -1,49 +1,16 @@
-import React, { Component } from 'react';
-import './App.css';
+// project import
+import Routes from 'routes';
+import ThemeCustomization from 'themes';
+import ScrollTop from 'components/ScrollTop';
 
-class App extends Component {
-  state = {
-    biens : []
-  }
+// ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
-  componentDidMount(){
-    fetch('http://localhost:9001/bien')
-    .then(response => response.json())
-    .then((result) => {
-      this.setState({biens: result})
-    })
-  }
-
-
-  render() {
-    return (
-      <div className='App'>
-        <h1>Biens :</h1>
-        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead>
-            <tr>
-              <th style={tableCellStyle}>Nom</th>
-              <th style={tableCellStyle}>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.biens.map((bien, index) => (
-              <tr key={index}>
-                <td style={tableCellStyle}>{bien.nomBien}</td>
-                <td style={tableCellStyle}>{bien.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-}
-
-const tableCellStyle = {
-  border: '1px solid #ddd',
-  padding: '8px',
-  textAlign: 'left',
-};
+const App = () => (
+  <ThemeCustomization>
+    <ScrollTop>
+      <Routes />
+    </ScrollTop>
+  </ThemeCustomization>
+);
 
 export default App;
