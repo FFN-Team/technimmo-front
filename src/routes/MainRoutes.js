@@ -7,8 +7,12 @@ import MainLayout from 'layout/MainLayout';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
+//render - prospects
+const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
+const Buyer = Loadable(lazy(() => import('pages/buyer')))
+
 // render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
+// const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 
 // render - utilities
 const Typography = Loadable(lazy(() => import('pages/components-overview/Typography')));
@@ -19,40 +23,44 @@ const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons'
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-  path: '/',
+  path: '',
   element: <MainLayout />,
   children: [
     {
-      path: '/',
+      path: '',
       element: <DashboardDefault />
     },
     {
-      path: 'color',
+      path: 'dashboard',
+      element: <DashboardDefault />
+    },
+    {
+      path: 'prospect-dashboard',
       element: <Color />
     },
     {
-      path: 'dashboard',
+      path: 'buyers',
       children: [
         {
-          path: 'default',
-          element: <DashboardDefault />
+          path: '',
+          element: <TableBuyers />,
+        },
+        {
+          path: ':id',
+          element: <Buyer />
         }
       ]
     },
     {
-      path: 'sample-page',
-      element: <SamplePage />
-    },
-    {
-      path: 'shadow',
+      path: 'search-prospect',
       element: <Shadow />
     },
     {
-      path: 'typography',
+      path: 'search-properties',
       element: <Typography />
     },
     {
-      path: 'icons/ant',
+      path: 'properties',
       element: <AntIcons />
     }
   ]
