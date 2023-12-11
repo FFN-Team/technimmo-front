@@ -9,7 +9,7 @@ const icons = {
   HomeOutlined
 };
 
-// ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
+// ==============================|| MENU ITEMS - Properties ||============================== //
 
 const properties = {
   id: 'properties-menu',
@@ -20,14 +20,14 @@ const properties = {
       id: 'search-properties',
       title: 'Search properties',
       type: 'item',
-      url: '/',
+      url: '/search-properties',
       icon: icons.SearchOutlined,
     },
     {
       id: 'properties',
       title: 'Properties',
       type: 'item',
-      url: '/',
+      url: '/properties',
       icon: icons.HomeOutlined,
     }
   ]

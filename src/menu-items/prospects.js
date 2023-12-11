@@ -8,7 +8,7 @@ const icons = {
   SearchOutlined
 };
 
-// ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
+// ==============================|| MENU ITEMS - Prospects ||============================== //
 
 const prospects = {
   id: 'prospects',
@@ -19,21 +19,21 @@ const prospects = {
       id: 'prospect-dashboard',
       title: 'Prospects dashboard',
       type: 'item',
-      url: '/',
+      url: '/prospect-dashboard',
       icon: icons.AreaChartOutlined,
     },
     {
       id: 'search-prospect',
       title: 'Search prospect',
       type: 'item',
-      url: '/',
+      url: '/search-prospect',
       icon: icons.SearchOutlined,
     },
     {
       id: 'buyers',
       title: 'Buyers',
       type: 'item',
-      url: '/',
+      url: '/buyers',
       icon: icons.TeamOutlined,
     }
   ]
