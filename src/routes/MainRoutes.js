@@ -52,6 +52,15 @@ const MainRoutes = {
       ]
     },
     {
+      path: 'properties',
+      children: [
+        {
+          path: ':id',
+          element: <Color />
+        }
+      ]
+    },
+    {
       path: 'search-prospect',
       element: <Shadow />
     },
