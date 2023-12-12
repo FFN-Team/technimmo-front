@@ -11,6 +11,9 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
 const Buyer = Loadable(lazy(() => import('pages/buyer')))
 
+//render - properties
+const Property = Loadable(lazy(() => import('pages/property')));
+
 // render - sample page
 // const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 
@@ -56,7 +59,7 @@ const MainRoutes = {
       children: [
         {
           path: ':id',
-          element: <Color />
+          element: <Property />
         }
       ]
     },
