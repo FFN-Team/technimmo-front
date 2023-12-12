@@ -1,4 +1,4 @@
-import { useParams/*,useNavigate*/ } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 const Buyer = () => {
@@ -148,15 +148,15 @@ const TableCell = ({ header, children }) => (
   )
 );
 
-const TableRow = ({ children /*,propertyId*/ }) => {
-  // const navigate = useNavigate();
+const TableRow = ({ children,propertyId }) => {
+  const navigate = useNavigate();
 
-  // const handleTableRowClick = () => {
-  //   navigate(`/properties/${propertyId}`);
-  // };
+  const handleTableRowClick = () => {
+    navigate(`/properties/${propertyId}`);
+  };
 
   return (
-    <tr /*style={{ cursor: 'pointer' }} onClick={handleTableRowClick}*/>
+    <tr style={{ cursor: 'pointer' }} onClick={handleTableRowClick}>
       {children}
     </tr>
   );
