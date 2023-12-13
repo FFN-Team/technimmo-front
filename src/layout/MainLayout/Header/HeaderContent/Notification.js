@@ -1,17 +1,15 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-  Avatar,
   Badge,
   Box,
   ClickAwayListener,
-  Divider,
   IconButton,
   List,
   ListItemButton,
-  ListItemAvatar,
   ListItemText,
   ListItemSecondaryAction,
   Paper,
@@ -25,7 +23,7 @@ import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 
 // assets
-import { BellOutlined, CloseOutlined, GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
+import { BellOutlined, CloseOutlined, SettingOutlined,ReloadOutlined } from '@ant-design/icons';
 
 // sx styles
 const avatarSX = {
@@ -47,12 +45,65 @@ const actionSX = {
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
 const Notification = () => {
+  const iconBackColorOpen = 'grey.300';
+  const iconBackColor = 'grey.100';
+  const navigate = useNavigate();
+
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
-
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const handleToggle = () => {
+  const [notificationsPP , setNotificationsPP] = useState([]);
+  const [notificationsP , setNotificationsP] = useState([]);
+  
+
+  //A MOFIDIER AVEC LA MODIF DE FLORINE PAR RAPPORT AUX CONTROLLER DE NOTIFICATION QUI RENVOIE TOUTES TYPES DE NOTIFS
+  const updateNotifications = async () => {
+    try {
+      const url_potentiel_projet = `http://localhost:9001/api/v1/potential-projects/notification`;
+      const url_propect = `http://localhost:9001/api/v1/prospects/notification`;
+
+
+      const response_potentiel_projet = await fetch(url_potentiel_projet, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+      },});
+
+      const response_propect = await fetch(url_propect, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+      },});
+
+
+
+      console.log("testttttttt response_potentiel_projet");
+      console.log(response_potentiel_projet);
+
+      console.log("testttttttt response_propect");
+      console.log(response_propect);  
+
+
+      const data_potentiel_projet = await response_potentiel_projet.json();
+      const data_propect = await response_propect.json();
+
+      setNotificationsPP(data_potentiel_projet);
+      setNotificationsP(data_propect);
+      
+      console.log("testttttttt notif");
+      console.log(notificationsPP);
+      console.log(notificationsP);
+
+    } catch (error) {
+      console.log(error.message);
+    } 
+  };
+
+
+
+  
+  const handleToggle = async () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
@@ -63,8 +114,6 @@ const Notification = () => {
     setOpen(false);
   };
 
-  const iconBackColorOpen = 'grey.300';
-  const iconBackColor = 'grey.100';
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -78,7 +127,7 @@ const Notification = () => {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Badge badgeContent={4} color="primary">
+        <Badge color="primary">
           <BellOutlined />
         </Badge>
       </IconButton>
@@ -113,6 +162,16 @@ const Notification = () => {
                 }
               }}
             >
+              <ReloadOutlined 
+                onClick={updateNotifications}
+                style={{ cursor: 'pointer' }}
+              />
+              <span style={{ margin: '0 4px' }}></span>
+              <SettingOutlined 
+                onClick={() => navigate(`/notifications-settings`)}
+                style={{ cursor: 'pointer' }}
+              />
+
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard
                   title="Notification"
@@ -136,28 +195,19 @@ const Notification = () => {
                       }
                     }}
                   >
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'success.main',
-                            bgcolor: 'success.lighter'
-                          }}
-                        >
-                          <GiftOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
+
+
+                  {notificationsPP
+                     .map((notification,index) => (
+
+                      <ListItemButton key={index}>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
-                            It&apos;s{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Cristina danny&apos;s
-                            </Typography>{' '}
-                            birthday today.
+                           {notification.message}
                           </Typography>
                         }
-                        secondary="2 min ago"
+                        secondary={notification.state}
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
@@ -165,106 +215,34 @@ const Notification = () => {
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'primary.main',
-                            bgcolor: 'primary.lighter'
-                          }}
-                        >
-                          <MessageOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
+                    ))}
+
+                    {notificationsP
+                     .map((notification,index) => (
+
+                      <ListItemButton key={index}>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Aida Burg
-                            </Typography>{' '}
-                            commented your post.
+                           {notification.message}
                           </Typography>
                         }
-                        secondary="5 August"
+                        secondary={notification.state}
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          6:00 PM
+                          3:00 AM
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'error.main',
-                            bgcolor: 'error.lighter'
-                          }}
-                        >
-                          <SettingOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Your Profile is Complete &nbsp;
-                            <Typography component="span" variant="subtitle1">
-                              60%
-                            </Typography>{' '}
-                          </Typography>
-                        }
-                        secondary="7 hours ago"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          2:45 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'primary.main',
-                            bgcolor: 'primary.lighter'
-                          }}
-                        >
-                          C
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Cristina Danny
-                            </Typography>{' '}
-                            invited to join{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Meeting.
-                            </Typography>
-                          </Typography>
-                        }
-                        secondary="Daily scrum meeting time"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          9:10 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton sx={{ textAlign: 'center', py: `${12}px !important` }}>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6" color="primary">
-                            View All
-                          </Typography>
-                        }
-                      />
-                    </ListItemButton>
+                    ))}
+
+
+                   
+                    
+
+                    
+
                   </List>
                 </MainCard>
               </ClickAwayListener>

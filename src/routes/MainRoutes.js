@@ -14,6 +14,9 @@ const Buyer = Loadable(lazy(() => import('pages/buyer')))
 //render - properties
 const Property = Loadable(lazy(() => import('pages/property')));
 
+//render - notifications
+const NotificationsSettings = Loadable(lazy(() => import('pages/notificationsSettings')));
+
 // render - sample page
 // const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 
@@ -33,6 +36,11 @@ const MainRoutes = {
       path: '',
       element: <DashboardDefault />
     },
+    {
+      path: 'notifications-settings',
+      element: <NotificationsSettings />
+    },
+    
     {
       path: 'dashboard',
       element: <DashboardDefault />
