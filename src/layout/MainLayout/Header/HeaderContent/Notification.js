@@ -53,9 +53,8 @@ const Notification = () => {
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [notificationsPP , setNotificationsPP] = useState([]);
-  const [notificationsP , setNotificationsP] = useState([]);
-  
+  const [notificationsPotentialProject , setNotificationsPotentialProject] = useState([]);
+  const [notificationsProspect , setNotificationsProspect] = useState([]);
 
   //A MOFIDIER AVEC LA MODIF DE FLORINE PAR RAPPORT AUX CONTROLLER DE NOTIFICATION QUI RENVOIE TOUTES TYPES DE NOTIFS
   const updateNotifications = async () => {
@@ -87,13 +86,14 @@ const Notification = () => {
 
       const data_potentiel_projet = await response_potentiel_projet.json();
       const data_propect = await response_propect.json();
+      
 
-      setNotificationsPP(data_potentiel_projet);
-      setNotificationsP(data_propect);
+      setNotificationsPotentialProject(data_potentiel_projet);
+      setNotificationsProspect(data_propect);
       
       console.log("testttttttt notif");
-      console.log(notificationsPP);
-      console.log(notificationsP);
+      console.log(notificationsPotentialProject);
+      console.log(notificationsProspect);
 
     } catch (error) {
       console.log(error.message);
@@ -114,6 +114,55 @@ const Notification = () => {
     setOpen(false);
   };
 
+  const handleClickPotentialProject = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:9001/api/v1/notifications/${id}/state`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          state: 'OPEN'
+        })
+      });
+
+      updateNotifications();
+      window.location.href = `http://localhost:3000/work-in-progress`;
+
+      if (response.ok) {
+        console.log('Données modifiées avec succès !');
+      } else {
+        console.error('Échec de la mise à jour des données. Status:', response.status);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête PATCH :', error);
+    }
+  };
+
+  const handleClickProspect = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:9001/api/v1/notifications/${id}/state`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          state: 'OPEN'
+        })
+      });
+
+      updateNotifications();
+      window.location.href = `http://localhost:3000/work-in-progress`;
+
+      if (response.ok) {
+        console.log('Données modifiées avec succès !');
+      } else {
+        console.error('Échec de la mise à jour des données. Status:', response.status);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête PATCH :', error);
+    }
+  };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -197,10 +246,10 @@ const Notification = () => {
                   >
 
 
-                  {notificationsPP
+                  {notificationsPotentialProject
                      .map((notification,index) => (
 
-                      <ListItemButton key={index}>
+                      <ListItemButton key={index} onClick={() => handleClickPotentialProject(notification.id)}>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
@@ -217,10 +266,10 @@ const Notification = () => {
                     </ListItemButton>
                     ))}
 
-                    {notificationsP
+                    {notificationsProspect
                      .map((notification,index) => (
 
-                      <ListItemButton key={index}>
+                      <ListItemButton key={index} onClick={() => handleClickProspect(notification.id)}>
                       <ListItemText
                         primary={
                           <Typography variant="h6">

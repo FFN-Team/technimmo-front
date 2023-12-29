@@ -40,7 +40,10 @@ const MainRoutes = {
       path: 'notifications-settings',
       element: <NotificationsSettings />
     },
-    
+    {
+      path: 'work-in-progress',
+      element: <div>Work in progress</div>
+    },
     {
       path: 'dashboard',
       element: <DashboardDefault />
