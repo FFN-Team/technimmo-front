@@ -1,9 +1,6 @@
-import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import DeleteButton from './DeleteButton';
 
-const Property = () => {
-  const { id } = useParams();
+const AddPropertyForm = () => {
   const [property, setProperty] = useState({
     property_name: '',
     description: '',
@@ -12,39 +9,12 @@ const Property = () => {
     id_address: 0
   });
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    const fetchDataFromApi = async () => {
-      try {
-        const url = `http://localhost:9001/api/v1/properties/${id}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        const usedData = {
-          property_name: data.property_name,
-          description: data.description,
-          number_of_rooms: data.number_of_rooms,
-          livable_area: data.livable_area,
-          id_address: data.address.id
-        };
-
-        setProperty(usedData);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const addresses = async () => {
       try {
-        const url = `http://localhost:9001/api/v1/addresses/non-assigned/${id}`;
+        const url = `http://localhost:9001/api/v1/addresses/non-assigned`;
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -57,9 +27,8 @@ const Property = () => {
       }
     };
 
-    fetchDataFromApi();
     addresses();
-  }, [id]);
+  }, []);
 
   const handleChange = (e) => {
     setProperty({
@@ -72,8 +41,8 @@ const Property = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:9001/api/v1/properties/${id}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:9001/api/v1/properties`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -89,36 +58,14 @@ const Property = () => {
       window.location.href = `http://localhost:3000/properties`;
 
       if (response.ok) {
-        console.log('Données mises à jour avec succès !');
+        console.log('Données ajoutées avec succès !');
       } else {
-        console.error('Échec de la mise à jour des données. Status:', response.status);
+        console.error("Échec de l'ajout des données. Status:", response.status);
       }
     } catch (error) {
-      console.error('Erreur lors de la requête PUT :', error);
+      console.error('Erreur lors de la requête POST :', error);
     }
   };
-
-  const handleDeletion = async () => {
-    try {
-      const url = `http://localhost:9001/api/v1/properties/${id}`;
-      const response = await fetch(url, { method: 'DELETE' });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      
-      window.location.href = `http://localhost:3000/properties`;
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
 
   return (
     <div className="property-details">
@@ -171,10 +118,6 @@ const Property = () => {
           <br />
           <button type="submit">Save</button>
         </form>
-
-        <br />
-
-        <DeleteButton onClick={handleDeletion} />
       </Card>
     </div>
   );
@@ -192,4 +135,4 @@ const cardStyle = {
   margin: '10px'
 };
 
-export default Property;
+export default AddPropertyForm;

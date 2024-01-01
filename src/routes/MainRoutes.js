@@ -12,6 +12,7 @@ const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
 const Buyer = Loadable(lazy(() => import('pages/buyer')))
 
 //render - properties
+const TableProperties = Loadable(lazy(() => import('pages/properties')));
 const Property = Loadable(lazy(() => import('pages/property')));
 
 //render - notifications
@@ -68,6 +69,10 @@ const MainRoutes = {
     {
       path: 'properties',
       children: [
+        {
+          path: '',
+          element: <TableProperties />
+        },
         {
           path: ':id',
           element: <Property />
