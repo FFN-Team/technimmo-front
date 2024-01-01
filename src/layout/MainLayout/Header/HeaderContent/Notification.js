@@ -1,6 +1,10 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -15,7 +19,8 @@ import {
   Paper,
   Popper,
   Typography,
-  useMediaQuery
+  useMediaQuery,
+  Button
 } from '@mui/material';
 
 // project import
@@ -55,6 +60,8 @@ const Notification = () => {
   const [open, setOpen] = useState(false);
   const [notificationsPotentialProject , setNotificationsPotentialProject] = useState([]);
   const [notificationsProspect , setNotificationsProspect] = useState([]);
+  const [prospect , setPotentialProjectProspect] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   //A MOFIDIER AVEC LA MODIF DE FLORINE PAR RAPPORT AUX CONTROLLER DE NOTIFICATION QUI RENVOIE TOUTES TYPES DE NOTIFS
   const updateNotifications = async () => {
@@ -99,9 +106,6 @@ const Notification = () => {
       console.log(error.message);
     } 
   };
-
-
-
   
   const handleToggle = async () => {
     setOpen((prevOpen) => !prevOpen);
@@ -116,18 +120,21 @@ const Notification = () => {
 
   const handleClickPotentialProject = async (id) => {
     try {
-      const response = await fetch(`http://localhost:9001/api/v1/notifications/${id}/state`, {
+      const url = `http://localhost:9001/api/v1/notifications/8/status`;
+      console.log(id);
+      const response = await fetch(url, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          state: 'OPEN'
+          status: 'OPEN'
         })
       });
 
-      updateNotifications();
-      window.location.href = `http://localhost:3000/work-in-progress`;
+      console.log(response)
+
+      //window.location.href = `http://localhost:3000/work-in-progress`;
 
       if (response.ok) {
         console.log('Données modifiées avec succès !');
@@ -141,28 +148,151 @@ const Notification = () => {
 
   const handleClickProspect = async (id) => {
     try {
-      const response = await fetch(`http://localhost:9001/api/v1/notifications/${id}/state`, {
+      const response = await fetch(`http://localhost:9001/api/v1/notifications/${id}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          state: 'OPEN'
+          status: 'OPEN'
         })
       });
 
-      updateNotifications();
-      window.location.href = `http://localhost:3000/work-in-progress`;
+//      updateNotifications();
+//      window.location.href = `http://localhost:3000/work-in-progress`;
+
 
       if (response.ok) {
         console.log('Données modifiées avec succès !');
       } else {
         console.error('Échec de la mise à jour des données. Status:', response.status);
       }
+
     } catch (error) {
       console.error('Erreur lors de la requête PATCH :', error);
     }
+
   };
+
+  const getPotentialProjectProspect = async (potentialProjectId) => {
+    try {
+      const url_potentiel_projet_prospect = `http://localhost:9001/api/v1/potential-projects/${potentialProjectId}/prospect`;
+
+      console.log("testttttttt url_potentiel_projet");
+      console.log(url_potentiel_projet_prospect);
+
+      const response_potentiel_projet_prospect = await fetch(url_potentiel_projet_prospect, {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+      },});
+
+      console.log("testttttttt response_potentiel_projet");
+      console.log(response_potentiel_projet_prospect);
+
+      const data_prospect = await response_potentiel_projet_prospect.json();
+      setPotentialProjectProspect(data_prospect);
+    } catch (error) {
+      console.log(error.message);
+    } 
+  };
+
+  const handleSendPotentialProjectEmail = async (notification) => {
+
+    await getPotentialProjectProspect(notification.potentialProject.id);
+    
+    const confirmSend = window.confirm(`Voulez-vous envoyer un e-mail à ${prospect.completeName}?`);
+    
+    if (confirmSend) {
+      sendEmailToProspect(prospect, 'PROJECT_DUE_DATE_APPROACHING');
+    }
+  };
+
+  const handleSendProspectEmail = async (prospect) => {
+    
+    const confirmSend = window.confirm(`Voulez-vous envoyer un e-mail à ${prospect.completeName}?`);
+    
+    if (confirmSend) {
+      sendEmailToProspect(prospect, 'PROSPECT_MAY_BUY_BIGGER_HOUSE');
+    }
+  };
+  
+  const sendEmailToProspect = async (prospect, eventType) => {
+    
+    try { 
+      console.log("tesstttttt prospect")
+      console.log(prospect)
+      const response = await fetch(`http://localhost:9001/api/v1/email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prospectId: prospect.id,
+          eventType: eventType
+        })
+      });
+
+      if (response.ok) {
+        console.log('Email envoyé avec succès !');
+        setSnackbarOpen(true); 
+      } else {
+        console.error('Échec de envoi email. Status:', response.status);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête POST :', error);
+    }
+  };
+  
+  const BORDER_RADIUS = '5px';
+  const COMMON_STYLE = {
+    border: '1px solid #ccc',
+    margin: '5px',
+    padding: '10px',
+    borderRadius: BORDER_RADIUS,
+  };
+
+  const NotificationItem = ({ notification, onClick, onSendEmail, onConsult, showActionButton = true }) => (
+    <ListItemButton onClick={() => onClick(notification.id)} style={{ ...COMMON_STYLE, display: 'flex', flexDirection: 'column' }}>
+      <ListItemText
+        primary={<Typography variant="h6" style={{ color: '#333' }}>{notification.message}</Typography>}
+        secondary={notification.state}
+      />
+      <ListItemSecondaryAction style={{ width: 'auto', alignSelf: 'flex-end' }}>
+        <Typography variant="caption" noWrap style={{ marginRight: '10px', color: '#888' }}>
+          {notification.time || ''}
+        </Typography>
+        {showActionButton && (
+          <>
+            <Button onClick={() => onSendEmail(notification)} style={{ backgroundColor: '#4CAF50', color: 'white', marginRight: '5px' }}>
+              Envoyer un email
+            </Button>
+            {onConsult && (
+              <Button onClick={() => onConsult(notification)} style={{ backgroundColor: '#2196F3', color: 'white' }}>
+                Consulter
+              </Button>
+            )}
+          </>
+        )}
+      </ListItemSecondaryAction>
+    </ListItemButton>
+  );
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const handleConsultProject = () => {
+  };
+
+  const handleConsultProspect = () => {
+    // Logique pour consulter le prospect
+    console.log('Consulter le prospect');
+  };
+
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -244,47 +374,39 @@ const Notification = () => {
                       }
                     }}
                   >
+                    <div>
+
+      {notificationsPotentialProject.map((notification, index) => (
+        <NotificationItem
+          key={index}
+          notification={notification}
+          onClick={handleClickPotentialProject}
+          onSendEmail={handleSendPotentialProjectEmail}
+          onConsult={handleConsultProject}
+        />
+      
+      ))}
+
+      {notificationsProspect.map((notification, index) => (
+        <NotificationItem
+          key={index}
+          notification={notification}
+          onClick={handleClickProspect}
+          onSendEmail={() => handleSendProspectEmail(notification.prospect)}
+          onConsult={handleConsultProspect}
+        />
+      ))}
+
+      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          Message envoyé avec succès !
+        </MuiAlert>
+      </Snackbar>
+
+      </div>
 
 
-                  {notificationsPotentialProject
-                     .map((notification,index) => (
 
-                      <ListItemButton key={index} onClick={() => handleClickPotentialProject(notification.id)}>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                           {notification.message}
-                          </Typography>
-                        }
-                        secondary={notification.state}
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          3:00 AM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    ))}
-
-                    {notificationsProspect
-                     .map((notification,index) => (
-
-                      <ListItemButton key={index} onClick={() => handleClickProspect(notification.id)}>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                           {notification.message}
-                          </Typography>
-                        }
-                        secondary={notification.state}
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          3:00 AM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    ))}
 
 
                    
