@@ -3,14 +3,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
 const TableRowProperties = ({ row, columns, navigate }) => (
-  <TableRow
-    hover
-    role="checkbox"
-    tabIndex={-1}
-    key={row.id}
-    onClick={() => navigate(`${row.id}`)}
-    style={{ cursor: 'pointer' }}
-  >
+  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} onClick={() => navigate(`${row.id}`)} style={{ cursor: 'pointer' }}>
     {columns.map((column) => {
       const value =
         column.id === 'property_name'
@@ -24,7 +17,6 @@ const TableRowProperties = ({ row, columns, navigate }) => (
           : column.id === 'address'
           ? row.address.street_number + ' ' + row.address.street.name + ', ' + row.address.city.name
           : row[column.id];
-
       return (
         <TableCell key={column.id} align={column.align}>
           {column.format && typeof value === 'number' ? column.format(value) : value}

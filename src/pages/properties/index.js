@@ -24,7 +24,7 @@ const TableProperties = () => {
   useEffect(() => {
     const fetchDataFromApi = async () => {
       try {
-        const response = await fetch('http://localhost:9001/api/v1/buyers');
+        const response = await fetch('http://localhost:9001/api/v1/properties');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

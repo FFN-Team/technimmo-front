@@ -34,7 +34,18 @@ const Property = () => {
           id_address: data.address.id
         };
 
+        handleInitIdAddress(usedData.id_address);
+
         setProperty(usedData);
+
+        const url2 = `http://localhost:9001/api/v1/addresses/non-assigned/${usedData.id_address}`;
+        const response2 = await fetch(url2);
+        if (!response2.ok) {
+          throw new Error(`HTTP error! Status: ${response2.status}`);
+        }
+        const data2 = await response2.json();
+
+        setOptions(data2);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -42,24 +53,15 @@ const Property = () => {
       }
     };
 
-    const addresses = async () => {
-      try {
-        const url = `http://localhost:9001/api/v1/addresses/non-assigned/${id}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        setOptions(data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
     fetchDataFromApi();
-    addresses();
   }, [id]);
+
+  const handleInitIdAddress = (value) => {
+    setProperty({
+      ...property,
+      id_address: value
+    });
+  };
 
   const handleChange = (e) => {
     setProperty({
@@ -105,7 +107,7 @@ const Property = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      
+
       window.location.href = `http://localhost:3000/properties`;
     } catch (error) {
       setError(error.message);
@@ -125,11 +127,27 @@ const Property = () => {
       <Card>
         <form onSubmit={handleSubmit}>
           <label htmlFor="property_name">Name : </label>
-          <input type="text" id="property_name" name="property_name" value={property.property_name} onChange={handleChange} required />
+          <input
+            type="text"
+            id="property_name"
+            name="property_name"
+            value={property.property_name}
+            onChange={handleChange}
+            required
+            style={{ width: 200 }}
+          />
           <br />
           <br />
           <label htmlFor="description">Description : </label>
-          <input type="text" id="description" name="description" value={property.description} onChange={handleChange} required />
+          <input
+            type="text"
+            id="description"
+            name="description"
+            value={property.description}
+            onChange={handleChange}
+            required
+            style={{ width: 300 }}
+          />
           <br />
           <br />
           <label htmlFor="number_of_rooms">Number of rooms : </label>
@@ -142,6 +160,7 @@ const Property = () => {
             max={1000}
             onChange={handleChange}
             required
+            style={{ width: 70 }}
           />
           <br />
           <br />
@@ -156,11 +175,12 @@ const Property = () => {
             step={0.1}
             onChange={handleChange}
             required
+            style={{ width: 100 }}
           />
           <br />
           <br />
           <label htmlFor="id_address">Address : </label>
-          <select id="id_address" name="id_address" value={property.id_address} onChange={handleChange}>
+          <select id="id_address" name="id_address" value={property.id_address} onChange={handleChange} style={{ width: 300 }}>
             {options.map((option) => (
               <option key={option.id} value={option.id}>
                 {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
@@ -180,11 +200,7 @@ const Property = () => {
   );
 };
 
-const Card = ({ children }) => (
-  <div style={cardStyle}>
-    {children}
-  </div>
-);
+const Card = ({ children }) => <div style={cardStyle}>{children}</div>;
 
 const cardStyle = {
   border: '1px solid #ddd',
