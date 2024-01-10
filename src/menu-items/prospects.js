@@ -23,10 +23,10 @@ const prospects = {
       icon: icons.AreaChartOutlined,
     },
     {
-      id: 'search-prospect',
-      title: 'Search prospect',
+      id: 'search-prospects',
+      title: 'Search prospects',
       type: 'item',
-      url: '/search-prospect',
+      url: '/search-prospects',
       icon: icons.SearchOutlined,
     },
     {
