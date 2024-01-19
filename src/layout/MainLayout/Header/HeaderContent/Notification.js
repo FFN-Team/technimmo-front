@@ -58,9 +58,9 @@ const Notification = () => {
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [notificationsPotentialProject , setNotificationsPotentialProject] = useState([]);
-  const [notificationsProspect , setNotificationsProspect] = useState([]);
-  const [prospect , setPotentialProjectProspect] = useState([]);
+  const [notificationsPotentialProject, setNotificationsPotentialProject] = useState([]);
+  const [notificationsProspect, setNotificationsProspect] = useState([]);
+  const [prospect, setPotentialProjectProspect] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   //A MOFIDIER AVEC LA MODIF DE FLORINE PAR RAPPORT AUX CONTROLLER DE NOTIFICATION QUI RENVOIE TOUTES TYPES DE NOTIFS
@@ -69,44 +69,30 @@ const Notification = () => {
       const url_potentiel_projet = `http://localhost:9001/api/v1/potential-projects/notification`;
       const url_propect = `http://localhost:9001/api/v1/prospects/notification`;
 
-
       const response_potentiel_projet = await fetch(url_potentiel_projet, {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json',
-      },});
+          'Content-Type': 'application/json'
+        }
+      });
 
       const response_propect = await fetch(url_propect, {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json',
-      },});
-
-
-
-      console.log("testttttttt response_potentiel_projet");
-      console.log(response_potentiel_projet);
-
-      console.log("testttttttt response_propect");
-      console.log(response_propect);  
-
+          'Content-Type': 'application/json'
+        }
+      });
 
       const data_potentiel_projet = await response_potentiel_projet.json();
       const data_propect = await response_propect.json();
-      
 
       setNotificationsPotentialProject(data_potentiel_projet);
       setNotificationsProspect(data_propect);
-      
-      console.log("testttttttt notif");
-      console.log(notificationsPotentialProject);
-      console.log(notificationsProspect);
-
     } catch (error) {
       console.log(error.message);
-    } 
+    }
   };
-  
+
   const handleToggle = async () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -118,83 +104,22 @@ const Notification = () => {
     setOpen(false);
   };
 
-  const handleClickPotentialProject = async (id) => {
-    try {
-      const url = `http://localhost:9001/api/v1/notifications/8/status`;
-      console.log(id);
-      const response = await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          status: 'OPEN'
-        })
-      });
-
-      console.log(response)
-
-      //window.location.href = `http://localhost:3000/work-in-progress`;
-
-      if (response.ok) {
-        console.log('Données modifiées avec succès !');
-      } else {
-        console.error('Échec de la mise à jour des données. Status:', response.status);
-      }
-    } catch (error) {
-      console.error('Erreur lors de la requête PATCH :', error);
-    }
-  };
-
-  const handleClickProspect = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:9001/api/v1/notifications/${id}/status`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          status: 'OPEN'
-        })
-      });
-
-//      updateNotifications();
-//      window.location.href = `http://localhost:3000/work-in-progress`;
-
-
-      if (response.ok) {
-        console.log('Données modifiées avec succès !');
-      } else {
-        console.error('Échec de la mise à jour des données. Status:', response.status);
-      }
-
-    } catch (error) {
-      console.error('Erreur lors de la requête PATCH :', error);
-    }
-
-  };
-
   const getPotentialProjectProspect = async (potentialProjectId) => {
     try {
       const url_potentiel_projet_prospect = `http://localhost:9001/api/v1/potential-projects/${potentialProjectId}/prospect`;
 
-      console.log("testttttttt url_potentiel_projet");
-      console.log(url_potentiel_projet_prospect);
-
       const response_potentiel_projet_prospect = await fetch(url_potentiel_projet_prospect, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json',
-      },});
-
-      console.log("testttttttt response_potentiel_projet");
-      console.log(response_potentiel_projet_prospect);
+          'Content-Type': 'application/json'
+        }
+      });
 
       const data_prospect = await response_potentiel_projet_prospect.json();
       setPotentialProjectProspect(data_prospect);
     } catch (error) {
       console.log(error.message);
-    } 
+    }
   };
 
   const handleSendPotentialProjectEmail = async (notification) => {
@@ -216,7 +141,7 @@ const Notification = () => {
       sendEmailToProspect(prospect, 'PROSPECT_MAY_BUY_BIGGER_HOUSE');
     }
   };
-  
+
   const sendEmailToProspect = async (prospect, eventType) => {
     
     try { 
@@ -243,17 +168,17 @@ const Notification = () => {
       console.error('Erreur lors de la requête POST :', error);
     }
   };
-  
+
   const BORDER_RADIUS = '5px';
   const COMMON_STYLE = {
     border: '1px solid #ccc',
     margin: '5px',
     padding: '10px',
-    borderRadius: BORDER_RADIUS,
+    borderRadius: BORDER_RADIUS
   };
 
-  const NotificationItem = ({ notification, onClick, onSendEmail, onConsult, showActionButton = true }) => (
-    <ListItemButton onClick={() => onClick(notification.id)} style={{ ...COMMON_STYLE, display: 'flex', flexDirection: 'column' }}>
+  const NotificationItem = ({ notification, onSendEmail, onConsult, showActionButton = true }) => (
+    <ListItemButton style={{ ...COMMON_STYLE, display: 'flex', flexDirection: 'column' }}>
       <ListItemText
         primary={<Typography variant="h6" style={{ color: '#333' }}>{notification.message}</Typography>}
         secondary={notification.state}
@@ -268,7 +193,7 @@ const Notification = () => {
               Envoyer un email
             </Button>
             {onConsult && (
-              <Button onClick={() => onConsult(notification)} style={{ backgroundColor: '#2196F3', color: 'white' }}>
+              <Button onClick={() => onConsult(notification.id)} style={{ backgroundColor: '#2196F3', color: 'white' }}>
                 Consulter
               </Button>
             )}
@@ -285,14 +210,53 @@ const Notification = () => {
     setSnackbarOpen(false);
   };
 
-  const handleConsultProject = () => {
+  const handleConsultProject = async (notificationId) => {
+    try {
+      const response = await fetch(`http://localhost:9001/api/v1/notifications/${notificationId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          status: 'OPEN'
+        })
+      });
+
+      window.location.href = `http://localhost:3000/work-in-progress`;
+
+      if (response.ok) {
+        console.log('Données modifiées avec succès !');
+      } else {
+        console.error('Échec de la mise à jour des données. Status:', response.status);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête PATCH :', error);
+    }
   };
 
-  const handleConsultProspect = () => {
-    // Logique pour consulter le prospect
-    console.log('Consulter le prospect');
-  };
+  const handleConsultProspect = async (notificationId) => {
+    try {
+      const response = await fetch(`http://localhost:9001/api/v1/notifications/${notificationId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          status: 'OPEN'
+        })
+      });
 
+      window.location.href = `http://localhost:3000/work-in-progress`;
+
+      if (response.ok) {
+        console.log('Données modifiées avec succès !');
+      } else {
+        console.error('Échec de la mise à jour des données. Status:', response.status);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête PATCH :', error);
+    }
+  };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -341,15 +305,9 @@ const Notification = () => {
                 }
               }}
             >
-              <ReloadOutlined 
-                onClick={updateNotifications}
-                style={{ cursor: 'pointer' }}
-              />
+              <ReloadOutlined onClick={updateNotifications} style={{ cursor: 'pointer' }} />
               <span style={{ margin: '0 4px' }}></span>
-              <SettingOutlined 
-                onClick={() => navigate(`/notifications-settings`)}
-                style={{ cursor: 'pointer' }}
-              />
+              <SettingOutlined onClick={() => navigate(`/notifications-settings`)} style={{ cursor: 'pointer' }} />
 
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard
@@ -375,45 +333,30 @@ const Notification = () => {
                     }}
                   >
                     <div>
+                      {notificationsPotentialProject.map((notification, index) => (
+                        <NotificationItem
+                          key={index}
+                          notification={notification}
+                          onSendEmail={handleSendPotentialProjectEmail}
+                          onConsult={handleConsultProject}
+                        />
+                      ))}
 
-      {notificationsPotentialProject.map((notification, index) => (
-        <NotificationItem
-          key={index}
-          notification={notification}
-          onClick={handleClickPotentialProject}
-          onSendEmail={handleSendPotentialProjectEmail}
-          onConsult={handleConsultProject}
-        />
-      
-      ))}
+                      {notificationsProspect.map((notification, index) => (
+                        <NotificationItem
+                          key={index}
+                          notification={notification}
+                          onSendEmail={() => handleSendProspectEmail(notification.prospect)}
+                          onConsult={handleConsultProspect}
+                        />
+                      ))}
 
-      {notificationsProspect.map((notification, index) => (
-        <NotificationItem
-          key={index}
-          notification={notification}
-          onClick={handleClickProspect}
-          onSendEmail={() => handleSendProspectEmail(notification.prospect)}
-          onConsult={handleConsultProspect}
-        />
-      ))}
-
-      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-          Message envoyé avec succès !
-        </MuiAlert>
-      </Snackbar>
-
-      </div>
-
-
-
-
-
-                   
-                    
-
-                    
-
+                      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+                        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+                          Message envoyé avec succès !
+                        </MuiAlert>
+                      </Snackbar>
+                    </div>
                   </List>
                 </MainCard>
               </ClickAwayListener>
