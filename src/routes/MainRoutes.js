@@ -20,6 +20,7 @@ const NotificationsSettings = Loadable(lazy(() => import('pages/notificationsSet
 
 //render - prospects
 const SearchProspects = Loadable(lazy(() => import('pages/prospects/search-prospects')));
+const Prospect = Loadable(lazy(() => import('pages/prospects/prospect')))
 
 
 // render - sample page
@@ -53,8 +54,21 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: 'prospect-dashboard',
-      element: <Color />
+      path: 'prospects',
+      children: [
+        {
+          path: 'prospect-dashboard',
+          element: <Color />
+        },
+        {
+          path: 'search-prospects',
+          element: <SearchProspects />
+        },
+        {
+          path: ':id',
+          element: <Prospect />
+        }
+      ]
     },
     {
       path: 'buyers',
@@ -81,10 +95,6 @@ const MainRoutes = {
           element: <Property />
         }
       ]
-    },
-    {
-      path: 'search-prospects',
-      element: <SearchProspects />
     },
     {
       path: 'search-properties',

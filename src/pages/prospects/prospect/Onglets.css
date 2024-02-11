@@ -1,0 +1,59 @@
+/* Onglets.css */
+
+.custom-tabs {
+    font-family: 'Arial', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  .custom-tab-list {
+    display: flex;
+    padding: 10px;
+    background-color: #f5f5f5;
+    list-style-type: none;
+    margin: 0;
+    border-bottom: 1px solid #ccc; /* Ajouter une bordure en bas */
+  }
+  
+  .custom-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    transition: background-color 0.3s;
+    margin-right: 10px; /* Espacement entre les onglets */
+  }
+  
+  .custom-tab:last-child {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #333;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+  }
+  
+  .custom-tab:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .react-tabs__tab--selected {
+    background-color: #fff; /* Retirer le fond bleu */
+    color: #333;
+    border: 1px solid #ccc; /* Ajouter une bordure autour de l'onglet sélectionné */
+    border-bottom: none; /* Retirer la bordure en bas de l'onglet sélectionné */
+  }
+  
+  .react-tabs__tab-panel {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 8px 8px;
+  }
+  

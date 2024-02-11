@@ -26,7 +26,7 @@ const prospects = {
       id: 'search-prospects',
       title: 'Search prospects',
       type: 'item',
-      url: '/search-prospects',
+      url: '/prospects/search-prospects',
       icon: icons.SearchOutlined,
     },
     {
