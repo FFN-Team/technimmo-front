@@ -1,249 +1,413 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  Button,
+  ButtonGroup,
+  Menu ,
+  Container,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import { DataGrid } from '@mui/x-data-grid';
+
+
+const columns = [
+  { field: 'title', headerName: 'Title', width: 60 },
+  { field: 'firstName', headerName: 'First name', width: 120, /*editable: true,*/ },
+  { field: 'lastName', headerName: 'Last name', width: 120},
+  { field: 'dateOfBirth', headerName: 'Date of birth', width: 100 },
+  { field: 'profession', headerName: 'Profession', width: 120 },
+  { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'mobile', headerName: 'Mobile', width: 100 },
+  { field: 'contactOrigin', headerName: 'Contact Origin', width: 100 },
+];
 
 const SearchProspects = () => {
-    const [prospectFilterName, setProspectFilterName] = useState('');
-    const [showModal, setShowModal] = useState(false);
-    const [prospects, setProspects] = useState([]);
+  const [prospectFilterName, setProspectFilterName] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [prospects, setProspects] = useState([]);
+  const [contactOrigin, setContactOrigin] = useState('');
+  const [title, setTitle] = useState('');
+  const [age, setAge] = useState('');
+  const [ageComparator, setAgeComparator] = useState('');
+  const [profession, setProfession] = useState('');
+  const [filtersList, setFiltersList] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+  const [currentFilterName, setCurrentFilterName] = useState(''); 
+  
 
-    const [contactOrigin, setContactOrigin] = useState('');
-    const [title, setTitle] = useState('');
-    const [age, setAge] = useState('');
-    const [ageComparator, setAgeComparator] = useState('');
-    const [profession, setProfession] = useState('');
-    //const [authorizeContact, setAuthorizeContact] = useState(true);
+  const handleFindClick = async (e) => {
+    e.preventDefault();
 
+    const formData = new FormData(e.target);
+    const formDataObject = {};
 
-    // Gestionnaire d'événements pour le clic sur le bouton "Find"
-    const handleFindClick = async (e) => {
-        e.preventDefault(); // Empêche le rechargement de la page
+    formData.forEach((value, key) => {
+      if (value !== '') formDataObject[key] = value;
+    });
 
-        const formData = new FormData(e.target); 
-        const formDataObject = {};
-        
-        // Convertir FormData en objet JavaScript 
-        formData.forEach((value, key) => {
-            if(value!=="") formDataObject[key] = value;
+    try {
+      const url = `http://localhost:9001/api/v1/prospects/filtred`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataObject),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setProspects(result);
+    } catch (error) {
+      console.error('Error during API call:', error);
+    }
+  };
+
+  const handleSaveFilter = () => {
+    setShowModal(true);
+  };
+
+  const handleModalSave = async () => {
+    setShowModal(false);
+    if (prospectFilterName === '') {
+      window.alert("Vous n'avez pas choisi de nom de filtre.");
+      return;
+    }
+
+    const savedFilter = {
+      prospectFilterName,
+      contactOrigin,
+      title,
+      age,
+      ageComparator,
+      profession,
+    };
+
+    console.log('Saved Filter:', savedFilter);
+
+    const formDataObject = {};
+
+    Object.entries(savedFilter).forEach(([key, value]) => {
+      if (value !== '') formDataObject[key] = value;
+    });
+
+    console.log('formDataObject : ', formDataObject);
+
+    const filterKeys = Object.keys(formDataObject);
+    if (filterKeys.length === 1 && filterKeys[0] === 'prospectFilterName') {
+      window.alert("Vous n'avez pas choisi de caractéristique de filtre.");
+    } else {
+      try {
+        const url = `http://localhost:9001/api/v1/prospects/filter`;
+        const response = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formDataObject),
         });
 
-        console.log("test :", formDataObject);
-        
-        try {
-            const url = `http://localhost:9001/api/v1/prospects/filtred`;
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formDataObject)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            setProspects(result);
-        } catch (error) {
-            console.error("Error during API call:", error);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-    };
+        window.alert("L'opération s'est terminée avec succès.");
+        window.location.reload();
+      } catch (error) {
+        console.error('Error during API call:', error);
+        window.alert("Quelque chose s'est mal passé.");
+      }
+    }
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
+  };
+
+  const handleClearFilter = () => {
+    setContactOrigin('');
+    setTitle('');
+    setAgeComparator('');
+    setAge('');
+    setProfession('');
+};
+
+  const fetchFiltersList = async () => {
+    try {
+      const url = 'http://localhost:9001/api/v1/prospects/filters';
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = await response.json();
+      setFiltersList(result);
+    } catch (error) {
+      console.error('Error fetching filters:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFiltersList();
+  }, []);
+
+  const handleFilterClick = async (prospectFilterName) => {
+    console.log(`Filter ${prospectFilterName} clicked`);
+
+    try {
+      const url = 'http://localhost:9001/api/v1/prospects/existing-filter';
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prospectFilterName: prospectFilterName,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setProspects(result);
+    } catch (error) {
+      console.error('Error filtering prospects with existing filter:', error);
+    }
+  };
+
+  const handleFilterMenuClick = (event,prospectFilterName) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentFilterName(prospectFilterName);
+  };
+
+  const handleDeleteFilterClick = async (currentFilterName) => {
+    try {
+      const url = 'http://localhost:9001/api/v1/prospects/filter';
+  
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prospectFilterName: currentFilterName,
+        }),
+      });
+  
+      if (response.ok) {
+        console.log('Suppression réussie !');
+        window.alert("La suppresion s'est terminée avec succès.");
+        window.location.reload();
+      } else {
+        console.error('Échec de la suppression');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression :', error);
+    } finally {
+      setAnchorEl(null);
+
+    }
+  };
+  
 
 
-    const handleSaveFilter = () => {
-        // Ouvrir le popup (modal)
-        setShowModal(true);
-    };
+  return (
+    <Container style={{ marginTop: '20px' }}>
+      <form onSubmit={handleFindClick}>
 
+        <FormControl style={{ marginRight: '10px' }}>
+            <InputLabel htmlFor="contactOrigin" style={{ fontSize: '12px', marginTop: '-5px'}}>Contact Origin</InputLabel>
+            <Select
+                name="contactOrigin"
+                value={contactOrigin}
+                onChange={(e) => setContactOrigin(e.target.value)}
+                style={{ minWidth: '150px', height: '30px' }}
+            >
+                <MenuItem value="">...</MenuItem>
+                <MenuItem value="EMAIL">Email</MenuItem>
+                <MenuItem value="PHONE">Phone</MenuItem>
+                <MenuItem value="SOCIAL_MEDIA">Social media</MenuItem>
+                <MenuItem value="WEB_SITE">Web site</MenuItem>
+                <MenuItem value="WORD_OF_MOUTH">Word of mouth</MenuItem>
+            </Select>
+        </FormControl>
 
-    const handleModalSave = async () => {
-        // Fermer le popup (modal) et récupérer la valeur du champ dans prospectFilterName
-        setShowModal(false);
-        if(prospectFilterName=="") {
-            window.alert("Vous n'avez pas choisi de nom de filtre.");
-            return;
-        }
-    
+        <FormControl style={{ marginRight: '10px' }}>
+            <InputLabel htmlFor="title" style={{ fontSize: '12px', marginTop: '-5px'}}>Title</InputLabel>
+            <Select
+                name="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ minWidth: '150px', height: '30px' }}
+            >
+                <MenuItem value="">...</MenuItem>
+                <MenuItem value="MR">Mr</MenuItem>
+                <MenuItem value="MRS">Mrs</MenuItem>
+            </Select>
+        </FormControl>
 
-        // Enregistre le filtre avec le nom dans la console ou effectue d'autres actions nécessaires
-        const savedFilter = {
-            prospectFilterName,
-            contactOrigin,
-            title,
-            age,
-            ageComparator,
-            profession,
-        };
-
-        console.log("Saved Filter:", savedFilter);
-
-        const formDataObject = {};
+        <FormControl>
+            <InputLabel htmlFor="ageComparator" style={{ fontSize: '12px', marginTop: '-5px'}}>Age Comparator</InputLabel>
+            <Select
+                name="ageComparator"
+                value={ageComparator}
+                onChange={(e) => setAgeComparator(e.target.value)}
+                style={{ minWidth: '150px', height: '30px' }}
+            >
+                <MenuItem value="">...</MenuItem>
+                <MenuItem value="EQUALS">Equals</MenuItem>
+                <MenuItem value="NOT_EQUAL_TO">Not equal to</MenuItem>
+                <MenuItem value="GREATER_THAN">Greater than</MenuItem>
+                <MenuItem value="LESS_THAN">Less than</MenuItem>
+                <MenuItem value="GREATER_THAN_OR_EQUAL_TO">Greater than or equal to</MenuItem>
+                <MenuItem value="LESS_THAN_OR_EQUAL_TO">Less than or equal to</MenuItem>
+            </Select>
+        </FormControl>
         
-        Object.entries(savedFilter).forEach(([key, value]) => {
-            if (value !== "") formDataObject[key] = value;
-        });
-
-        console.log("formDataObject : ", formDataObject);
-
-        const filterKeys = Object.keys(formDataObject);
-        if (filterKeys.length === 1 && filterKeys[0] === 'prospectFilterName') {
-            window.alert("Vous n'avez pas choisi de caractéristique de filtre.");
-        } else {
-            try {
-                const url = `http://localhost:9001/api/v1/prospects/filter`;
-                const response = await fetch(url, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(formDataObject)
-                });
-        
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-        
-                window.alert("L'opération s'est terminée avec succès.");
-            } catch (error) {
-                console.error("Error during API call:", error);
-        
-                // Il y a eu une erreur, afficher une alerte d'erreur
-                window.alert("Quelque chose s'est mal passé.");
-            }
-        }
-
-    };
+        <TextField
+            type="number"
+            label="Age"
+            name="age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            style={{ width: '100px',marginRight: '10px'}}
+            inputProps={{style: {height: 8}}}
+            InputLabelProps={{style: {fontSize: 12,marginTop: -5}}}
+            
+        />      
+       
+        <FormControl>
+            <InputLabel htmlFor="profession" style={{ fontSize: '12px', marginTop: '-5px'}}>Profession</InputLabel>
+            <Select
+                name="profession"
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                style={{ minWidth: '150px', height: '30px' }}
+            >
+                <MenuItem value="">...</MenuItem>
+                <MenuItem value="DOCTOR">Doctor</MenuItem>
+                <MenuItem value="ENGINEER">Engineer</MenuItem>
+                <MenuItem value="TEACHER">Teacher</MenuItem>
+                <MenuItem value="STUDENT">Student</MenuItem>
+                <MenuItem value="COMMERCIAL">Commercial</MenuItem>
+            </Select>
+        </FormControl>
 
 
-    const handleModalCancel = () => {
-        // Fermer le popup (modal) sans enregistrer
-        setShowModal(false);
-    };
+        <div style={{ display: 'flex', gap: '10px', marginTop: '20px', marginBottom:'30px' }}>
+          <Button type="submit" variant="contained" style={{ height: '25px' }} >
+            Find
+          </Button>
 
+          <Button  onClick={handleClearFilter} variant="outlined" style={{ height: '25px' }} color="error">
+            Clear Filter
+          </Button>
 
-
-    return (
-        <div>
-            <form onSubmit={handleFindClick} style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                    <div>
-                        <label htmlFor="contactOrigin">Contact Origin : </label>
-                        <select name="contactOrigin" value={contactOrigin} onChange={(e) => setContactOrigin(e.target.value)}>
-                            <option value="">Sélectionnez Contact Origin</option>
-                            <option value="EMAIL">EMAIL</option>
-                            <option value="PHONE">PHONE</option>
-                            <option value="SOCIAL_MEDIA">SOCIAL_MEDIA</option>
-                            <option value="WEB_SITE">WEB_SITE</option>
-                            <option value="WORD_OF_MOUTH">WORD_OF_MOUTH</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="title">Title : </label>
-                        <select name="title" value={title} onChange={(e) => setTitle(e.target.value)}>
-                            <option value="">Sélectionnez Title</option>
-                            <option value="MR">MR</option>
-                            <option value="MRS">MRS</option>
-                            <option value="MISS">MISS</option>
-                            <option value="DR">DR</option>
-                        </select>
-                    </div>  
-                    
-                    <div>
-                        <label htmlFor="profession">Profession : </label>
-                        <select name="profession" value={profession} onChange={(e) => setProfession(e.target.value)}>
-                            <option value="">Sélectionnez Profession</option>
-                            <option value="DOCTOR">DOCTOR</option>
-                            <option value="ENGINEER">ENGINEER</option>
-                            <option value="TEACHER">TEACHER</option>
-                            <option value="STUDENT">STUDENT</option>
-                            <option value="COMMERCIAL">COMMERCIAL</option>
-                        </select>
-                    </div>
-                    
-                </div>
-
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                    <div>
-                        <label htmlFor="age">Age : </label>
-                        <input type="number" name="age" value={age} onChange={(e) => setAge(e.target.value)} />
-                    </div>
-
-                    <div>
-                        <label htmlFor="ageComparator">Age Comparator : </label>
-                        <select name="ageComparator" value={ageComparator} onChange={(e) => setAgeComparator(e.target.value)}>
-                            <option value="">Sélectionnez Age Comparator</option>
-                            <option value="EQUALS">EQUALS</option>
-                            <option value="NOT_EQUAL_TO">NOT_EQUAL_TO</option>
-                            <option value="GREATER_THAN">GREATER_THAN</option>
-                            <option value="LESS_THAN">LESS_THAN</option>
-                            <option value="GREATER_THAN_OR_EQUAL_TO">GREATER_THAN_OR_EQUAL_TO</option>
-                            <option value="LESS_THAN_OR_EQUAL_TO">LESS_THAN_OR_EQUAL_TO</option>
-                        </select>
-                    </div>
-
-                    {/**
-                     * 
-                    <div>
-                        <label htmlFor="authorizeContactOnSocialMedia">Authorize Contact : </label>
-                        <input type="radio" name="authorizeContactOnSocialMedia" checked={authorizeContact} onChange={(e) => setAuthorizeContact(e.target.checked)} />
-                    </div>
-                     */}
-                </div>
-                    
-                <div>
-                    <button type="submit" style={{ marginRight: '10px' }}>Find</button>
-                    <button type="button" onClick={handleSaveFilter}>Save Filter</button>
-                </div>
-            </form>
-
-
-            {/* Modal (Popup) pour donner un nom au filtre */}
-            {showModal && (
-                <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', background: '#fff', boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)' }}>
-                    <label htmlFor="filterName">Donne un nom à ce filtre:</label>
-                    <input type="text" id="filterName" value={prospectFilterName} onChange={(e) => setProspectFilterName(e.target.value)} />
-                    <button onClick={handleModalSave}>Enregistrer</button>
-                    <button onClick={handleModalCancel}>Annuler</button>
-                </div>
-            )}
-
-
-            <div>
-                <h2>Résultats de la recherche :</h2>
-                <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                    <thead>
-                        <tr style={{ borderBottom: '1px solid #ddd' }}>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Title</th>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Nom</th>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Prénom</th>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Date de naissance</th>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Profession</th>
-                            {/* Ajoute d'autres colonnes si nécessaire */}
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Mail</th>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Mobile</th>
-                            <th style={{ padding: '8px', textAlign: 'left' }}>Contact Origin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {prospects.map(prospect => (
-                            <tr key={prospect.id} style={{ borderBottom: '1px solid #ddd' }}>
-                                <td style={{ padding: '8px' }}>{prospect.title}</td>
-                                <td style={{ padding: '8px' }}>{prospect.lastName}</td>
-                                <td style={{ padding: '8px' }}>{prospect.firstName}</td>
-                                <td style={{ padding: '8px' }}>{prospect.dateOfBirth}</td>
-                                <td style={{ padding: '8px' }}>{prospect.profession}</td>
-                                {/* Ajoute d'autres cellules si nécessaire */}
-                                <td style={{ padding: '8px' }}>{prospect.mail}</td>
-                                <td style={{ padding: '8px' }}>{prospect.mobile}</td>
-                                <td style={{ padding: '8px' }}>{prospect.contactOrigin}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+          <Button onClick={handleSaveFilter} variant="outlined" style={{height: '25px' }} color="success">
+            Save Filter
+          </Button>
         </div>
-    );
+
+      </form>
+
+
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        {filtersList.map((filter) => (
+          <ButtonGroup key={filter.id} variant="outlined" style={{ height: '25px' }}>
+            <Button 
+              onClick={() => handleFilterClick(filter.prospectFilterName)}
+              style={{ textTransform: 'none' }}
+            >
+              {filter.prospectFilterName}
+            </Button>
+            <Button style={{ width: '10px' }} onClick={(event) => handleFilterMenuClick(event, filter.prospectFilterName)}>
+              <ExpandMoreIcon/>
+            </Button>          
+          </ButtonGroup>
+        ))}
+
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem 
+            onClick={() => navigate(`/search-prospects/${currentFilterName}`)}
+          >
+            Ouvrir dossier
+            </MenuItem>
+          <MenuItem 
+            onClick={() => handleDeleteFilterClick(currentFilterName)}
+          >Supprimer le filtre</MenuItem>
+        </Menu>
+      </div>
+
+      {showModal && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            padding: '20px',
+            background: '#fff',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
+            zIndex: 9999,
+          }}
+        >
+          <InputLabel htmlFor="filterName">Donne un nom à ce filtre : </InputLabel>
+          <TextField
+            type="text"
+            id="filterName"
+            value={prospectFilterName}
+            onChange={(e) => setProspectFilterName(e.target.value)}
+            variant="outlined"
+            fullWidth
+            style={{ marginBottom: '10px' }}
+          />
+          <Button variant="contained" onClick={handleModalSave} style={{ marginRight: '10px' }}>
+            Enregistrer
+          </Button>
+          <Button variant="outlined" onClick={handleModalCancel}>
+            Annuler
+          </Button>
+        </div>
+      )}
+
+      <div>
+        <h2>Résultats de la recherche :</h2>
+
+        
+        <Box sx={{ height: 320, width: '100%' }}>
+          <DataGrid
+            rows={prospects}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 15,
+                },
+              },
+            }}
+            pageSizeOptions={[5]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
+        </Box> 
+      </div>
+    </Container>
+  );
 };
 
 export default SearchProspects;
