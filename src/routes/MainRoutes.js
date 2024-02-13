@@ -20,6 +20,7 @@ const NotificationsSettings = Loadable(lazy(() => import('pages/notificationsSet
 
 //render - prospects
 const SearchProspects = Loadable(lazy(() => import('pages/prospects/search-prospects')));
+const FiltredProspects = Loadable(lazy(() => import('pages/prospects/filtred-prospects')));
 
 
 // render - sample page
@@ -84,7 +85,16 @@ const MainRoutes = {
     },
     {
       path: 'search-prospects',
-      element: <SearchProspects />
+      children: [
+        {
+          path: '',
+          element: <SearchProspects />
+        },
+        {
+          path: ':filterName',
+          element: <FiltredProspects />
+        }
+      ]
     },
     {
       path: 'search-properties',
