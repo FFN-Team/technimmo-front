@@ -1,9 +1,9 @@
 {
-  "name": "technImmo",
-  "version": "1.1.2",
+  "name": "technimmo-front",
+  "version": "0.1.0",
   "private": true,
-  "homepage": "http://localhost:3000",
   "dependencies": {
+<<<<<<< HEAD
     "@ant-design/colors": "^6.0.0",
     "@ant-design/icons": "^4.7.0",
     "@emotion/cache": "^11.10.3",
@@ -38,12 +38,14 @@
     "primeicons": "^6.0.1",
     "primereact": "^10.3.3",
     "prop-types": "^15.8.1",
+=======
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+>>>>>>> dafa69b (Revert "Feature/ti 102 second step front for prospects search")
     "react": "^18.2.0",
-    "react-apexcharts": "^1.4.0",
-    "react-bootstrap": "^2.10.0",
-    "react-copy-to-clipboard": "^5.1.0",
-    "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "react-draggable": "^4.4.5",
     "react-element-to-jsx-string": "^15.0.0",
     "react-leaflet": "^4.2.1",
@@ -76,6 +78,10 @@
     "use-supercluster": "^1.2.0",
     "web-vitals": "^3.0.2",
     "yup": "^0.32.11"
+=======
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+>>>>>>> dafa69b (Revert "Feature/ti 102 second step front for prospects search")
   },
   "scripts": {
     "start": "react-scripts start",
@@ -89,11 +95,6 @@
       "react-app/jest"
     ]
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-react"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -105,19 +106,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/core": "^7.21.4",
-    "@babel/eslint-parser": "^7.21.3",
-    "eslint": "^8.38.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.8.7"
   }
 }
