@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  ButtonGroup,
-  Menu ,
-  Container,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
+import {  Container} from '@mui/material';
+import FilterButtons from './FilterButtons';
+import SearchResults from './SearchResults'; 
+import SearchForm from './SearchForm';
+import ModalComponent from './ModalComponent'; 
 
 
 const columns = [
@@ -38,7 +28,6 @@ const SearchProspects = () => {
   const [profession, setProfession] = useState('');
   const [filtersList, setFiltersList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
   const [currentFilterName, setCurrentFilterName] = useState(''); 
   
 
@@ -224,188 +213,41 @@ const SearchProspects = () => {
 
   return (
     <Container style={{ marginTop: '20px' }}>
-      <form onSubmit={handleFindClick}>
+      <SearchForm
+        contactOrigin={contactOrigin}
+        setContactOrigin={setContactOrigin}
+        title={title}
+        setTitle={setTitle}
+        ageComparator={ageComparator}
+        setAgeComparator={setAgeComparator}
+        age={age}
+        setAge={setAge}
+        profession={profession}
+        setProfession={setProfession}
+        handleFindClick={handleFindClick}
+        handleClearFilter={handleClearFilter}
+        handleSaveFilter={handleSaveFilter}
+      />
 
-        <FormControl style={{ marginRight: '10px' }}>
-            <InputLabel htmlFor="contactOrigin" style={{ fontSize: '12px', marginTop: '-5px'}}>Contact Origin</InputLabel>
-            <Select
-                name="contactOrigin"
-                value={contactOrigin}
-                onChange={(e) => setContactOrigin(e.target.value)}
-                style={{ minWidth: '150px', height: '30px' }}
-            >
-                <MenuItem value="">...</MenuItem>
-                <MenuItem value="EMAIL">Email</MenuItem>
-                <MenuItem value="PHONE">Phone</MenuItem>
-                <MenuItem value="SOCIAL_MEDIA">Social media</MenuItem>
-                <MenuItem value="WEB_SITE">Web site</MenuItem>
-                <MenuItem value="WORD_OF_MOUTH">Word of mouth</MenuItem>
-            </Select>
-        </FormControl>
+      <FilterButtons
+        filtersList={filtersList}
+        handleFilterClick={handleFilterClick}
+        handleFilterMenuClick={handleFilterMenuClick}
+        handleDeleteFilterClick={handleDeleteFilterClick}
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        currentFilterName={currentFilterName}
+      />
 
-        <FormControl style={{ marginRight: '10px' }}>
-            <InputLabel htmlFor="title" style={{ fontSize: '12px', marginTop: '-5px'}}>Title</InputLabel>
-            <Select
-                name="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                style={{ minWidth: '150px', height: '30px' }}
-            >
-                <MenuItem value="">...</MenuItem>
-                <MenuItem value="MR">Mr</MenuItem>
-                <MenuItem value="MRS">Mrs</MenuItem>
-            </Select>
-        </FormControl>
+      <ModalComponent
+        showModal={showModal}
+        prospectFilterName={prospectFilterName}
+        setProspectFilterName={setProspectFilterName}
+        handleModalSave={handleModalSave}
+        handleModalCancel={handleModalCancel}
+      />
 
-        <FormControl>
-            <InputLabel htmlFor="ageComparator" style={{ fontSize: '12px', marginTop: '-5px'}}>Age Comparator</InputLabel>
-            <Select
-                name="ageComparator"
-                value={ageComparator}
-                onChange={(e) => setAgeComparator(e.target.value)}
-                style={{ minWidth: '150px', height: '30px' }}
-            >
-                <MenuItem value="">...</MenuItem>
-                <MenuItem value="EQUALS">Equals</MenuItem>
-                <MenuItem value="NOT_EQUAL_TO">Not equal to</MenuItem>
-                <MenuItem value="GREATER_THAN">Greater than</MenuItem>
-                <MenuItem value="LESS_THAN">Less than</MenuItem>
-                <MenuItem value="GREATER_THAN_OR_EQUAL_TO">Greater than or equal to</MenuItem>
-                <MenuItem value="LESS_THAN_OR_EQUAL_TO">Less than or equal to</MenuItem>
-            </Select>
-        </FormControl>
-        
-        <TextField
-            type="number"
-            label="Age"
-            name="age"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            style={{ width: '100px',marginRight: '10px'}}
-            inputProps={{style: {height: 8}}}
-            InputLabelProps={{style: {fontSize: 12,marginTop: -5}}}
-            
-        />      
-       
-        <FormControl>
-            <InputLabel htmlFor="profession" style={{ fontSize: '12px', marginTop: '-5px'}}>Profession</InputLabel>
-            <Select
-                name="profession"
-                value={profession}
-                onChange={(e) => setProfession(e.target.value)}
-                style={{ minWidth: '150px', height: '30px' }}
-            >
-                <MenuItem value="">...</MenuItem>
-                <MenuItem value="DOCTOR">Doctor</MenuItem>
-                <MenuItem value="ENGINEER">Engineer</MenuItem>
-                <MenuItem value="TEACHER">Teacher</MenuItem>
-                <MenuItem value="STUDENT">Student</MenuItem>
-                <MenuItem value="COMMERCIAL">Commercial</MenuItem>
-            </Select>
-        </FormControl>
-
-
-        <div style={{ display: 'flex', gap: '10px', marginTop: '20px', marginBottom:'30px' }}>
-          <Button type="submit" variant="contained" style={{ height: '25px' }} >
-            Find
-          </Button>
-
-          <Button  onClick={handleClearFilter} variant="outlined" style={{ height: '25px' }} color="error">
-            Clear Filter
-          </Button>
-
-          <Button onClick={handleSaveFilter} variant="outlined" style={{height: '25px' }} color="success">
-            Save Filter
-          </Button>
-        </div>
-
-      </form>
-
-
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-        {filtersList.map((filter) => (
-          <ButtonGroup key={filter.id} variant="outlined" style={{ height: '25px' }}>
-            <Button 
-              onClick={() => handleFilterClick(filter.prospectFilterName)}
-              style={{ textTransform: 'none' }}
-            >
-              {filter.prospectFilterName}
-            </Button>
-            <Button style={{ width: '10px' }} onClick={(event) => handleFilterMenuClick(event, filter.prospectFilterName)}>
-              <ExpandMoreIcon/>
-            </Button>          
-          </ButtonGroup>
-        ))}
-
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
-        >
-          <MenuItem 
-            onClick={() => navigate(`/search-prospects/${currentFilterName}`)}
-          >
-            Ouvrir dossier
-            </MenuItem>
-          <MenuItem 
-            onClick={() => handleDeleteFilterClick(currentFilterName)}
-          >Supprimer le filtre</MenuItem>
-        </Menu>
-      </div>
-
-      {showModal && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            padding: '20px',
-            background: '#fff',
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-            zIndex: 9999,
-          }}
-        >
-          <InputLabel htmlFor="filterName">Donne un nom à ce filtre : </InputLabel>
-          <TextField
-            type="text"
-            id="filterName"
-            value={prospectFilterName}
-            onChange={(e) => setProspectFilterName(e.target.value)}
-            variant="outlined"
-            fullWidth
-            style={{ marginBottom: '10px' }}
-          />
-          <Button variant="contained" onClick={handleModalSave} style={{ marginRight: '10px' }}>
-            Enregistrer
-          </Button>
-          <Button variant="outlined" onClick={handleModalCancel}>
-            Annuler
-          </Button>
-        </div>
-      )}
-
-      <div>
-        <h2>Résultats de la recherche :</h2>
-
-        
-        <Box sx={{ height: 320, width: '100%' }}>
-          <DataGrid
-            rows={prospects}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 15,
-                },
-              },
-            }}
-            pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
-          />
-        </Box> 
-      </div>
+      <SearchResults prospects={prospects} columns={columns} />
     </Container>
   );
 };
