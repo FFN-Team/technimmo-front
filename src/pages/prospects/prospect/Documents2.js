@@ -16,9 +16,6 @@ const Document = () => {
         fd.append('fileContent', file);
 
         setMsg("Uploading...");
-        setProgress(prevState => {
-            return {...prevState, started: true}
-        });
         
         fetch(`http://localhost:9001/api/v1/documents/upload?fileName=edt.png&documentType=VISITE_PHOTO&ownerId=1`, {
             method: 'POST',
@@ -40,7 +37,7 @@ const Document = () => {
     };
 
     return (
-        <div className='document-container'>
+    <div className='document-container'>
       <h1 className='document-header header'>Document Management</h1>
       <div className='document-input-container'>
         <input type='file' onChange={handleFileChange} />
@@ -50,6 +47,18 @@ const Document = () => {
       </div>
 
       {msg && <span className='upload-message'>{msg}</span>}
+
+      <Card>
+      <CardContent>
+        <Typography variant="h6" component="div">
+          {document.title}
+        </Typography>
+        <Typography color="text.secondary">
+          {document.description}
+        </Typography>
+        {/* Ajoutez d'autres détails du document ici */}
+      </CardContent>
+    </Card>
     </div>
     );
 }
