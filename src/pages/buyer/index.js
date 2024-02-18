@@ -33,6 +33,7 @@ const Buyer = () => {
     fetchBuyerDataFromBuyerId();
   }, [id]);
 
+
   //fetchPropertiesToFollowDataFromBuyerId
   useEffect(() => {
     const fetchPropertiesToFollowDataFromBuyerId = async () => {
@@ -54,21 +55,17 @@ const Buyer = () => {
     fetchPropertiesToFollowDataFromBuyerId();
   }, []);
 
-  const resetAndFindPropertiesToFollow = async () => {
-    const userConfirmed = window.confirm("Veuillez noter que, pour l'instant, cette fonctionnalité entraînera la mise à jour des biens correspondants et réinitialisera les statuts à blabla. Souhaitez-vous poursuivre?");
+  const refreshPropertiesToFollow = async () => {
+    try {
+      const url = `http://localhost:9001/api/v1/buyers/${id}/properties-to-follow`;
+      await fetch(url, {
+        method: 'PUT',
+      });
 
-    if (userConfirmed) {
-      try {
-        const url = `http://localhost:9001/api/v1/buyers/${id}/properties-to-follow`;
-        await fetch(url, {
-          method: 'PUT',
-        });
-
-        window.location.reload();
-      } catch (error) {
-        console.error("Une erreur s'est produite lors de la réinitialisation des propriétés à suivre :", error);
-        alert("Une erreur s'est produite. Veuillez réessayer.");
-      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Une erreur s'est produite lors de la réinitialisation des propriétés à suivre :", error);
+      alert("Une erreur s'est produite. Veuillez réessayer.");
     }
   };
 
@@ -108,7 +105,13 @@ const Buyer = () => {
         <div className="find-properties">
           <Card>
             <p><strong>Portfolio properties to follow :</strong></p>
-            <button onClick={resetAndFindPropertiesToFollow}>Find</button>
+            {propertiesToFollow.length === 0 && (
+              <button onClick={refreshPropertiesToFollow}>Find</button>
+            )}
+            {propertiesToFollow.length !== 0 && (
+              <button onClick={refreshPropertiesToFollow}>Refresh</button>
+            )}
+
             <PropertiesTable properties={propertiesToFollow}/>
           </Card>
         </div>
