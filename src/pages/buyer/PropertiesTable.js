@@ -15,7 +15,6 @@ const PropertiesTable = ({ properties }) => {
   
       if (userConfirmed) {
         const newStatus = event.target.value;
-  
         try {
           const url = `http://localhost:9001/api/v1/properties-to-follow/${propertyId}/status`;
   
@@ -25,7 +24,7 @@ const PropertiesTable = ({ properties }) => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              propertyToFollowStatus: newStatus,
+              propertyToFollowStatus : newStatus
             }),
           });
   
@@ -73,7 +72,7 @@ const PropertiesTable = ({ properties }) => {
                       {property.status}
                     </option>
                     <option value="TO_STUDY">TO_STUDY</option>
-                    <option value="TO_VISITED">TO_VISITED</option>
+                    <option value="TO_VISIT">TO_VISIT</option>
                     <option value="VISITED">VISITED</option>
                   </select>
                 </TableCell>
