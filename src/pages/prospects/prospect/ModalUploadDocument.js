@@ -8,14 +8,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import './Document.css'; 
 
 const ModalUploadDocument = () => {
-  const [file, setFile] = useState(null);
   const [msg, setMsg] = useState('');
   const [isModalOpen, setModalOpen] = useState(true);
 
   
 
   const handleClose = () => {
-    setFile(null);
     setMsg('');
     setModalOpen(false);
   };

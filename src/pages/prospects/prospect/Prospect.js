@@ -1,5 +1,6 @@
 import { useParams,useNavigate} from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+import Card from 'pages/components/Card';
 
 const Prospect = () => {
   const { id } = useParams();
@@ -251,12 +252,6 @@ const TableRow = ({ children }) => {
   );
 };
 
-const Card = ({ children }) => (
-  <div style={cardStyle}>
-    {children}
-  </div>
-);
-
 const prospectDetailsStyle = {
   fontSize: '16px',
   lineHeight: '1.6',
@@ -269,17 +264,6 @@ const prospectFieldStyle = {
   fontWeight: 'bold', // Texte en gras pour les noms des champs
   color: '#333', // Couleur légèrement plus foncée pour les noms des champs
   marginRight: '8px',
-};
-
-const cardStyle = {
-  border: '1px solid #e0e0e0',
-  borderRadius: '8px',
-  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  padding: '16px',
-  margin: '10px',
-  backgroundColor: '#ffffff',
-  transition: 'box-shadow 0.3s ease-in-out',
-  cursor: 'pointer',
 };
 
 const tableStyle = {

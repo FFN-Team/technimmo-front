@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './Document.css'; 
+import Card from 'pages/components/Card';
 
 const Document = () => {
 
@@ -37,29 +38,28 @@ const Document = () => {
     };
 
     return (
-    <div className='document-container'>
-      <h1 className='document-header header'>Document Management</h1>
-      <div className='document-input-container'>
-        <input type='file' onChange={handleFileChange} />
-        <button className='upload-button' onClick={handleUpload}>
-          Upload
-        </button>
-      </div>
+    <div>
+        <div className='document-container'>
+        <h1 className='document-header header'>Document Management</h1>
+        <div className='document-input-container'>
+            <input type='file' onChange={handleFileChange} />
+            <button className='upload-button' onClick={handleUpload}>
+            Upload
+            </button>
+        </div>
 
-      {msg && <span className='upload-message'>{msg}</span>}
+        {msg && <span className='upload-message'>{msg}</span>}
+        </div>
 
-      <Card>
-      <CardContent>
-        <Typography variant="h6" component="div">
-          {document.title}
-        </Typography>
-        <Typography color="text.secondary">
-          {document.description}
-        </Typography>
-        {/* Ajoutez d'autres détails du document ici */}
-      </CardContent>
-    </Card>
-    </div>
+        <div className="card-container">
+            <Card>
+                <h3>Justificatif d&rsquo;identité du propriétaire</h3>
+            </Card>
+            <Card>
+                <h3>Contrat mariage, PACS ou Jugement de divorce</h3>
+            </Card>
+        </div>
+    </div>    
     );
 }
 

@@ -46,3 +46,16 @@
     margin-top: 10px;
     color: #28a745;
   }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux cartes de passer à la ligne si l'espace est insuffisant */
+    justify-content: space-between; /* Espacement équitable entre les cartes */
+  }
+  
+  /* Ajoutez ces styles si vous voulez spécifier la largeur de chaque carte */
+  .card-container > * {
+    width: 48%; /* Ajustez en fonction de vos besoins, vous pouvez également utiliser media queries pour la mise en page réactive */
+    margin-bottom: 10px; /* Marge inférieure pour l'espace entre les cartes */
+  }
+  

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css'; // Importer les styles de react-tabs
 import Prospects from './Prospect'; // Importer le composant Prospects
-import Document from './Documents2';
+import Document from './Documents';
 import './Onglets.css'; // Importer le fichier de style CSS
 
 const Onglets = () => {

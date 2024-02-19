@@ -12,8 +12,6 @@ const DocumentManagement = () => {
           Upload Document
         </button>
       </div>
-
-      <ModalUploadDocument />
     </div>
   );
 };
