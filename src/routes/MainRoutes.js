@@ -65,7 +65,7 @@ const MainRoutes = {
           element: <SearchProspects />
         },
         {
-          path: ':id',
+          path: `:id`,
           element: <Prospect />
         }
       ]
@@ -91,7 +91,7 @@ const MainRoutes = {
           element: <TableProperties />
         },
         {
-          path: ':id',
+          path: `:id`,
           element: <Property />
         }
       ]

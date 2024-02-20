@@ -51,6 +51,7 @@ const Breadcrumbs = ({ navigation, title, ...others }) => {
   let itemContent;
   let breadcrumbContent = <Typography />;
   let itemTitle = '';
+  let itemProspectName = '';
 
   // collapse item
   if (main && main.type === 'collapse') {
@@ -64,11 +65,22 @@ const Breadcrumbs = ({ navigation, title, ...others }) => {
   // items
   if (item && item.type === 'item') {
     itemTitle = item.title;
-    itemContent = (
-      <Typography variant="subtitle1" color="textPrimary">
-        {itemTitle}
-      </Typography>
-    );
+    if(item.prospectName) {
+      itemProspectName = item.prospectName;
+      itemContent = (
+        <Typography variant="subtitle1" color="textPrimary">
+          {itemTitle} / {itemProspectName}
+        </Typography>
+      );
+    }
+    else {
+      itemContent = (
+        <Typography variant="subtitle1" color="textPrimary">
+          {itemTitle}
+        </Typography>
+      );
+    }
+    
 
     // main
     if (item.breadcrumbs !== false) {

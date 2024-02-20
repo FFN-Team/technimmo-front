@@ -2,34 +2,11 @@ import { useParams,useNavigate} from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import Card from 'pages/components/Card';
 
-const Prospect = () => {
+const Prospect = ({prospect, load}) => {
   const { id } = useParams();
-  const [prospect, setProspect] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(load);
   const [error, setError] = useState(null);
   const [propertiesToFollow, setPropertiesToFollow] = useState([]);
-
-
-  //fetchBuyerDataFromBuyerId
-  useEffect(() => {
-    const fetchProspectDataFromProspectId = async () => {
-      try {
-        const url = `http://localhost:9001/api/v1/prospects/${id}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setProspect(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProspectDataFromProspectId();
-  }, [id]);
 
   //fetchPropertiesToFollowDataFromBuyerId
   useEffect(() => {

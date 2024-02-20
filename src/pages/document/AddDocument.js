@@ -1,7 +1,7 @@
 import { useState } from "react";
 import './Document.css'; 
 
-const AddDocument = ({documentType}) => {
+const AddDocument = ({documentType, id}) => {
     const [file, setFile] = useState(null);
     const [msg, setMsg] = useState(null);
 
@@ -16,7 +16,7 @@ const AddDocument = ({documentType}) => {
 
         setMsg("Uploading...");
         
-        fetch(`http://localhost:9001/api/v1/documents/upload?fileName=edt.png&documentType=${documentType}&ownerId=1`, {
+        fetch(`http://localhost:9001/api/v1/documents/upload?fileName=edt.png&documentType=${documentType}&ownerId=${id}`, {
             method: 'POST',
             body: fd
         })
