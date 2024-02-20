@@ -1,4 +1,3 @@
-import ModalUploadDocument from './ModalUploadDocument';
 import './Document.css'; 
 
 const DocumentManagement = () => {

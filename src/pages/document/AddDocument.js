@@ -1,9 +1,7 @@
 import { useState } from "react";
 import './Document.css'; 
-import Card from 'pages/components/Card';
 
-const Document = () => {
-
+const AddDocument = ({documentType}) => {
     const [file, setFile] = useState(null);
     const [msg, setMsg] = useState(null);
 
@@ -18,7 +16,7 @@ const Document = () => {
 
         setMsg("Uploading...");
         
-        fetch(`http://localhost:9001/api/v1/documents/upload?fileName=edt.png&documentType=VISITE_PHOTO&ownerId=1`, {
+        fetch(`http://localhost:9001/api/v1/documents/upload?fileName=edt.png&documentType=${documentType}&ownerId=1`, {
             method: 'POST',
             body: fd
         })
@@ -38,8 +36,7 @@ const Document = () => {
     };
 
     return (
-    <div>
-        <div className='document-container'>
+    <div className='document-container'>
         <h1 className='document-header header'>Document Management</h1>
         <div className='document-input-container'>
             <input type='file' onChange={handleFileChange} />
@@ -49,18 +46,7 @@ const Document = () => {
         </div>
 
         {msg && <span className='upload-message'>{msg}</span>}
-        </div>
+    </div>)
+};
 
-        <div className="card-container">
-            <Card>
-                <h3>Justificatif d&rsquo;identité du propriétaire</h3>
-            </Card>
-            <Card>
-                <h3>Contrat mariage, PACS ou Jugement de divorce</h3>
-            </Card>
-        </div>
-    </div>    
-    );
-}
-
-export default Document;
+export default AddDocument;

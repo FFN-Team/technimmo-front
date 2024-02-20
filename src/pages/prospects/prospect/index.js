@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css'; // Importer les styles de react-tabs
 import Prospects from './Prospect'; // Importer le composant Prospects
-import Document from './Documents';
-import './Onglets.css'; // Importer le fichier de style CSS
+import Document from 'pages/document/Documents';
+import 'pages/components/Onglets.css'; // Importer le fichier de style CSS
+import Card from 'pages/components/Card';
+
 
 const Onglets = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -12,6 +14,16 @@ const Onglets = () => {
   const handleTabSelect = (index) => {
     setActiveTab(index);
   };
+
+  const card = (
+      <div className="card-container">     
+        <Card>
+            <h3>Justificatif d&rsquo;identité du propriétaire</h3>
+        </Card>
+        <Card>
+            <h3>Contrat mariage, PACS ou Jugement de divorce</h3>
+        </Card>
+      </div>);
 
   return (
     <Tabs className="custom-tabs"  selectedIndex={activeTab} onSelect={handleTabSelect}>
@@ -24,7 +36,7 @@ const Onglets = () => {
         <Prospects />
       </TabPanel>
       <TabPanel>
-        <Document />
+        <Document element={card} />
       </TabPanel>
     </Tabs>
   );

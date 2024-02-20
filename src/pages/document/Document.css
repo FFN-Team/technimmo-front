@@ -58,4 +58,9 @@
     width: 48%; /* Ajustez en fonction de vos besoins, vous pouvez également utiliser media queries pour la mise en page réactive */
     margin-bottom: 10px; /* Marge inférieure pour l'espace entre les cartes */
   }
-  
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }

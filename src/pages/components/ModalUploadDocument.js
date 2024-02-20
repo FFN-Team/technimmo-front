@@ -11,8 +11,6 @@ const ModalUploadDocument = () => {
   const [msg, setMsg] = useState('');
   const [isModalOpen, setModalOpen] = useState(true);
 
-  
-
   const handleClose = () => {
     setMsg('');
     setModalOpen(false);
