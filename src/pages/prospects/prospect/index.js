@@ -47,7 +47,7 @@ const Onglets = () => {
         children: [
           {
             id: 'prospects',
-            title: 'Prospect',
+            title: 'Prospects',
             type: 'item',
             prospectName: `${prospect.firstName} ${prospect.lastName}`,
             url: `/prospects/${id}`,
@@ -67,10 +67,10 @@ const Onglets = () => {
         </TabList>
 
         <TabPanel>
-          <Prospects prospect={prospect} loading={loading}/>
+          <Prospects prospect={prospect} load={loading}/>
         </TabPanel>
         <TabPanel>
-          <Document />
+          <Document owner={prospect}/>
         </TabPanel>
       </Tabs>
     </div>

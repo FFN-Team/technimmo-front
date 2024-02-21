@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useParams } from 'react-router-dom';
 
-const Document = () => {
+const Document = ({owner}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { id } = useParams();
 
@@ -21,9 +21,16 @@ const Document = () => {
 
     const modalContent = (documentType) => (
         <div>
-          <AddDocument documentType={documentType} id={id} />
+          <AddDocument documentType={documentType} id={id} ownerName={ownerName}/>
         </div>
       );
+
+    
+    let ownerName = '';        
+
+    if(owner) {
+        ownerName = `${owner.firstName} ${owner.lastName}`
+    }
 
     return (
     <div>
@@ -39,12 +46,13 @@ const Document = () => {
                     startIcon={<CloudUploadIcon />}>
                     Upload file
                     </Button>
-                <ModalComponent isOpen={isModalOpen} onClose={closeModal} component={modalContent('PROSPECT_IDENTITY')} />
+                    {isModalOpen && (
+                <ModalComponent isOpen={isModalOpen} onClose={closeModal} component={modalContent('PROSPECT_IDENTITY')} />)}
             </div>
          </Card>
         <Card> 
             <div className="card-header">
-                <h3>Contrat mariage, PACS ou Jugement de divorce</h3>
+                <h3>Etat civil</h3>
                 <Button onClick={openModal}
                     component="label"
                     role={undefined}
@@ -53,7 +61,7 @@ const Document = () => {
                     startIcon={<CloudUploadIcon />}>
                     Upload file
                     </Button>
-                <ModalComponent isOpen={isModalOpen} onClose={closeModal} component={modalContent('')} />
+                <ModalComponent isOpen={isModalOpen} onClose={closeModal} component={modalContent('CIVIL_STATUS')} />
             </div>
         </Card>
        </div>

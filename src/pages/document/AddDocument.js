@@ -1,14 +1,24 @@
 import { useState } from "react";
 import './Document.css'; 
 
-const AddDocument = ({documentType, id}) => {
+const AddDocument = ({documentType, id, ownerName}) => {
     const [file, setFile] = useState(null);
     const [msg, setMsg] = useState(null);
+    const [success, setSuccess] = useState(true);
+    let fileName = "";
 
-    function handleUpload() {
+    // comment escape les apostrophe et les accents
+
+    const handleUpload = () => {
         if(!file) {
             console.log("No file selected");
             return;
+        }
+
+        console.log(documentType);
+
+        if (documentType && documentType === 'PROSPECT_IDENTITY'){
+            fileName = "Justificatif identite" + ownerName;
         }
 
         const fd = new FormData();
@@ -16,19 +26,25 @@ const AddDocument = ({documentType, id}) => {
 
         setMsg("Uploading...");
         
-        fetch(`http://localhost:9001/api/v1/documents/upload?fileName=edt.png&documentType=${documentType}&ownerId=${id}`, {
+        try {
+            const response = fetch(`http://localhost:9001/api/v1/documents/upload?fileName=${fileName}&documentType=${documentType}&ownerId=${id}`, {
             method: 'POST',
             body: fd
         })
-        .then(res => {
+
+            if(!response.ok) {
+                setMsg("Upload failed");
+                setSuccess(false);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
             setMsg("Upload successful !")
             console.log(res.data)
-        })
-        .catch(err => {
-            setMsg("Upload failed");
-            console.error(err);
-        })
 
+        } catch (error) {
+            setMsg("Upload failed");
+            setSuccess(false);
+        }
     }
 
     const handleFileChange = (e) => {
@@ -37,7 +53,6 @@ const AddDocument = ({documentType, id}) => {
 
     return (
     <div className='document-container'>
-        <h1 className='document-header header'>Document Management</h1>
         <div className='document-input-container'>
             <input type='file' onChange={handleFileChange} />
             <button className='upload-button' onClick={handleUpload}>
@@ -45,7 +60,7 @@ const AddDocument = ({documentType, id}) => {
             </button>
         </div>
 
-        {msg && <span className='upload-message'>{msg}</span>}
+        {msg && <span className={`upload-message ${success === true ? 'success' : 'failed'}`}>{msg}</span>}
     </div>)
 };
 
