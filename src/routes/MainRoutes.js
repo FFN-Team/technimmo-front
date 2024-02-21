@@ -9,7 +9,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 //render - buyers
 const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
-const Buyer = Loadable(lazy(() => import('pages/buyer')))
+//const Buyer = Loadable(lazy(() => import('pages/buyer')))
 
 //render - properties
 const TableProperties = Loadable(lazy(() => import('pages/properties')));
@@ -20,6 +20,7 @@ const NotificationsSettings = Loadable(lazy(() => import('pages/notificationsSet
 
 //render - prospects
 const SearchProspects = Loadable(lazy(() => import('pages/prospects/search-prospects')));
+const Prospect = Loadable(lazy(() => import('pages/prospects/prospect')))
 const FiltredProspects = Loadable(lazy(() => import('pages/prospects/filtred-prospects')));
 
 
@@ -66,7 +67,7 @@ const MainRoutes = {
         },
         {
           path: ':id',
-          element: <Buyer />
+          element: <Prospect />
         }
       ]
     },
@@ -80,6 +81,15 @@ const MainRoutes = {
         {
           path: ':id',
           element: <Property />
+        }
+      ]
+    },
+    {
+      path:'prospects',
+      children: [
+        {
+          path: ':id',
+          element: <Prospect />
         }
       ]
     },

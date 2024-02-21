@@ -1,0 +1,74 @@
+.document-container {
+    max-width: 600px; /* Ajusté la largeur de la card */
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .document-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .document-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .upload-button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .upload-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .upload-message {
+    display: block;
+    margin-top: 10px;
+    color: #28a745;
+  }
+
+  .success {
+    color: #28a745;
+  }
+
+  .failed {
+    color: crimson;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux cartes de passer à la ligne si l'espace est insuffisant */
+    justify-content: space-between; /* Espacement équitable entre les cartes */
+  }
+  
+  /* Ajoutez ces styles si vous voulez spécifier la largeur de chaque carte */
+  .card-container > * {
+    width: 48%; /* Ajustez en fonction de vos besoins, vous pouvez également utiliser media queries pour la mise en page réactive */
+    margin-bottom: 10px; /* Marge inférieure pour l'espace entre les cartes */
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
