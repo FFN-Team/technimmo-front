@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef, useEffect, useState } from 'react';
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -28,7 +27,7 @@ import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 
 // assets
-import { BellOutlined, CloseOutlined, SettingOutlined,ReloadOutlined } from '@ant-design/icons';
+import { BellOutlined, CloseOutlined } from '@ant-design/icons';
 
 // sx styles
 const avatarSX = {
@@ -52,7 +51,6 @@ const actionSX = {
 const Notification = () => {
   const iconBackColorOpen = 'grey.300';
   const iconBackColor = 'grey.100';
-  const navigate = useNavigate();
 
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
@@ -60,38 +58,41 @@ const Notification = () => {
   const [open, setOpen] = useState(false);
   const [notificationsPotentialProject, setNotificationsPotentialProject] = useState([]);
   const [notificationsProspect, setNotificationsProspect] = useState([]);
-  const [prospect, setPotentialProjectProspect] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  //A MOFIDIER AVEC LA MODIF DE FLORINE PAR RAPPORT AUX CONTROLLER DE NOTIFICATION QUI RENVOIE TOUTES TYPES DE NOTIFS
   const updateNotifications = async () => {
-    try {
-      const url_potentiel_projet = `http://localhost:9001/api/v1/potential-projects/notification`;
-      const url_propect = `http://localhost:9001/api/v1/prospects/notification`;
+      try {
+        const url_potential_project = `http://localhost:9001/api/v1/potential-projects/notification`;
+        const url_prospect = `http://localhost:9001/api/v1/prospects/notification`;
 
-      const response_potentiel_projet = await fetch(url_potentiel_projet, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+        const response_potential_project = await fetch(url_potential_project, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-      const response_propect = await fetch(url_propect, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+        const response_prospect = await fetch(url_prospect, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-      const data_potentiel_projet = await response_potentiel_projet.json();
-      const data_propect = await response_propect.json();
+        const data_potential_project = await response_potential_project.json();
+        const data_prospect = await response_prospect.json();
 
-      setNotificationsPotentialProject(data_potentiel_projet);
-      setNotificationsProspect(data_propect);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+        setNotificationsPotentialProject(data_potential_project);
+        setNotificationsProspect(data_prospect);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+  //A MOFIDIER AVEC LA MODIF DE FLORINE PAR RAPPORT AUX CONTROLLER DE NOTIFICATION QUI RENVOIE TOUTES TYPES DE NOTIFS
+  useEffect(() => {
+    updateNotifications();
+  }, []); // Assurez-vous de mettre une dépendance vide pour useEffect si la fonction doit être appelée une seule fois.
 
   const handleToggle = async () => {
     setOpen((prevOpen) => !prevOpen);
@@ -107,7 +108,6 @@ const Notification = () => {
   const getPotentialProjectProspect = async (potentialProjectId) => {
     try {
       const url_potentiel_projet_prospect = `http://localhost:9001/api/v1/potential-projects/${potentialProjectId}/prospect`;
-
       const response_potentiel_projet_prospect = await fetch(url_potentiel_projet_prospect, {
         method: 'GET',
         headers: {
@@ -116,20 +116,27 @@ const Notification = () => {
       });
 
       const data_prospect = await response_potentiel_projet_prospect.json();
-      setPotentialProjectProspect(data_prospect);
+
+      return data_prospect;
     } catch (error) {
       console.log(error.message);
     }
   };
 
   const handleSendPotentialProjectEmail = async (notification) => {
+    try {
+      console.log(notification.potentialProject.id);
+      const prospect = await getPotentialProjectProspect(notification.potentialProject.id);
 
-    await getPotentialProjectProspect(notification.potentialProject.id);
-    
-    const confirmSend = window.confirm(`Voulez-vous envoyer un e-mail à ${prospect.completeName}?`);
-    
-    if (confirmSend) {
-      sendEmailToProspect(prospect, 'PROJECT_DUE_DATE_APPROACHING');
+      console.log(prospect);
+  
+      const confirmSend = window.confirm(`Voulez-vous envoyer un e-mail à ${prospect.completeName}?`);
+
+      if (confirmSend) {
+        sendEmailToProspect(prospect, 'PROJECT_DUE_DATE_APPROACHING');
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données du prospect :", error.message);
     }
   };
 
@@ -145,8 +152,6 @@ const Notification = () => {
   const sendEmailToProspect = async (prospect, eventType) => {
     
     try { 
-      console.log("tesstttttt prospect")
-      console.log(prospect)
       const response = await fetch(`http://localhost:9001/api/v1/email`, {
         method: 'POST',
         headers: {
@@ -305,9 +310,7 @@ const Notification = () => {
                 }
               }}
             >
-              <ReloadOutlined onClick={updateNotifications} style={{ cursor: 'pointer' }} />
               <span style={{ margin: '0 4px' }}></span>
-              <SettingOutlined onClick={() => navigate(`/notifications-settings`)} style={{ cursor: 'pointer' }} />
 
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard
@@ -337,7 +340,7 @@ const Notification = () => {
                         <NotificationItem
                           key={index}
                           notification={notification}
-                          onSendEmail={handleSendPotentialProjectEmail}
+                          onSendEmail={() => handleSendPotentialProjectEmail(notification)}
                           onConsult={handleConsultProject}
                         />
                       ))}

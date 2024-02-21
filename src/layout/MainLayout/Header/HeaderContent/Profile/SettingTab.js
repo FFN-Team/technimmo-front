@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -11,6 +12,7 @@ import { CommentOutlined, LockOutlined, QuestionCircleOutlined, UserOutlined, Un
 
 const SettingTab = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index) => {
@@ -25,7 +27,10 @@ const SettingTab = () => {
         </ListItemIcon>
         <ListItemText primary="Support" />
       </ListItemButton>
-      <ListItemButton selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1)}>
+      <ListItemButton selected={selectedIndex === 1} onClick={(event) => {
+        handleListItemClick(event, 1);
+        navigate(`/account-settings`);
+      }}>
         <ListItemIcon>
           <UserOutlined />
         </ListItemIcon>
