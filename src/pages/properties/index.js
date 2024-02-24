@@ -7,6 +7,7 @@ import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import { useNavigate } from 'react-router-dom';
+import Card from "pages/components/Card.js";
 
 import TableRowProperties from './TableRowProperties';
 import TablePaginationProperties from './TablePaginationProperties';
@@ -60,34 +61,36 @@ const TableProperties = () => {
 
   return (
     <div>
-      <AddPropertyForm />
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {ColumnProperties.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                    {column.label}
-                  </TableCell>
+      <Card>
+        <AddPropertyForm /> 
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {ColumnProperties.map((column) => (
+                    <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                  <TableRowProperties key={row.id} row={row} columns={ColumnProperties} navigate={navigate} />
                 ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRowProperties key={row.id} row={row} columns={ColumnProperties} navigate={navigate} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePaginationProperties
-          rows={rows}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          handleChangePage={handleChangePage}
-          handleChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePaginationProperties
+            rows={rows}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            handleChangePage={handleChangePage}
+            handleChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </Paper>
+        </Card>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Card from 'pages/components/Card';
 import PropertiesTable from 'pages/properties/PropertiesTable.js';
 
-const Prospect = ({prospect, load}) => {
+const ProspectDetails = ({prospect, load}) => {
   const { id } = useParams();
   const [loading, setLoading] = useState(load);
   const [error, setError] = useState(null);
@@ -131,4 +131,4 @@ const prospectFieldStyle = {
   marginRight: '8px',
 };
 
-export default Prospect;
+export default ProspectDetails;

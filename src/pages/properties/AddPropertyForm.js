@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Card from "pages/components/Card.js";
+import MenuItem from '@mui/material/MenuItem';import { Button } from '@mui/material';
 
 const AddPropertyForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -82,10 +86,11 @@ const AddPropertyForm = () => {
   };
 
   return (
-    <div className="property-details">
-      <Card>
+    <Card>
+      <div className="property-details">
+        <h1 style={{ padding: 20 }}>Ajouter un nouveau bien</h1>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="property_name">Name : </label>
+          <label htmlFor="property_name" style={{ marginRight: 10 }}>Name : </label>
           <input
             type="text"
             id="property_name"
@@ -97,7 +102,7 @@ const AddPropertyForm = () => {
           />
           <br />
           <br />
-          <label htmlFor="description">Description : </label>
+          <label htmlFor="description" style={{ marginRight: 10 }}>Description : </label>
           <input
             type="text"
             id="description"
@@ -109,7 +114,7 @@ const AddPropertyForm = () => {
           />
           <br />
           <br />
-          <label htmlFor="number_of_rooms">Number of rooms : </label>
+          <label htmlFor="number_of_rooms" style={{ marginRight: 10 }}>Number of rooms : </label>
           <input
             type="number"
             id="number_of_rooms"
@@ -123,7 +128,7 @@ const AddPropertyForm = () => {
           />
           <br />
           <br />
-          <label htmlFor="livable_area">Livable area : </label>
+          <label htmlFor="livable_area" style={{ marginRight: 10 }}>Livable area : </label>
           <input
             type="number"
             id="livable_area"
@@ -138,26 +143,27 @@ const AddPropertyForm = () => {
           />
           <br />
           <br />
-          <label htmlFor="id_address">Address : </label>
-          <select
-            id="id_address"
-            name="id_address"
-            value={property.id_address}
-            onChange={handleChange}
-            disabled={options.length === 0}
-            style={{ width: 300 }}
-          >
-            {options.length === 0 && (
-              <option value="" disabled>
-                No address available
-              </option>
-            )}
-            {options.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
-              </option>
-            ))}
-          </select>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <label htmlFor="id_address" style={{ marginRight: 10 }}>Address : </label>
+            <FormControl required sx={{ m: 1, minWidth: 120 }}>
+              <Select
+                id="id_address" name="id_address" value={property.id_address} onChange={handleChange} 
+                disabled={options.length === 0}
+                style={{ width: 300 }}
+              >
+                {options.length === 0 && (
+                  <option value="" disabled>
+                    No address available
+                  </option>
+                )}
+                {options.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <br />
           <br />
           {errorMessage && (
@@ -166,19 +172,15 @@ const AddPropertyForm = () => {
               <br />
             </div>
           )}
-          <button type="submit">Save</button>
+          <div style={{ display: 'flex'}}>
+            <Button type="submit" variant="outlined" style={{height: '25px' }} color="success">
+              Save
+            </Button>
+          </div>
         </form>
-      </Card>
-    </div>
+      </div>
+    </Card>
   );
-};
-
-const Card = ({ children }) => <div style={cardStyle}>{children}</div>;
-
-const cardStyle = {
-  border: '1px solid #ddd',
-  padding: '10px',
-  margin: '10px'
 };
 
 export default AddPropertyForm;
