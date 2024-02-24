@@ -129,7 +129,6 @@ const PropertyDetails = () => {
   return (
     <div className="property-details">
       <Card>
-        <h1>Modifier le bien</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="property_name">Name : </label>
           <input
