@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {  Container} from '@mui/material';
 import FilterButtons from './FilterButtons';
 import SearchResults from './SearchResults'; 
 import SearchForm from './SearchForm';
@@ -147,6 +146,8 @@ const SearchProspects = () => {
 
   useEffect(() => {
     fetchFiltersList();
+    // ici je veux que handleFindClick  soit appeler 
+    handleFindClick({ preventDefault: () => {} });
   }, []);
 
   const handleFilterClick = async (prospectFilterName) => {
@@ -212,7 +213,7 @@ const SearchProspects = () => {
 
 
   return (
-    <Container style={{ marginTop: '20px' }}>
+    <div>
       <SearchForm
         contactOrigin={contactOrigin}
         setContactOrigin={setContactOrigin}
@@ -248,7 +249,7 @@ const SearchProspects = () => {
       />
 
       <SearchResults prospects={prospects} columns={columns} />
-    </Container>
+    </div>
   );
 };
 

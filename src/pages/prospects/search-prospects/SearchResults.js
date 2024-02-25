@@ -9,7 +9,7 @@ const SearchResults = ({ prospects, columns }) => {
     <div>
       <h2>Résultats de la recherche :</h2>
 
-      <Box sx={{ height: 320, width: '100%' }}>
+      <Box sx={{ height: 450}}>
         <DataGrid
           rows={prospects}
           columns={columns}
