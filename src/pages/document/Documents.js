@@ -23,7 +23,7 @@ const Document = ({owner, documentData}) => {
         <div>
           <AddDocument documentType={documentType} id={id} ownerName={ownerName}/>
         </div>
-      );
+    );
 
     if (!documentData || !Array.isArray(documentData)) {
         return <div>Aucune donnée de document disponible</div>;

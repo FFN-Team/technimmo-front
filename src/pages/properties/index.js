@@ -8,13 +8,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import { useNavigate } from 'react-router-dom';
 import Card from "pages/components/Card.js";
-
+import ModalComponent from "../components/ModalComponent.js";
+import Button from '@mui/material/Button';
 import TableRowProperties from './TableRowProperties';
 import TablePaginationProperties from './TablePaginationProperties';
 import ColumnProperties from './ColumnProperties';
-import AddPropertyForm from './AddPropertyForm';
+import AddPropertyForm from './AddPropertyForm.js';
 
 const TableProperties = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -42,6 +44,18 @@ const TableProperties = () => {
     fetchDataFromApi();
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+      setIsModalOpen(false);
+  };
+
+  const modalContent = () => (
+      <AddPropertyForm /> 
+  );
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -62,10 +76,28 @@ const TableProperties = () => {
   return (
     <div>
       <Card>
-        <AddPropertyForm /> 
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        <Button
+          onClick={openModal}
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+        >
+          Ajouter un nouveau bien
+        </Button>
+        {isModalOpen && (
+          <ModalComponent
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            component={modalContent()}
+          />
+        )}
+      </div>
+
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
+            <Table  aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   {ColumnProperties.map((column) => (

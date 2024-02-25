@@ -2,9 +2,10 @@ import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import Card from "pages/components/Card.js";
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { StyledSelect } from 'pages/components/SelectElement.js';
 import MenuItem from '@mui/material/MenuItem';
 import { Button } from '@mui/material';
+import StyledInput from 'pages/components/InputElement.js';
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -129,9 +130,9 @@ const PropertyDetails = () => {
   return (
     <div className="property-details">
       <Card>
-        <form onSubmit={handleSubmit}>
+      <FormControl onSubmit={handleSubmit}>
           <label htmlFor="property_name">Name : </label>
-          <input
+          <StyledInput
             type="text"
             id="property_name"
             name="property_name"
@@ -143,7 +144,7 @@ const PropertyDetails = () => {
           <br />
           <br />
           <label htmlFor="description">Description : </label>
-          <input
+          <StyledInput
             type="text"
             id="description"
             name="description"
@@ -155,7 +156,7 @@ const PropertyDetails = () => {
           <br />
           <br />
           <label htmlFor="number_of_rooms">Number of rooms : </label>
-          <input
+          <StyledInput
             type="number"
             id="number_of_rooms"
             name="number_of_rooms"
@@ -169,7 +170,7 @@ const PropertyDetails = () => {
           <br />
           <br />
           <label htmlFor="livable_area">Livable area : </label>
-          <input
+          <StyledInput
             type="number"
             id="livable_area"
             name="livable_area"
@@ -179,28 +180,20 @@ const PropertyDetails = () => {
             step={0.1}
             onChange={handleChange}
             required
-            style={{ width: 100 }}
           />
           <br />
           <br />
-          <div style={{ display: 'flex', alignItems: 'center' }}>
             <label htmlFor="id_address">Address : </label>
-            <FormControl required sx={{ m: 1, minWidth: 120 }}>
-              <Select
+            <FormControl >
+              <StyledSelect
                 id="id_address" name="id_address" value={property.id_address} onChange={handleChange} 
-                min={1.0}
-                max={1000000.0}
-                step={0.1}
-                required
-                style={{ width: 300 }}
               >
                 {options.map((option) => (
                 <MenuItem key={option.id} value={option.id}>
                   {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
                 </MenuItem>))}
-              </Select>
+              </StyledSelect>
             </FormControl>
-          </div>
           <br />
           <br />
           <div style={{ display: 'flex', gap: '20px', marginBottom:'30px' }}>
@@ -211,7 +204,7 @@ const PropertyDetails = () => {
               Delete
             </Button>
           </div>
-        </form>
+          </FormControl>
       </Card>
     </div>
   );

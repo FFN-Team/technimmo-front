@@ -7,8 +7,6 @@ const AddDocument = ({documentType, id, ownerName}) => {
     const [success, setSuccess] = useState(true);
     let fileName = "";
 
-    // comment escape les apostrophe et les accents
-
     const handleUpload = () => {
         if(!file) {
             console.log("No file selected");
