@@ -16,7 +16,7 @@ const TableProperties = Loadable(lazy(() => import('pages/properties')));
 const Property = Loadable(lazy(() => import('pages/property')));
 
 //render - notifications
-const NotificationsSettings = Loadable(lazy(() => import('pages/notificationsSettings')));
+const AccountSettings = Loadable(lazy(() => import('pages/accountSettings')));
 
 //render - prospects
 const SearchProspects = Loadable(lazy(() => import('pages/prospects/search-prospects')));
@@ -43,8 +43,8 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: 'notifications-settings',
-      element: <NotificationsSettings />
+      path: 'account-settings',
+      element: <AccountSettings />
     },
     {
       path: 'work-in-progress',
