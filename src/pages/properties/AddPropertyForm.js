@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import FormControl from '@mui/material/FormControl';
+import StyledInput from 'pages/components/InputElement.js';
+import MenuItem from '@mui/material/MenuItem';
+import { Button } from '@mui/material';
+import { StyledSelect } from 'pages/components/SelectElement.js';
 
 const AddPropertyForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -82,35 +87,33 @@ const AddPropertyForm = () => {
   };
 
   return (
-    <div className="property-details">
-      <Card>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="property_name">Name : </label>
-          <input
+      <div className="property-details" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <h1 >Ajouter un nouveau bien</h1>
+        <FormControl onSubmit={handleSubmit}>
+          <label htmlFor="property_name" style={{ marginRight: 10 }}>Name : </label>
+          <StyledInput
             type="text"
             id="property_name"
             name="property_name"
             value={property.property_name}
             onChange={handleChange}
             required
-            style={{ width: 200 }}
           />
           <br />
           <br />
-          <label htmlFor="description">Description : </label>
-          <input
+          <label htmlFor="description" style={{ marginRight: 10 }}>Description : </label>
+          <StyledInput
             type="text"
             id="description"
             name="description"
             value={property.description}
             onChange={handleChange}
             required
-            style={{ width: 300 }}
           />
           <br />
           <br />
-          <label htmlFor="number_of_rooms">Number of rooms : </label>
-          <input
+          <label htmlFor="number_of_rooms" style={{ marginRight: 10 }}>Number of rooms : </label>
+          <StyledInput
             type="number"
             id="number_of_rooms"
             name="number_of_rooms"
@@ -119,12 +122,11 @@ const AddPropertyForm = () => {
             max={1000}
             onChange={handleChange}
             required
-            style={{ width: 70 }}
           />
           <br />
           <br />
-          <label htmlFor="livable_area">Livable area : </label>
-          <input
+          <label htmlFor="livable_area" style={{ marginRight: 10 }}>Livable area : </label>
+          <StyledInput
             type="number"
             id="livable_area"
             name="livable_area"
@@ -134,30 +136,27 @@ const AddPropertyForm = () => {
             step={0.1}
             onChange={handleChange}
             required
-            style={{ width: 100 }}
           />
           <br />
           <br />
-          <label htmlFor="id_address">Address : </label>
-          <select
-            id="id_address"
-            name="id_address"
-            value={property.id_address}
-            onChange={handleChange}
-            disabled={options.length === 0}
-            style={{ width: 300 }}
-          >
-            {options.length === 0 && (
-              <option value="" disabled>
-                No address available
-              </option>
-            )}
-            {options.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
-              </option>
-            ))}
-          </select>
+          <label htmlFor="id_address" >Address : </label>
+          <FormControl>
+            <StyledSelect
+              id="id_address" name="id_address" value={property.id_address} onChange={handleChange} 
+              disabled={options.length === 0}
+            >
+              {options.length === 0 && (
+                <option value="" disabled>
+                  No address available
+                </option>
+              )}
+              {options.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
+                </MenuItem>
+              ))}
+            </StyledSelect>
+          </FormControl>
           <br />
           <br />
           {errorMessage && (
@@ -166,19 +165,14 @@ const AddPropertyForm = () => {
               <br />
             </div>
           )}
-          <button type="submit">Save</button>
-        </form>
-      </Card>
-    </div>
+          <div style={{ display: 'flex'}}>
+            <Button type="submit" variant="outlined" style={{height: '25px' }} color="success">
+              Save
+            </Button>
+          </div>
+        </FormControl>
+      </div>
   );
-};
-
-const Card = ({ children }) => <div style={cardStyle}>{children}</div>;
-
-const cardStyle = {
-  border: '1px solid #ddd',
-  padding: '10px',
-  margin: '10px'
 };
 
 export default AddPropertyForm;
