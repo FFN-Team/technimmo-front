@@ -1,4 +1,3 @@
-// SearchForm.js
 import React from 'react';
 import {
   Button,
@@ -28,7 +27,7 @@ const SearchForm = ({
     <form onSubmit={handleFindClick}>
 
         <FormControl style={{ marginRight: '10px' }}>
-            <InputLabel htmlFor="contactOrigin" style={{ fontSize: '12px', marginTop: '-5px'}}>Contact Origin</InputLabel>
+            <InputLabel htmlFor="contactOrigin" style={{ fontSize: '12px', marginTop: '-5px'}}>Origine du contact</InputLabel>
             <Select
                 name="contactOrigin"
                 value={contactOrigin}
@@ -45,7 +44,7 @@ const SearchForm = ({
         </FormControl>
 
         <FormControl style={{ marginRight: '10px' }}>
-            <InputLabel htmlFor="title" style={{ fontSize: '12px', marginTop: '-5px'}}>Title</InputLabel>
+            <InputLabel htmlFor="title" style={{ fontSize: '12px', marginTop: '-5px'}}>Civilité</InputLabel>
             <Select
                 name="title"
                 value={title}
@@ -59,7 +58,7 @@ const SearchForm = ({
         </FormControl>
 
         <FormControl>
-            <InputLabel htmlFor="ageComparator" style={{ fontSize: '12px', marginTop: '-5px'}}>Age Comparator</InputLabel>
+            <InputLabel htmlFor="ageComparator" style={{ fontSize: '12px', marginTop: '-5px'}}>Comparateur</InputLabel>
             <Select
                 name="ageComparator"
                 value={ageComparator}
@@ -108,15 +107,15 @@ const SearchForm = ({
 
         <div style={{ display: 'flex', gap: '10px', marginTop: '20px', marginBottom:'30px' }}>
           <Button type="submit" variant="contained" style={{ height: '25px' }} >
-            Find
+            Rechercher
           </Button>
 
           <Button  onClick={handleClearFilter} variant="outlined" style={{ height: '25px' }} color="error">
-            Clear Filter
+            Effacer le filtre
           </Button>
 
           <Button onClick={handleSaveFilter} variant="outlined" style={{height: '25px' }} color="success">
-            Save Filter
+            Sauvegarder le filtre
           </Button>
         </div>
 

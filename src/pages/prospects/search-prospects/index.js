@@ -6,14 +6,14 @@ import ModalComponent from './ModalComponent';
 
 
 const columns = [
-  { field: 'title', headerName: 'Title', width: 60 },
-  { field: 'firstName', headerName: 'First name', width: 120, /*editable: true,*/ },
-  { field: 'lastName', headerName: 'Last name', width: 120},
-  { field: 'dateOfBirth', headerName: 'Date of birth', width: 100 },
+  { field: 'title', headerName: 'Civilité', width: 60 },
+  { field: 'firstName', headerName: 'Prénom', width: 120, /*editable: true,*/ },
+  { field: 'lastName', headerName: 'Nom', width: 120},
+  { field: 'dateOfBirth', headerName: 'Date de naissance', width: 120 },
   { field: 'profession', headerName: 'Profession', width: 120 },
   { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'mobile', headerName: 'Mobile', width: 100 },
-  { field: 'contactOrigin', headerName: 'Contact Origin', width: 100 },
+  { field: 'mobile', headerName: 'Tél', width: 100 },
+  { field: 'contactOrigin', headerName: 'Origine du contact', width: 120 },
 ];
 
 const SearchProspects = () => {
@@ -146,7 +146,6 @@ const SearchProspects = () => {
 
   useEffect(() => {
     fetchFiltersList();
-    // ici je veux que handleFindClick  soit appeler 
     handleFindClick({ preventDefault: () => {} });
   }, []);
 

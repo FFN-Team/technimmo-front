@@ -23,17 +23,17 @@ const prospects = {
       icon: icons.AreaChartOutlined,
     },
     {
-      id: 'search-prospects',
-      title: 'Search prospects',
+      id: 'prospects',
+      title: 'Prospects',
       type: 'item',
-      url: '/search-prospects',
+      url: '/prospects',
       icon: icons.SearchOutlined,
     },
     {
-      id: 'buyers',
-      title: 'Buyers',
-      type: 'item',
-      url: '/buyers',
+      id: 'acquereur',
+      title: 'Acquéreurs',
+      type: 'item', 
+      url: '/acquereurs',
       icon: icons.TeamOutlined,
     }
   ]

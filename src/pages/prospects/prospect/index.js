@@ -4,7 +4,7 @@ import 'react-tabs/style/react-tabs.css'; // Importer les styles de react-tabs
 import Prospects from './Prospect'; // Importer le composant Prospects
 import Document from 'pages/document/Documents';
 import 'pages/components/Onglets.css'; // Importer le fichier de style CSS
-import Breadcrumbs from 'components/@extended/Breadcrumbs';
+// import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { useParams } from 'react-router-dom';
 
 const Onglets = () => {
@@ -38,28 +38,28 @@ const Onglets = () => {
       fetchProspectDataFromProspectId();
     }, [id]);
 
-  const navigation = {
-    items: [
-      {
-        id: 'prospects',
-        title: 'Prospects',
-        type: 'group',
-        children: [
-          {
-            id: 'prospects',
-            title: 'Prospects',
-            type: 'item',
-            prospectName: `${prospect.firstName} ${prospect.lastName}`,
-            url: `/prospects/${id}`,
-          },
-        ],
-      }
-    ]
-  };
+  // const navigation = {
+  //   items: [
+  //     {
+  //       id: 'prospects',
+  //       title: 'Prospects',
+  //       type: 'group',
+  //       children: [
+  //         {
+  //           id: 'prospects',
+  //           title: 'Prospects',
+  //           type: 'item',
+  //           prospectName: `${prospect.firstName} ${prospect.lastName}`,
+  //           url: `/prospects/${id}`,
+  //         },
+  //       ],
+  //     }
+  //   ]
+  // };
 
   return (
     <div>
-      <Breadcrumbs navigation={navigation} title />
+      {/* <Breadcrumbs navigation={navigation} title /> */}
       <Tabs className="custom-tabs"  selectedIndex={activeTab} onSelect={handleTabSelect}>
         <TabList className="custom-tab-list">
           <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>Informations prospect</Tab>

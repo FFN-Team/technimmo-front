@@ -9,7 +9,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 //render - buyers
 const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
-//const Buyer = Loadable(lazy(() => import('pages/buyer')))
+const Buyer = Loadable(lazy(() => import('pages/buyer')))
 
 //render - properties
 const TableProperties = Loadable(lazy(() => import('pages/properties')));
@@ -30,7 +30,6 @@ const FiltredProspects = Loadable(lazy(() => import('pages/prospects/filtred-pro
 const Typography = Loadable(lazy(() => import('pages/components-overview/Typography')));
 const Color = Loadable(lazy(() => import('pages/components-overview/Color')));
 //const Shadow = Loadable(lazy(() => import('pages/components-overview/Shadow')));
-const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -42,24 +41,54 @@ const MainRoutes = {
       path: '',
       element: <DashboardDefault />
     },
+
     {
       path: 'notifications-settings',
       element: <NotificationsSettings />
     },
+
     {
       path: 'work-in-progress',
       element: <div>Work in progress</div>
     },
+
+
     {
       path: 'dashboard',
       element: <DashboardDefault />
     },
+
+
     {
       path: 'prospect-dashboard',
       element: <Color />
     },
+
     {
-      path: 'buyers',
+      path: 'prospects',
+      children: [
+        {
+          path: '',
+          element: <SearchProspects />
+        },
+        {
+          path: 'filtre',
+          children: [
+            {
+              path: ':filterName',
+              element: <FiltredProspects />
+            }        
+          ]
+        },
+        {
+          path: ':id',
+          element: <Prospect />
+        },   
+      ]
+    },
+
+    {
+      path: 'acquereurs',
       children: [
         {
           path: '',
@@ -67,10 +96,17 @@ const MainRoutes = {
         },
         {
           path: ':id',
-          element: <Prospect />
+          element: <Buyer />
         }
       ]
     },
+
+
+    {
+      path: 'search-properties',
+      element: <Typography />
+    },
+
     {
       path: 'properties',
       children: [
@@ -83,37 +119,7 @@ const MainRoutes = {
           element: <Property />
         }
       ]
-    },
-    {
-      path:'prospects',
-      children: [
-        {
-          path: ':id',
-          element: <Prospect />
-        }
-      ]
-    },
-    {
-      path: 'search-prospects',
-      children: [
-        {
-          path: '',
-          element: <SearchProspects />
-        },
-        {
-          path: ':filterName',
-          element: <FiltredProspects />
-        }
-      ]
-    },
-    {
-      path: 'search-properties',
-      element: <Typography />
-    },
-    {
-      path: 'properties',
-      element: <AntIcons />
-    }
+    },  
   ]
 };
 

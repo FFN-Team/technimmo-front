@@ -3,19 +3,16 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 
-
-const SearchResults = ({ prospects, columns }) => {
+const BuyersTable = ({ buyers, columns }) => {
   const navigate = useNavigate();
 
   return (
     <div>
-      <h4>Résultats de la recherche :</h4>
-
-      <Box sx={{ height: '63vh', backgroundColor: 'white' }}>
+      <Box sx={{ height: '90vh', backgroundColor: 'white' }}>
         <DataGrid
-          rows={prospects}
-          onRowDoubleClick={(params) => navigate(`/prospects/${params.id}`)}
+          rows={buyers}
           columns={columns}
+          onRowDoubleClick={(params) => navigate(`/acquereurs/${params.id}`)}
           initialState={{
             pagination: {
               paginationModel: {
@@ -23,7 +20,7 @@ const SearchResults = ({ prospects, columns }) => {
               },
             },
           }}
-          pageSizeOptions={[5,15,20,50]}
+          pageSizeOptions={[5, 15, 20, 50]}
           checkboxSelection
           disableRowSelectionOnClick
           sx={{
@@ -40,4 +37,4 @@ const SearchResults = ({ prospects, columns }) => {
   );
 };
 
-export default SearchResults;
+export default BuyersTable;

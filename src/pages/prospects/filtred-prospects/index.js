@@ -76,12 +76,12 @@ const FiltredProspects = () => {
 
   return (
     <div>
-      <h1>File {filterName}</h1>
+      <h1>Dossier {filterName}</h1>
       <div style={{ textAlign: 'right' }}>
         <Button 
           variant="outlined" style={{ height: '25px' }} onClick={handleClick1}
         >
-          Send email
+          Envoyer un email
           <ExpandMoreIcon/>
         </Button>     
         <Menu
@@ -89,15 +89,15 @@ const FiltredProspects = () => {
           open={Boolean(anchorEl1)}
           onClose={handleClose1}
         >
-          <MenuItem>Send presentation email</MenuItem>
-          <MenuItem>Send offer email</MenuItem>
+          <MenuItem>Envoyer un email de présentation</MenuItem>
+          <MenuItem>Envoyer un email d<a>&apos;</a>offre</MenuItem>
         </Menu>
 
           
         <Button 
           variant="outlined" style={{ height: '25px' }} onClick={handleClick2}
         >
-          Generate stats
+          Générer des statistiques
           <ExpandMoreIcon/>
         </Button>  
         <Menu
@@ -105,13 +105,13 @@ const FiltredProspects = () => {
           open={Boolean(anchorEl2)}
           onClose={handleClose2}
         >
-          <MenuItem>Generate properties to follow</MenuItem>
-          <MenuItem>Generate stats 2</MenuItem>
+          <MenuItem>Générer les biens à suivre</MenuItem>
+          <MenuItem>Générer X</MenuItem>
         </Menu>
 
       </div>
 
-      <Box sx={{ height: 450, width: '100%' }}>
+      <Box sx={{ height: '75vh', backgroundColor: 'white' }}>
         <DataGrid
           rows={prospects}
           columns={columns}
@@ -122,9 +122,17 @@ const FiltredProspects = () => {
               },
             },
           }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[5,15,20,50]}
           checkboxSelection
           disableRowSelectionOnClick
+          sx={{
+            '& .MuiDataGrid-row:hover': {
+              cursor: 'pointer',
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: '1px solid lightgrey', 
+            }, 
+          }}
         />
       </Box>
     </div>
