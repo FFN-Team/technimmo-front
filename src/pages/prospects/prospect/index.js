@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css'; // Importer les styles de react-tabs
-import Prospects from './Prospect'; // Importer le composant Prospects
+import 'react-tabs/style/react-tabs.css'; 
+import ProspectDetails from './ProspectDetails';
 import Document from 'pages/document/Documents';
 import 'pages/components/Onglets.css'; // Importer le fichier de style CSS
 // import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { useParams } from 'react-router-dom';
 
-const Onglets = () => {
+const Prospect = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [prospect, setProspect] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,6 +57,11 @@ const Onglets = () => {
   //   ]
   // };
 
+  const documentData = [
+    ["Justificatif d'identité du propriétaire", 'PROSPECT_IDENTITY'],
+    ["Etat civil", 'CIVIL_STATUS']
+  ];
+
   return (
     <div>
       {/* <Breadcrumbs navigation={navigation} title /> */}
@@ -67,14 +72,14 @@ const Onglets = () => {
         </TabList>
 
         <TabPanel>
-          <Prospects prospect={prospect} load={loading}/>
+          <ProspectDetails prospect={prospect} load={loading}/>
         </TabPanel>
         <TabPanel>
-          <Document owner={prospect}/>
+          <Document owner={prospect} documentData={documentData}/>
         </TabPanel>
       </Tabs>
     </div>
   );
 };
 
-export default Onglets;
+export default Prospect;

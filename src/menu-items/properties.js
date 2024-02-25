@@ -13,7 +13,7 @@ const icons = {
 
 const properties = {
   id: 'properties-menu',
-  title: 'Properties',
+  title: 'Biens',
   type: 'group',
   children: [
     {
@@ -25,7 +25,7 @@ const properties = {
     },
     {
       id: 'properties',
-      title: 'Properties',
+      title: 'Biens',
       type: 'item',
       url: '/properties',
       icon: icons.HomeOutlined,
