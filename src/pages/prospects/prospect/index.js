@@ -3,8 +3,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css'; 
 import ProspectDetails from './ProspectDetails';
 import Document from 'pages/document/Documents';
-import 'pages/components/Onglets.css';
-import Breadcrumbs from 'components/@extended/Breadcrumbs';
+import 'pages/components/Onglets.css'; // Importer le fichier de style CSS
+// import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { useParams } from 'react-router-dom';
 
 const Prospect = () => {
@@ -38,24 +38,24 @@ const Prospect = () => {
       fetchProspectDataFromProspectId();
     }, [id]);
 
-  const navigation = {
-    items: [
-      {
-        id: 'prospects',
-        title: 'Prospects',
-        type: 'group',
-        children: [
-          {
-            id: 'prospects',
-            title: 'Prospects',
-            type: 'item',
-            prospectName: `${prospect.firstName} ${prospect.lastName}`,
-            url: `/prospects/${id}`,
-          },
-        ],
-      }
-    ]
-  };
+  // const navigation = {
+  //   items: [
+  //     {
+  //       id: 'prospects',
+  //       title: 'Prospects',
+  //       type: 'group',
+  //       children: [
+  //         {
+  //           id: 'prospects',
+  //           title: 'Prospects',
+  //           type: 'item',
+  //           prospectName: `${prospect.firstName} ${prospect.lastName}`,
+  //           url: `/prospects/${id}`,
+  //         },
+  //       ],
+  //     }
+  //   ]
+  // };
 
   const documentData = [
     ["Justificatif d'identité du propriétaire", 'PROSPECT_IDENTITY'],
@@ -64,7 +64,7 @@ const Prospect = () => {
 
   return (
     <div>
-      <Breadcrumbs navigation={navigation} title />
+      {/* <Breadcrumbs navigation={navigation} title /> */}
       <Tabs className="custom-tabs"  selectedIndex={activeTab} onSelect={handleTabSelect}>
         <TabList className="custom-tab-list">
           <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>Informations prospect</Tab>

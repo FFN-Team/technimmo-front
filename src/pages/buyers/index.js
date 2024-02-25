@@ -1,25 +1,24 @@
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableBody from '@mui/material/TableBody';
 import React, { useEffect, useState } from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import { useNavigate } from 'react-router-dom';
 
-import TableRowBuyers from './tableRowBuyers'; 
-import TablePaginationComponent from './tablePaginationBuyers'; 
-import columnsBuyers from './columnsBuyers'; 
+import BuyersTable from './BuyersTable'
+
+const columns = [
+  { field: 'title', headerName: 'Civilité', width: 60 },
+  { field: 'firstName', headerName: 'Prénom', width: 120, /*editable: true,*/ },
+  { field: 'lastName', headerName: 'Nom', width: 120},
+  { field: 'dateOfBirth', headerName: 'Date de naissance', width: 120 },
+  { field: 'profession', headerName: 'Profession', width: 120 },
+  { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'mobile', headerName: 'Tél', width: 100 },
+  { field: 'contactOrigin', headerName: 'Origine du contact', width: 120 },
+  { field: 'status', headerName: 'Statut', width: 120 },
+];
 
 
 const TableBuyers = () => {
-  const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [buyers, setBuyers] = useState([]);
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -29,7 +28,7 @@ const TableBuyers = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setRows(data);
+        setBuyers(transformDataToBuyers(data));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -38,16 +37,7 @@ const TableBuyers = () => {
     };
 
     fetchDataFromApi();
-  }, []); // Le tableau de dépendances vide assure que cela s'exécute qu'une fois après le montage
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  }, []); 
 
   if (loading) {
     return <p>Loading...</p>;
@@ -57,45 +47,40 @@ const TableBuyers = () => {
     return <p>Error: {error}</p>;
   }
 
+  function transformDataToBuyers(originalData) {
+    return originalData.map((item) => {
+      const {
+        id,
+        prospect: {
+          title,
+          firstName,
+          lastName,
+          dateOfBirth,
+          profession,
+          mail,
+          mobile,
+          contactOrigin,
+        },
+        status,
+      } = item;
+  
+      return {
+        id,
+        title,
+        firstName,
+        lastName,
+        dateOfBirth,
+        profession,
+        email: mail,
+        mobile,
+        contactOrigin,
+        status,
+      };
+    });
+  }
+
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columnsBuyers.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRowBuyers
-                  key={row.id}
-                  row={row}
-                  columns={columnsBuyers}
-                  navigate={navigate}
-                />
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePaginationComponent
-        rows={rows}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <BuyersTable buyers={buyers} columns={columns} />
   );
 };
 

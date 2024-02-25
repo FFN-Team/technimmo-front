@@ -28,7 +28,7 @@ const FilterButtons = ({ filtersList, handleFilterClick, handleFilterMenuClick, 
         onClose={() => setAnchorEl(null)}
       >
         <MenuItem 
-          onClick={() => navigate(`/search-prospects/${currentFilterName}`)}
+          onClick={() => navigate(`/prospects/filtre/${currentFilterName}`)}
         >
           Ouvrir dossier
         </MenuItem>
