@@ -82,6 +82,8 @@ const Notification = () => {
         const data_prospect = await response_prospect.json();
         setNotificationsPotentialProject(data_potential_project.notifications);
         setNotificationsProspect(data_prospect.notifications);
+        console.log(notificationsPotentialProject);
+        console.log(notificationsProspect);
       } catch (error) {
         console.log(error.message);
       }
@@ -123,8 +125,8 @@ const Notification = () => {
 
   const handleSendPotentialProjectEmail = async (notification) => {
     try {
-      console.log(notification.potentialProject.id);
-      const prospect = await getPotentialProjectProspect(notification.potentialProject.id);
+      console.log(notification.subResponse.id);
+      const prospect = await getPotentialProjectProspect(notification.subResponse.id);
 
       console.log(prospect);
   
@@ -139,7 +141,7 @@ const Notification = () => {
   };
 
   const handleSendProspectEmail = async (prospect) => {
-    
+    console.log(prospect);
     const confirmSend = window.confirm(`Voulez-vous envoyer un e-mail à ${prospect.completeName}?`);
     
     if (confirmSend) {
@@ -347,7 +349,7 @@ const Notification = () => {
                         <NotificationItem
                           key={index}
                           notification={notification}
-                          onSendEmail={() => handleSendProspectEmail(notification.prospect)}
+                          onSendEmail={() => handleSendProspectEmail(notification.subResponse)}
                           onConsult={handleConsultProspect}
                         />
                       ))}
