@@ -9,7 +9,33 @@ const NotificationsSettings = () => {
   let potentialBuyerNotificationLabel = "J'autorise à reçevoir des notifications pour les acquéreurs potentiels.";
 
   useEffect(() => {
-    // avoir une fonction qui permet de savoir si on est inscrit a une notification ou pas
+    const urlPotentialProject = `http://localhost:9001/api/v1/subscriptions/notifications/PROJECT_DUE_DATE_APPROACHING`;
+    const urlPotentialBuyer = `http://localhost:9001/api/v1/subscriptions/notifications/PROSPECT_MAY_BUY_BIGGER_HOUSE`;
+
+    const fetchData = async () => {
+      try {
+        const responsePP = await fetch(urlPotentialProject, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const dataPP = await responsePP.json();
+        setCheckedPPN(dataPP.isSubscribe);
+  
+        const responsePB = await fetch(urlPotentialBuyer, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const dataPB = await responsePB.json();
+        setCheckedPB(dataPB.isSubscribe);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données', error);
+      }
+    };
+    fetchData();
   }, []);
 
   const handleOkClickPPN = async () => {
@@ -17,7 +43,7 @@ const NotificationsSettings = () => {
     if (isCheckedPPN) {
       //avoir une fonction unsubscribe
       try {
-        const url = `http://localhost:9001/api/v1/potential-projects/notifications/unSubscribe`;
+        const url = `http://localhost:9001/api/v1/potential-projects/unsubscription`;
 
         const response = await fetch(url, {
             method: 'POST',
@@ -60,7 +86,7 @@ const NotificationsSettings = () => {
     if (isCheckedPB) {
       //avoir une fonction unsubscribe
       try {
-        const url = `http://localhost:9001/api/v1/prospects/notifications/unSubscribe`;
+        const url = `http://localhost:9001/api/v1/prospects/unsubscription`;
 
         const response = await fetch(url, {
             method: 'POST',

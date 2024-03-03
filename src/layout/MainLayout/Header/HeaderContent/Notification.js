@@ -62,8 +62,8 @@ const Notification = () => {
 
   const updateNotifications = async () => {
       try {
-        const url_potential_project = `http://localhost:9001/api/v1/potential-projects/notification`;
-        const url_prospect = `http://localhost:9001/api/v1/prospects/notification`;
+        const url_potential_project = `http://localhost:9001/api/v1/potential-projects/notifications`;
+        const url_prospect = `http://localhost:9001/api/v1/prospects/notifications`;
 
         const response_potential_project = await fetch(url_potential_project, {
           method: 'POST',
@@ -78,12 +78,10 @@ const Notification = () => {
             'Content-Type': 'application/json'
           }
         });
-
         const data_potential_project = await response_potential_project.json();
         const data_prospect = await response_prospect.json();
-
-        setNotificationsPotentialProject(data_potential_project);
-        setNotificationsProspect(data_prospect);
+        setNotificationsPotentialProject(data_potential_project.notifications);
+        setNotificationsProspect(data_prospect.notifications);
       } catch (error) {
         console.log(error.message);
       }
