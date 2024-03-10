@@ -87,91 +87,97 @@ const AddPropertyForm = () => {
   };
 
   return (
-      <div className="property-details" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <h1 >Ajouter un nouveau bien</h1>
-        <FormControl onSubmit={handleSubmit}>
-          <label htmlFor="property_name" style={{ marginRight: 10 }}>Name : </label>
-          <StyledInput
-            type="text"
-            id="property_name"
-            name="property_name"
-            value={property.property_name}
+    <div className="property-details" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <h1>Ajouter un nouveau bien</h1>
+      <FormControl onSubmit={handleSubmit}>
+        <label htmlFor="property_name" style={{ marginRight: 10 }}>
+          Name :{' '}
+        </label>
+        <StyledInput type="text" id="property_name" name="property_name" value={property.property_name} onChange={handleChange} required />
+        <br />
+        <br />
+        <label htmlFor="description" style={{ marginRight: 10 }}>
+          Description :{' '}
+        </label>
+        <StyledInput type="text" id="description" name="description" value={property.description} onChange={handleChange} required />
+        <br />
+        <br />
+        <label htmlFor="number_of_rooms" style={{ marginRight: 10 }}>
+          Number of rooms :{' '}
+        </label>
+        <StyledInput
+          type="number"
+          id="number_of_rooms"
+          name="number_of_rooms"
+          value={property.number_of_rooms}
+          min={1}
+          max={1000}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <br />
+        <label htmlFor="livable_area" style={{ marginRight: 10 }}>
+          Livable area :{' '}
+        </label>
+        <StyledInput
+          type="number"
+          id="livable_area"
+          name="livable_area"
+          value={property.livable_area}
+          min={1.0}
+          max={1000000.0}
+          step={0.1}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <br />
+        <label htmlFor="id_address">Address : </label>
+        <FormControl>
+          <StyledSelect
+            id="id_address"
+            name="id_address"
+            value={property.id_address}
             onChange={handleChange}
-            required
-          />
-          <br />
-          <br />
-          <label htmlFor="description" style={{ marginRight: 10 }}>Description : </label>
-          <StyledInput
-            type="text"
-            id="description"
-            name="description"
-            value={property.description}
-            onChange={handleChange}
-            required
-          />
-          <br />
-          <br />
-          <label htmlFor="number_of_rooms" style={{ marginRight: 10 }}>Number of rooms : </label>
-          <StyledInput
-            type="number"
-            id="number_of_rooms"
-            name="number_of_rooms"
-            value={property.number_of_rooms}
-            min={1}
-            max={1000}
-            onChange={handleChange}
-            required
-          />
-          <br />
-          <br />
-          <label htmlFor="livable_area" style={{ marginRight: 10 }}>Livable area : </label>
-          <StyledInput
-            type="number"
-            id="livable_area"
-            name="livable_area"
-            value={property.livable_area}
-            min={1.0}
-            max={1000000.0}
-            step={0.1}
-            onChange={handleChange}
-            required
-          />
-          <br />
-          <br />
-          <label htmlFor="id_address" >Address : </label>
-          <FormControl>
-            <StyledSelect
-              id="id_address" name="id_address" value={property.id_address} onChange={handleChange} 
-              disabled={options.length === 0}
-            >
-              {options.length === 0 && (
-                <option value="" disabled>
-                  No address available
-                </option>
-              )}
-              {options.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
-                </MenuItem>
-              ))}
-            </StyledSelect>
-          </FormControl>
-          <br />
-          <br />
-          {errorMessage && (
-            <div>
-              <div style={{ color: 'red' }}>{errorMessage}</div>
-              <br />
-            </div>
-          )}
-          <div style={{ display: 'flex'}}>
-            <Button type="submit" variant="outlined" style={{height: '25px' }} color="success">
-              Save
-            </Button>
-          </div>
+            disabled={options.length === 0}
+          >
+            {options.length === 0 && (
+              <option value="" disabled>
+                No address available
+              </option>
+            )}
+            {options.map((option) => (
+              <MenuItem key={option.id} value={option.id}>
+                {'n°' +
+                  option.flat_number +
+                  ', ' +
+                  (option.floor == 0 ? 'ground floor' : 'floor ' + option.floor) +
+                  ', ' +
+                  option.street_number +
+                  ' ' +
+                  option.street.name +
+                  ', ' +
+                  option.city.name}
+              </MenuItem>
+            ))}
+          </StyledSelect>
         </FormControl>
-      </div>
+        <br />
+        <br />
+        {errorMessage && (
+          <div>
+            <div style={{ color: 'red' }}>{errorMessage}</div>
+            <br />
+          </div>
+        )}
+        <div style={{ display: 'flex' }}>
+          <Button type="submit" variant="outlined" style={{ height: '25px' }} color="success">
+            Save
+          </Button>
+        </div>
+      </FormControl>
+    </div>
   );
 };
 

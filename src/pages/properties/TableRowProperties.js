@@ -15,7 +15,16 @@ const TableRowProperties = ({ row, columns, navigate }) => (
           : column.id === 'livable_area'
           ? row.livable_area
           : column.id === 'address'
-          ? row.address.street_number + ' ' + row.address.street.name + ', ' + row.address.city.name
+          ? 'n°' +
+            row.address.flat_number +
+            ', ' +
+            (row.address.floor == 0 ? 'ground floor' : 'floor ' + row.address.floor) +
+            ', ' +
+            row.address.street_number +
+            ' ' +
+            row.address.street.name +
+            ', ' +
+            row.address.city.name
           : row[column.id];
       return (
         <TableCell key={column.id} align={column.align}>
