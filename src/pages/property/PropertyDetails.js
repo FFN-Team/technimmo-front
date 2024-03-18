@@ -1,11 +1,13 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import Card from "pages/components/Card.js";
+import Card from 'pages/components/Card.js';
 import FormControl from '@mui/material/FormControl';
 import { StyledSelect } from 'pages/components/SelectElement.js';
 import MenuItem from '@mui/material/MenuItem';
 import { Button } from '@mui/material';
 import StyledInput from 'pages/components/InputElement.js';
+import PropertyPriceComparisonTable from './PropertyPriceComparisonTable.js';
+import './Form.css';
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -128,83 +130,99 @@ const PropertyDetails = () => {
   }
 
   return (
-    <div className="property-details">
+    <div className="property-details" style={{ display: 'flex', flexWrap: 'wrap' }}>
       <Card>
-      <FormControl onSubmit={handleSubmit}>
-          <label htmlFor="property_name">Name : </label>
-          <StyledInput
-            type="text"
-            id="property_name"
-            name="property_name"
-            value={property.property_name}
-            onChange={handleChange}
-            required
-            style={{ width: 200 }}
-          />
-          <br />
-          <br />
-          <label htmlFor="description">Description : </label>
-          <StyledInput
-            type="text"
-            id="description"
-            name="description"
-            value={property.description}
-            onChange={handleChange}
-            required
-            style={{ width: 300 }}
-          />
-          <br />
-          <br />
-          <label htmlFor="number_of_rooms">Number of rooms : </label>
-          <StyledInput
-            type="number"
-            id="number_of_rooms"
-            name="number_of_rooms"
-            value={property.number_of_rooms}
-            min={1}
-            max={1000}
-            onChange={handleChange}
-            required
-            style={{ width: 70 }}
-          />
-          <br />
-          <br />
-          <label htmlFor="livable_area">Livable area : </label>
-          <StyledInput
-            type="number"
-            id="livable_area"
-            name="livable_area"
-            value={property.livable_area}
-            min={1.0}
-            max={1000000.0}
-            step={0.1}
-            onChange={handleChange}
-            required
-          />
-          <br />
-          <br />
+        <FormControl onSubmit={handleSubmit} className="form">
+          <div>
+            <label htmlFor="property_name">Name : </label>
+            <StyledInput
+              type="text"
+              id="property_name"
+              name="property_name"
+              value={property.property_name}
+              onChange={handleChange}
+              required
+              style={{ width: 200 }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="description">Description : </label>
+            <StyledInput
+              type="text"
+              id="description"
+              name="description"
+              value={property.description}
+              onChange={handleChange}
+              required
+              style={{ width: 300 }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="number_of_rooms">Number of rooms : </label>
+            <StyledInput
+              type="number"
+              id="number_of_rooms"
+              name="number_of_rooms"
+              value={property.number_of_rooms}
+              min={1}
+              max={1000}
+              onChange={handleChange}
+              required
+              style={{ width: 70 }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="livable_area">Livable area : </label>
+            <StyledInput
+              type="number"
+              id="livable_area"
+              name="livable_area"
+              value={property.livable_area}
+              min={1.0}
+              max={1000000.0}
+              step={0.1}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div>
             <label htmlFor="id_address">Address : </label>
-            <FormControl >
-              <StyledSelect
-                id="id_address" name="id_address" value={property.id_address} onChange={handleChange} 
-              >
+            <FormControl>
+              <StyledSelect id="id_address" name="id_address" value={property.id_address} onChange={handleChange}>
                 {options.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.street_number + ' ' + option.street.name + ', ' + option.city.name}
-                </MenuItem>))}
+                  <MenuItem key={option.id} value={option.id}>
+                    {'n°' +
+                      option.flat_number +
+                      ', ' +
+                      (option.floor == 0 ? 'ground floor' : 'floor ' + option.floor) +
+                      ', ' +
+                      option.street_number +
+                      ' ' +
+                      option.street.name +
+                      ', ' +
+                      option.city.name}
+                  </MenuItem>
+                ))}
               </StyledSelect>
             </FormControl>
-          <br />
-          <br />
-          <div style={{ display: 'flex', gap: '20px', marginBottom:'30px' }}>
-            <Button type="submit" variant="outlined" style={{height: '25px' }} color="success">
+          </div>
+
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+            <Button type="submit" variant="outlined" style={{ height: '25px' }} color="success">
               Save
             </Button>
             <Button onClick={handleDeletion} variant="outlined" style={{ height: '25px' }} color="error">
               Delete
             </Button>
           </div>
-          </FormControl>
+        </FormControl>
+      </Card>
+      <Card>
+        <PropertyPriceComparisonTable />
       </Card>
     </div>
   );

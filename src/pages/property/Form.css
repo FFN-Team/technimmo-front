@@ -1,0 +1,7 @@
+.form > * + * {
+    margin-top: 5%;
+}
+
+.form > div > label {
+    font-weight: bold;
+}
