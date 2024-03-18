@@ -62,8 +62,8 @@ const Notification = () => {
 
   const updateNotifications = async () => {
       try {
-        const url_potential_project = `http://localhost:9001/api/v1/potential-projects/notification`;
-        const url_prospect = `http://localhost:9001/api/v1/prospects/notification`;
+        const url_potential_project = `http://localhost:9001/api/v1/potential-projects/notifications`;
+        const url_prospect = `http://localhost:9001/api/v1/prospects/notifications`;
 
         const response_potential_project = await fetch(url_potential_project, {
           method: 'POST',
@@ -78,12 +78,12 @@ const Notification = () => {
             'Content-Type': 'application/json'
           }
         });
-
         const data_potential_project = await response_potential_project.json();
         const data_prospect = await response_prospect.json();
-
-        setNotificationsPotentialProject(data_potential_project);
-        setNotificationsProspect(data_prospect);
+        setNotificationsPotentialProject(data_potential_project.notifications);
+        setNotificationsProspect(data_prospect.notifications);
+        console.log(notificationsPotentialProject);
+        console.log(notificationsProspect);
       } catch (error) {
         console.log(error.message);
       }
@@ -125,8 +125,8 @@ const Notification = () => {
 
   const handleSendPotentialProjectEmail = async (notification) => {
     try {
-      console.log(notification.potentialProject.id);
-      const prospect = await getPotentialProjectProspect(notification.potentialProject.id);
+      console.log(notification.subResponse.id);
+      const prospect = await getPotentialProjectProspect(notification.subResponse.id);
 
       console.log(prospect);
   
@@ -141,7 +141,7 @@ const Notification = () => {
   };
 
   const handleSendProspectEmail = async (prospect) => {
-    
+    console.log(prospect);
     const confirmSend = window.confirm(`Voulez-vous envoyer un e-mail à ${prospect.completeName}?`);
     
     if (confirmSend) {
@@ -349,7 +349,7 @@ const Notification = () => {
                         <NotificationItem
                           key={index}
                           notification={notification}
-                          onSendEmail={() => handleSendProspectEmail(notification.prospect)}
+                          onSendEmail={() => handleSendProspectEmail(notification.subResponse)}
                           onConsult={handleConsultProspect}
                         />
                       ))}
