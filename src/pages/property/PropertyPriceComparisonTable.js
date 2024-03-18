@@ -166,11 +166,13 @@ const PropertyPriceComparisonTable = () => {
         <thead>
           <td>Différence</td>
           <td>Prix moyen au m²</td>
+          <td>Zone</td>
         </thead>
         {comparisonStatistics.map((line) => (
           <tbody key={line.zone}>
             <td>{formatDifference(line.difference, line.zone, currentPropertyStatistics)}</td>
             <td>{formatPrice(line.price)}</td>
+            <td>{line.zone}</td>
           </tbody>
         ))}
       </table>
