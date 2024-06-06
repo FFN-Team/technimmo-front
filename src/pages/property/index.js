@@ -16,7 +16,7 @@ const Property = () => {
     ["Titre de propriété", 'PROPERTY_TITLE'],
     ["Plan cadastral", 'CADASTRAL_MAP'],
     ["Procès verbal de l'assemblée générale", 'GENERAL_MEETING'],
-    ["Diagnostic de Performance Energétique", 'ENERGY_PERFORMANCE_DIAGNOSTIC']
+    ["Diagnostic de Performance Energétique", 'ENERGY_PERFORMANCE_DIAGNOSIS']
   ];
 
   return (

@@ -7,48 +7,53 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useParams } from 'react-router-dom';
 
-const Document = ({owner, documentData}) => {
+const Document = ({ owner, documentData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedDocumentType, setSelectedDocumentType] = useState(null);
     const { id } = useParams();
 
-    const openModal = () => {
+    const openModal = (documentType) => {
+        setSelectedDocumentType(documentType);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
+        setSelectedDocumentType(null);
     };
 
     const modalContent = (documentType) => (
         <div>
-          <AddDocument documentType={documentType} id={id} ownerName={ownerName}/>
+            <AddDocument documentType={documentType} id={id} ownerName={ownerName} />
         </div>
     );
 
     if (!documentData || !Array.isArray(documentData)) {
         return <div>Aucune donnée de document disponible</div>;
     }
-    
+
     let ownerName = '';        
 
-    if(owner) {
-        ownerName = `${owner.firstName} ${owner.lastName}`
+    if (owner) {
+        ownerName = `${owner.firstName} ${owner.lastName}`;
     }
 
     const documentCard = (name, documentType) => (
         <Card>
             <div className="card-header">
                 <h3>{name}</h3>
-                <Button onClick={openModal}
+                <Button 
+                    onClick={() => openModal(documentType)}
                     component="label"
                     role={undefined}
                     variant="outlined"
                     tabIndex={-1}
-                    startIcon={<CloudUploadIcon />}>
+                    startIcon={<CloudUploadIcon />}
+                >
                     Upload file
                 </Button>
-                    {isModalOpen && (
-                <ModalComponent isOpen={isModalOpen} onClose={closeModal} component={modalContent({documentType})} />)}
+            </div>
+            <div className="documents">
             </div>
         </Card>
     );
@@ -57,10 +62,17 @@ const Document = ({owner, documentData}) => {
         <div className="card-container"> 
             {documentData.map(([name, documentType], index) => (
                 <div key={index}>
-                {documentCard(name, documentType)}
+                    {documentCard(name, documentType)}
                 </div>
             ))}
-       </div>
+            {isModalOpen && (
+                <ModalComponent 
+                    isOpen={isModalOpen} 
+                    onClose={closeModal} 
+                    component={modalContent(selectedDocumentType)} 
+                />
+            )}
+        </div>
     );
 }
 

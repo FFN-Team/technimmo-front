@@ -16,8 +16,14 @@ const AddDocument = ({documentType, id, ownerName}) => {
         console.log(documentType);
         console.log(file.type);
 
-        if (documentType && documentType === 'PROSPECT_IDENTITY'){
+        if (documentType && documentType == 'PROSPECT_IDENTITY'){
+            console.log(ownerName);
             fileName = "Justificatif identite " + ownerName;
+        }
+
+        if (documentType && documentType == 'CIVIL_STATUS'){
+            console.log(ownerName);
+            fileName = "Etat civil " + ownerName;
         }
 
         const fd = new FormData();
@@ -26,7 +32,7 @@ const AddDocument = ({documentType, id, ownerName}) => {
         setMsg("Uploading...");
         
         try {
-            const response = fetch(`http://localhost:9001/api/v1/documents/upload?fileName=${fileName}&fileType=${file.type}&documentType=${documentType}&ownerId=${id}`, {
+            const response = fetch(`http://localhost:9001/api/v1/documents/upload?fileName=${fileName}&fileType=${file.type}&documentTypeCode=${documentType}&ownerId=${id}`, {
             method: 'POST',
             body: fd
         })
