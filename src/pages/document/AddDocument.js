@@ -1,7 +1,7 @@
 import { useState } from "react";
 import './Document.css'; 
 
-const AddDocument = ({documentType, id, ownerName}) => {
+const AddDocument = ({documentType, id, owner}) => {
     const [file, setFile] = useState(null);
     const [msg, setMsg] = useState(null);
     const [success, setSuccess] = useState(true);
@@ -19,14 +19,19 @@ const AddDocument = ({documentType, id, ownerName}) => {
         console.log(documentType);
         console.log(file.type);
 
+        // attention il faut gérer les cas où on a pas le nom ou le prénom, on peut établir une régle de gestion qui dit que le nom ou le prénom est obligatoire
         if (documentType && documentType === 'PROSPECT_IDENTITY'){
-            console.log(ownerName);
-            fileName = "Justificatif identite " + ownerName;
+            fileName = "Justificatif identite " + owner.firstName + owner.lastName;
         }
 
         if (documentType && documentType == 'CIVIL_STATUS'){
-            console.log(ownerName);
-            fileName = "Etat civil " + ownerName;
+            fileName = "Etat civil "+ owner.firstName + owner.lastName;
+        }
+
+        console.log(owner);
+
+        if (documentType && documentType == 'GENERAL_ASSEMBLY'){
+            fileName = "Assemblee générale " + owner.address.street.name;
         }
 
         const fd = new FormData();
