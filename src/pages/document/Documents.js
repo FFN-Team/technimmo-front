@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import './Document.css'; 
 import Card from 'pages/components/Card';
 import ModalComponent from "../components/ModalComponent.js";
@@ -6,11 +6,17 @@ import AddDocument from "./AddDocument.js";
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useParams } from 'react-router-dom';
+import { Paper, Table, TableBody, TableContainer, TableHead } from '../../../node_modules/@mui/material/index';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import ColumnDocuments from './ColumnDocuments';
 
 const Document = ({ owner, documentData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDocumentType, setSelectedDocumentType] = useState(null);
     const { id } = useParams();
+    const loading = useState(true);
+    const error = useState(null);
 
     const openModal = (documentType) => {
         setSelectedDocumentType(documentType);
@@ -38,6 +44,14 @@ const Document = ({ owner, documentData }) => {
         ownerName = `${owner.firstName} ${owner.lastName}`;
     }
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
     const documentCard = (name, documentType) => (
         <Card>
             <div className="card-header">
@@ -53,7 +67,24 @@ const Document = ({ owner, documentData }) => {
                     Upload file
                 </Button>
             </div>
-            <div className="documents">
+            <div className='documents'>
+                <Paper>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                        <Table aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                {ColumnDocuments.map((column) => (
+                                    <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                                        {column.label}
+                                    </TableCell> ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Paper>
             </div>
         </Card>
     );
