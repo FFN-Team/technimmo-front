@@ -6,6 +6,7 @@ import Search from './Search';
 import Profile from './Profile';
 import Notification from './Notification';
 import MobileSection from './MobileSection';
+import Agenda from './Agenda';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -17,6 +18,7 @@ const HeaderContent = () => {
       {!matchesXs && <Search />}
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
 
+      <Agenda/>
       <Notification />
       {!matchesXs && <Profile />}
       {matchesXs && <MobileSection />}
