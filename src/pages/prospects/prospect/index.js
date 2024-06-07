@@ -38,30 +38,32 @@ const Prospect = () => {
       fetchProspectDataFromProspectId();
     }, [id]);
 
-  // const navigation = {
-  //   items: [
-  //     {
-  //       id: 'prospects',
-  //       title: 'Prospects',
-  //       type: 'group',
-  //       children: [
-  //         {
-  //           id: 'prospects',
-  //           title: 'Prospects',
-  //           type: 'item',
-  //           prospectName: `${prospect.firstName} ${prospect.lastName}`,
-  //           url: `/prospects/${id}`,
-  //         },
-  //       ],
-  //     }
-  //   ]
-  // };
+     const [documentData, setDocumentData] = useState([
+        ["Justificatif d'identité du propriétaire", 'PROSPECT_IDENTITY', []],
+        ["Etat civil", 'CIVIL_STATUS', []]
+    ]);
 
-  const documentData = [
-    ["Justificatif d'identité du propriétaire", 'PROSPECT_IDENTITY'],
-    ["Etat civil", 'CIVIL_STATUS']
-  ];
+    useEffect(() => {
+      fetch(`http://localhost:9001/api/v1/documents/PROSPECT/${id}`)
+          .then(response => response.json())
+          .then(data => {
+              // Créer un objet pour mapper les fichiers par documentTypeCode
+              const filesByType = {};
+              data.files.forEach(fileGroup => {
+                  filesByType[fileGroup.documentTypeCode] = fileGroup.documentTypeFiles;
+              });
 
+              // Mettre à jour documentData avec les listes de fichiers
+              const updatedDocumentData = documentData.map(([label, type]) => {
+                  const files = filesByType[type] || [];
+                  return [label, type, files];
+              });
+
+              setDocumentData(updatedDocumentData);
+          })
+          .catch(error => console.error('Error fetching data:', error));
+  }, []);
+    
   return (
     <div>
       {/* <Breadcrumbs navigation={navigation} title /> */}
@@ -83,3 +85,22 @@ const Prospect = () => {
 };
 
 export default Prospect;
+
+  // const navigation = {
+  //   items: [
+  //     {
+  //       id: 'prospects',
+  //       title: 'Prospects',
+  //       type: 'group',
+  //       children: [
+  //         {
+  //           id: 'prospects',
+  //           title: 'Prospects',
+  //           type: 'item',
+  //           prospectName: `${prospect.firstName} ${prospect.lastName}`,
+  //           url: `/prospects/${id}`,
+  //         },
+  //       ],
+  //     }
+  //   ]
+  // };
