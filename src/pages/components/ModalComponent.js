@@ -10,8 +10,8 @@ const ModalComponent = ({ isOpen, onClose, component }) => {
       top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: '80%', 
-      maxWidth: '600px', 
+      width: '80%',
+      maxWidth: '600px',
       maxHeight: '80%',
       overflow: 'auto',
     },
@@ -25,7 +25,7 @@ const ModalComponent = ({ isOpen, onClose, component }) => {
       style={customStyles}
     >
       <IconButton color="error" onClick={onClose}>
-        <CloseOutlined />
+      <CloseOutlined  />
       </IconButton>
       {component}
     </Modal>

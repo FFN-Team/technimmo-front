@@ -18,6 +18,9 @@ import AdsPublicationDateChart from './AdsPublicationDateChart';
 import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
 import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
 
+import ProspectContactOriginChart from './ProspectContactOriginChart';
+import MainCard from 'components/MainCard';
+import Map from './map';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
@@ -73,6 +76,8 @@ const DashboardDefault = () => {
 
   return (
     <div>
+    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+      {/* row 1 */}
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
@@ -122,6 +127,34 @@ const DashboardDefault = () => {
           <Card></Card>
         </TabPanel>
       </Tabs>
+      {/* row 3 */}
+      <Grid item xs={12} md={5} lg={4}>
+        <Grid container alignItems="center" justifyContent="space-between">
+        <Grid item>
+            <Typography variant="h5">Number of prospects by contact origin</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+        <ProspectContactOriginChart />
+        </MainCard>
+      </Grid>
+
+       {/* row 3 */}
+      <Grid item xs={12} sx={{ mb: -2.25 }}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+          <Typography variant="h5">Carte des annonces immobilières</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <Map/>
+        </MainCard>
+      </Grid>
+
+
+    </Grid>
     </div>
   );
 };
