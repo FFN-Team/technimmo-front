@@ -5,7 +5,7 @@
  * if you want to use image instead of <svg> uncomment following.
  */
 //import logoDark from 'assets/images/logo-dark.svg';
-import logo from 'components/Logo/logo.jpg';
+// import logo from '../../assets/images/icons/logo.png';
  
  
 
@@ -18,7 +18,7 @@ const Logo = () => {
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
      */
-      <img src={logo} alt="TechnImmoLogo" width="100%" />
+      <img alt="TechnImmoLogo" width="25%" />
      
      
     // <>

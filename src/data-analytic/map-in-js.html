@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte des Annonces Immobilières</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Définir la taille de la carte */
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+
+        /* Personnaliser la légende */
+        .legend {
+            background-color: white;
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .legend div {
+            height: 20px;
+            width: 20px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .legend .blue {
+            background-color: #0000FF;
+        }
+    </style>
+</head>
+<body>
+
+<h3 align="center">Carte des Annonces Immobilières avec Prix Moyen</h3>
+<div id="map"></div>
+
+<script>
+    async function loadMap() {
+        try {
+            const response = await fetch('/');  // Requête vers le serveur Flask
+            if (response.ok) {
+                const htmlContent = await response.text();  // Récupère le contenu HTML de la carte
+                document.getElementById('map').innerHTML = htmlContent;  // Injecter le HTML dans l'élément div
+            } else {
+                console.error("Erreur lors de la récupération de la carte");
+            }
+        } catch (error) {
+            console.error("Erreur de réseau ou de requête:", error);
+        }
+    }
+
+    // Charger la carte dès que la page est prête
+    loadMap();
+</script>
+
+</body>
+</html>

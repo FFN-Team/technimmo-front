@@ -75,6 +75,7 @@ const NotificationsSettings = () => {
         }
 
         setCheckedPPN(true);
+        window.location.reload();
       } catch (error) {
           console.log(error.message);
       }
@@ -119,6 +120,7 @@ const NotificationsSettings = () => {
         }
 
         setCheckedPB(true);
+        window.location.reload();
       } catch (error) {
           console.log(error.message);
       }
