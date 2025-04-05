@@ -52,7 +52,7 @@ const Map = () => {
                 {markers.map((marker, index) => (
                     <Marker key={index} position={[marker.latitude, marker.longitude]} icon={customIcon}>
                         <Popup>
-                            {marker.city}: {marker.price} €
+                            {marker.zipCode}: {marker.price} €
                         </Popup>
                     </Marker>
                 ))}
