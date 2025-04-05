@@ -28,7 +28,9 @@ import ProspectAgeGroupChart from './ProspectAgeGroupChart';
 import ProspectProfessionChart from './ProspectProfessionChart';
 import ProspectContactOriginChart from './ProspectContactOriginChart';
 import MainCard from 'components/MainCard';
-import Map from './map';
+import Map from './ProximityClusteringAddsMap.js';
+// import MapTest from './AddsMapTest copy';
+import MapTest2 from './AddsMapTest';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
@@ -134,6 +136,32 @@ const DashboardDefault = () => {
         </Grid>
         <MainCard sx={{ mt: 2 }} content={false}>
           <Map/>
+        </MainCard>
+      </Grid>
+
+      {/* row 4
+      <Grid item xs={12} sx={{ mb: -2.25 }}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+          <Typography variant="h5">Carte des annonces immobilières</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <MapTest/>
+        </MainCard>
+      </Grid> */}
+
+      {/* row 4 */}
+      <Grid item xs={12} sx={{ mb: -2.25 }}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+          <Typography variant="h5">Carte des annonces immobilières</Typography>
+          </Grid>
+          <Grid item />
+        </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <MapTest2/>
         </MainCard>
       </Grid>
 
