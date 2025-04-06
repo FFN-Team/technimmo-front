@@ -96,3 +96,7 @@ body {
     margin-right: 8px;
     border-radius: 3px;
   }
+
+  .leaflet-interactive:focus {
+    outline: none !important;
+  }

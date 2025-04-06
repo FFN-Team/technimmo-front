@@ -1,0 +1,31 @@
+/* legend.css */
+.legend-container {
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    font-family: sans-serif;
+    font-size: 14px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 8px;
+  }
+  
+  .legend-label {
+    color: #333;
+  }
+  

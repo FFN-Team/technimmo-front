@@ -8,6 +8,7 @@ import {
   Button,
   ButtonGroup,
   Grid,
+  Paper,
   //List,
   /*ListItemAvatar,
   ListItemButton,
@@ -30,8 +31,9 @@ import ProspectProfessionChart from './ProspectProfessionChart';
 import ProspectContactOriginChart from './ProspectContactOriginChart';
 import MainCard from 'components/MainCard';
 import Map from './ProximityClusteringAddsMap';
+import Filters from './Filters'; 
 // import MapTest from './AddsMapTest copy';
-import MapTest2 from './AddsMapTest copy';
+import MapTest2 from './CityClusteringAddsMap';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
@@ -80,6 +82,10 @@ const DashboardDefault = () => {
   //const [value, setValue] = useState('today');
   //const [slot, setSlot] = useState('week');
   const [selectedMap, setSelectedMap] = useState("map1");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(10000);
+  const [showHeatmap, setShowHeatmap] = useState(true);
+  const [showClusters, setShowClusters] = useState(true)
 
   return (
     <div>
@@ -128,7 +134,7 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid>
 
-       {/* row - Carte interactive */}
+       {/* row - Carte interactive
       <Grid item xs={12}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
@@ -155,7 +161,7 @@ const DashboardDefault = () => {
         <MainCard sx={{ mt: 2 }} content={false}>
           {selectedMap === "map1" ? <Map /> : <MapTest2 />}
         </MainCard>
-      </Grid>
+      </Grid> */}
 
       
 
@@ -172,7 +178,56 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid> */}
 
+    {/* ROW - Titre au-dessus de la carte + filtres */}
+<Grid item xs={12}>
+  <Grid container alignItems="center" justifyContent="space-between">
+    <Grid item>
+      <Typography variant="h5">Carte des annonces immobilières</Typography>
+    </Grid>
+    <Grid item>
+      <ButtonGroup variant="outlined" color="primary">
+        <Button
+          onClick={() => setSelectedMap('map1')}
+          variant={selectedMap === 'map1' ? 'contained' : 'outlined'}
+        >
+          Carte par quartier
+        </Button>
+        <Button
+          onClick={() => setSelectedMap('map2')}
+          variant={selectedMap === 'map2' ? 'contained' : 'outlined'}
+        >
+          Carte par villes
+        </Button>
+      </ButtonGroup>
+    </Grid>
+  </Grid>
+</Grid>
 
+    {/* ROW - Filtres + Carte côte à côte */}
+<Grid item xs={12}>
+  <Grid container spacing={2}>
+    {/* Filtres (Sidebar) */}
+    <Paper sx={{ padding: 3, height: '100%' }}>
+      <Filters
+        showHeatmap={showHeatmap}
+        setShowHeatmap={setShowHeatmap}
+        showClusters={showClusters}
+        setShowClusters={setShowClusters}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        setMinPrice={setMinPrice}
+        setMaxPrice={setMaxPrice}
+      />
+    </Paper>
+
+    {/* Carte interactive */}
+    <Grid item xs={12} md={8} lg={9}>
+      <MainCard content={false}>
+        {selectedMap === 'map1' ? <Map /> : <MapTest2 />}
+      </MainCard>
+    </Grid>
+  </Grid>
+</Grid>
     </Grid>
     </div>
   );
