@@ -1,11 +1,12 @@
-//import { useState } from 'react';
+import { useState } from 'react';
 
 // material-ui
 import {
   //Avatar,
   //AvatarGroup,
   //Box,
-  //Button,
+  Button,
+  ButtonGroup,
   Grid,
   //List,
   /*ListItemAvatar,
@@ -28,9 +29,9 @@ import ProspectAgeGroupChart from './ProspectAgeGroupChart';
 import ProspectProfessionChart from './ProspectProfessionChart';
 import ProspectContactOriginChart from './ProspectContactOriginChart';
 import MainCard from 'components/MainCard';
-import Map from './ProximityClusteringAddsMap.js';
+import Map from './ProximityClusteringAddsMap';
 // import MapTest from './AddsMapTest copy';
-import MapTest2 from './AddsMapTest';
+import MapTest2 from './AddsMapTest copy';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
@@ -78,6 +79,7 @@ const status = [
 const DashboardDefault = () => {
   //const [value, setValue] = useState('today');
   //const [slot, setSlot] = useState('week');
+  const [selectedMap, setSelectedMap] = useState("map1");
 
   return (
     <div>
@@ -126,18 +128,36 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid>
 
-       {/* row 3 */}
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
+       {/* row - Carte interactive */}
+      <Grid item xs={12}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-          <Typography variant="h5">Carte des annonces immobilières</Typography>
+            <Typography variant="h5">Carte des annonces immobilières</Typography>
           </Grid>
-          <Grid item />
+          <Grid item>
+            <ButtonGroup variant="outlined" color="primary">
+              <Button
+                onClick={() => setSelectedMap("map1")}
+                variant={selectedMap === "map1" ? "contained" : "outlined"}
+              >
+                Carte 1 (cluster)
+              </Button>
+              <Button
+                onClick={() => setSelectedMap("map2")}
+                variant={selectedMap === "map2" ? "contained" : "outlined"}
+              >
+                Carte 2 (polygones)
+              </Button>
+            </ButtonGroup>
+          </Grid>
         </Grid>
+
         <MainCard sx={{ mt: 2 }} content={false}>
-          <Map/>
+          {selectedMap === "map1" ? <Map /> : <MapTest2 />}
         </MainCard>
       </Grid>
+
+      
 
       {/* row 4
       <Grid item xs={12} sx={{ mb: -2.25 }}>
@@ -151,19 +171,6 @@ const DashboardDefault = () => {
           <MapTest/>
         </MainCard>
       </Grid> */}
-
-      {/* row 4 */}
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-          <Typography variant="h5">Carte des annonces immobilières</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <MapTest2/>
-        </MainCard>
-      </Grid>
 
 
     </Grid>
