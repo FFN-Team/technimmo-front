@@ -1,175 +1,217 @@
-// import React, { useEffect, useState, useRef } from "react";
-// import { MapContainer, TileLayer } from "react-leaflet";
-// import L from "leaflet";
-// import "leaflet/dist/leaflet.css";
-
-// // Fetch des polygones depuis ton API Flask
-// const fetchPolygons = async () => {
-//   try {
-//     const response = await fetch("http://localhost:5000/api/france-polygon");
-//     if (!response.ok) throw new Error("Erreur de chargement des données");
-//     return await response.json();
-//   } catch (error) {
-//     console.error("Erreur de récupération :", error);
-//     return [];
-//   }
-// };
-
-// const MapWithPolygons = () => {
-//   const [communesData, setCommunesData] = useState([]);
-//   const mapInstance = useRef(null);
-
-//   // Charger les données au démarrage
-//   useEffect(() => {
-//     const loadData = async () => {
-//       const data = await fetchPolygons();
-//       setCommunesData(data);
-//     };
-//     loadData();
-//   }, []);
-
-//   // Une fois la carte prête, ajout des polygones
-//   const handleMapReady = (mapInstance) => {
-//     console.log("Carte prête !", mapInstance);
-
-//     var polygon = L.polygon([[45.9828, 5.4302], [45.9851, 5.4349], [45.9978, 5.4411], [46.0172, 5.4447], [46.0256, 5.4416], [46.0307, 5.4359], [46.0315, 5.4249], [46.0232, 5.4206], [46.0078, 5.4044], [45.997, 5.426], [45.9865, 5.4245], [45.9828, 5.4302]], {
-//       color: "red",
-//       weight: 1,
-//       fillOpacity: 0.2,
-//     })
-//     console.log(polygon)
-//     polygon.addTo(mapInstance.current)
-
-//     console.log("handleMapReady : ", communesData)
-
-//     // Ajouter les polygones une fois que la carte est initialisée
-//     communesData.forEach((commune) => {
-//         const polygon = L.polygon(commune.polygon, {
-//           color: "red",
-//           weight: 1,
-//           fillOpacity: 0.2,
-//         });
-//         polygon.bindPopup(`<b>${commune.name}</b><br/>${commune.zipCode}`);
-//         polygon.addTo(mapInstance); // Ajoute le polygone à la carte
-//     });
-//   };
-
-//   return (
-//     <MapContainer
-//       center={[46.603354, 1.888334]} // Coordonnées de la France
-//       zoom={6}
-//       style={{ height: "100vh", width: "100%" }}
-//       whenReady={(event) => {
-//         // whenReady garantit que la carte est complètement initialisée
-//         console.log("Carte complètement prête !");
-//         mapInstance.current = event.target; // La carte est dans l'objet 'target' de l'événement
-//         handleMapReady(mapInstance); // Ajoute les polygones à la carte
-//       }}
-//     >
-//       <TileLayer
-//         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//         attribution="&copy; OpenStreetMap contributors"
-//       />
-//     </MapContainer>
-//   );
-// };
-
-// export default MapWithPolygons;
-
-
 import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+import { Button } from '@mui/material'; // Import du composant Button de Material-UI
+import "./map.css";
 
-// Fetch des polygones depuis ton API Flask
+// Fonction pour charger les données des polygones (à partir de votre API)
 const fetchPolygons = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/france-polygon");
-    if (!response.ok) throw new Error("Erreur de chargement des données");
-    return await response.json();
+    const response = await fetch("http://localhost:5000/api/regions/11/cities-polygon");
+    if (!response.ok) {
+      throw new Error("Erreur de chargement des données");
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Erreur de récupération :", error);
+    console.error("Erreur de récupération des données :", error);
+    return []; // Retourne un tableau vide si l'erreur se produit
+  }
+};
+
+// Fonction pour charger les données des annonces
+const fetchCountAnnonces = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/annonces/count");
+    if (!response.ok) {
+      throw new Error("Erreur de chargement des annonces");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur de récupération des annonces :", error);
     return [];
   }
 };
 
-const MapWithPolygons = () => {
-  const [communesData, setCommunesData] = useState([]); // Données des communes
-  const mapInstance = useRef(null); // Référence à la carte Leaflet
+// Fonction pour charger les données des annonces
+const fetchAveragePriceAnnonces = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/annonces/avg-price-per-m2");
+    if (!response.ok) {
+      throw new Error("Erreur de chargement des annonces");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erreur de récupération des annonces :", error);
+    return [];
+  }
+};
 
-  // Charger les données au démarrage
+// Fonction pour obtenir la couleur en fonction du nombre d'annonces
+const getColorForNumberOfAdds = (numberOfAdds) => {
+  if (numberOfAdds < 1) return "#66000000";
+  if (numberOfAdds < 5) return "#00FF00";  // Vert (très peu d'annonces)
+  if (numberOfAdds < 10) return "#66FF00";  // Vert clair
+  if (numberOfAdds < 20) return "#99FF00";  // Jaune-vert clair
+  if (numberOfAdds < 30) return "#FFFF00";  // Jaune
+  if (numberOfAdds < 40) return "#FFCC00";  // Jaune-orangé
+  if (numberOfAdds < 50) return "#FF9900";  // Orange clair
+  if (numberOfAdds < 70) return "#FF7F00";  // Orange
+  if (numberOfAdds < 100) return "#FF5500";  // Orange foncé
+  if (numberOfAdds < 150) return "#FF3300";  // Rouge orangé
+  return "#FF0000";  // Rouge (beaucoup d'annonces)
+};
+
+// Fonction pour obtenir la couleur en fonction du prix
+const getColorForPrice = (avgPrice) => {
+  if (avgPrice < 1) return "#66000000";
+  if (avgPrice < 3000) return "#00FF00";  // Vert (prix bas)
+  if (avgPrice < 4000) return "#66FF00";  // Vert clair
+  if (avgPrice < 5000) return "#99FF00";  // Jaune-vert clair
+  if (avgPrice < 6000) return "#FFFF00";  // Jaune
+  if (avgPrice < 7000) return "#FFCC00";  // Jaune-orangé
+  if (avgPrice < 8000) return "#FF9900";  // Orange clair
+  if (avgPrice < 9000) return "#FF7F00";  // Orange
+  if (avgPrice < 10000) return "#FF5500";  // Orange foncé
+  if (avgPrice < 11000) return "#FF3300";  // Rouge orangé
+  return "#FF0000";  // Rouge (prix très élevé)
+};
+
+// Composant principal avec le bouton pour changer de critère
+const MapWithDynamicZoom = () => {
+  const [communesData, setCommunesData] = useState([]);
+  const [annoncesParVille, setAnnoncesParVille] = useState(null);
+  const [averagePricePrVille, setAveragePriceParVille] = useState(null);
+  const [colorBy, setColorBy] = useState("annonces"); // "annonces" ou "prix"
+  const [zoom, setZoom] = useState(12);
+  const mapRef = useRef(null);
+
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchPolygons();
-      setCommunesData(data); // Mettre à jour les données des communes
-      console.log("communes data est ready");
+      const polygons = await fetchPolygons();
+      const countAnnonces = await fetchCountAnnonces();
+      const averagePriceAnnonces = await fetchAveragePriceAnnonces();
+
+      setCommunesData(polygons);
+      setAnnoncesParVille(countAnnonces);
+      setAveragePriceParVille(averagePriceAnnonces);
     };
+
     loadData();
-  }, []); // Une seule fois lors du montage du composant
+  }, []);
 
-  // Une fois la carte prête et communesData chargé, ajout des polygones
-  useEffect(() => {
-    if (!mapInstance.current) return; // Si communesData est vide ou la carte n'est pas prête, on ne fait rien
+  const handleZoomChange = () => {
+    if (mapRef.current) {
+      setZoom(mapRef.current.getZoom());
+    }
+  };
 
-    // Ajouter un polygone de test (si nécessaire)
-    const testPolygon = L.polygon(
-      [
-        [45.9828, 5.4302],
-        [45.9851, 5.4349],
-        [45.9978, 5.4411],
-        [46.0172, 5.4447],
-        [46.0256, 5.4416],
-        [46.0307, 5.4359],
-        [46.0315, 5.4249],
-        [46.0232, 5.4206],
-        [46.0078, 5.4044],
-        [45.997, 5.426],
-        [45.9865, 5.4245],
-        [45.9828, 5.4302]
-      ],
-      {
-        color: "red",
-        weight: 1,
-        fillOpacity: 0.2,
-      }
-    );
-    testPolygon.addTo(mapInstance.current); // Ajouter ce polygone de test à la carte
+  // Fonction pour changer la couleur en fonction du critère
+  const getColor = (commune) => {
+    if (colorBy === "annonces") {
+      const nombreAnnoncesPourMaVille = annoncesParVille.villes.find((ville) => ville.zipCode === commune.zipCode)?.count || 0;
+      return getColorForNumberOfAdds(nombreAnnoncesPourMaVille);
+    } else {
+      const prixMoyenPourMaVille = averagePricePrVille.villes.find((ville) => ville.zipCode === commune.zipCode)?.avgPricePerM2 || 0;
+      return getColorForPrice(prixMoyenPourMaVille);
+    }
+  };
 
-    console.log("on teste communes data : ", communesData);
-
-    if(!communesData.length) return;
-
-    console.log("est-ce que on va là ?");
-
-    // Ajouter les polygones de communesData
-    communesData.forEach((commune) => {
-      console.log("on va là également ?");
-      const polygon = L.polygon(commune.polygon, {
-        color: "red",
-        weight: 1,
-        fillOpacity: 0.2,
-      });
-      polygon.addTo(mapInstance.current); // Ajouter chaque polygone à la carte
-    });
-  }, [communesData, mapInstance]); // Dépend de communesData pour se déclencher
+  // Fonction pour générer le contenu de la légende
+  const getLegendContent = () => {
+    if (colorBy === "annonces") {
+      return (
+        <div>
+          <b>Légende - Nombre d&apos;annonces</b><br />
+          <div style={{ color: "#00FF00" }}>0-5 annonces</div>
+          <div style={{ color: "#66FF00" }}>6-10 annonces</div>
+          <div style={{ color: "#99FF00" }}>11-20 annonces</div>
+          <div style={{ color: "#FFFF00" }}>21-30 annonces</div>
+          <div style={{ color: "#FF7F00" }}>31-50 annonces</div>
+          <div style={{ color: "#FF0000" }}>Plus de 50 annonces</div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <b>Légende - Prix moyen par m²</b><br />
+          <div style={{ color: "#00FF00" }}>0-3000 €</div>
+          <div style={{ color: "#66FF00" }}>3001-4000 €</div>
+          <div style={{ color: "#FFFF00" }}>4001-5000 €</div>
+          <div style={{ color: "#FFCC00" }}>5001-6000 €</div>
+          <div style={{ color: "#FF7F00" }}>6001-7000 €</div>
+          <div style={{ color: "#FF0000" }}>Plus de 7000 €</div>
+        </div>
+      );
+    }
+  };
 
   return (
-    <MapContainer
-      center={[46.603354, 1.888334]} // Coordonnées de la France
-      zoom={6}
-      style={{ height: "100vh", width: "100%" }}
-      whenReady={(event) => {
-        console.log("Carte complètement prête !");
-        mapInstance.current = event.target; // La carte est dans l'objet 'target' de l'événement
-      }}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors"
-      />
-    </MapContainer>
+    <div style={{ position: 'relative', height: '100vh' }}>
+      <MapContainer
+        center={[48.902705531753895, 2.2006715083823996]}
+        zoom={zoom}
+        style={{ height: "100%", width: "100%" }}
+        whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance;
+        }}
+        onZoomEnd={handleZoomChange}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="&copy; OpenStreetMap"
+        />
+
+        {communesData.length > 0 &&
+          communesData.map((commune, index) => {
+            const geojsonData = convertToGeoJSON(commune);
+
+            return (
+              <GeoJSON
+                key={`city-${index}`}
+                data={geojsonData}
+                style={{
+                  weight: 2,
+                  opacity: 0.6,
+                  fillOpacity: 0.6,
+                  fillColor: getColor(commune),
+                }}
+              />
+            );
+          })}
+      </MapContainer>
+
+      <Button
+        onClick={() => setColorBy(colorBy === "annonces" ? "prix" : "annonces")}
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          zIndex: 1000,
+          padding: "10px",
+          backgroundColor: "#fff",
+          border: "1px solid #000",
+        }}
+      >
+        {colorBy === "annonces" ? "Afficher par prix" : "Afficher par annonces"}
+      </Button>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          zIndex: 1000,
+          backgroundColor: "#fff",
+          border: "1px solid #000",
+          padding: "10px",
+        }}
+      >
+        {getLegendContent()}
+      </div>
+    </div>
   );
 };
 
-export default MapWithPolygons;
+export default MapWithDynamicZoom;
