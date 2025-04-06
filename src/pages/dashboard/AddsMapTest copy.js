@@ -33,6 +33,7 @@ const fetchCountAnnonces = async () => {
   }
 };
 
+
 // Fonction pour charger les données des annonces
 const fetchAveragePriceAnnonces = async () => {
   try {
@@ -46,6 +47,38 @@ const fetchAveragePriceAnnonces = async () => {
     console.error("Erreur de récupération des annonces :", error);
     return [];
   }
+};
+
+const getCountAnnonceByZipCode = (zipCode, data) => {
+  // Cherche la ville avec le zipCode correspondant dans le tableau "villes"
+  const ville = data.villes.find((ville) => ville.zipCode === zipCode);
+
+  // Si la ville existe, retourne le count. Sinon, retourne 0.
+  return ville ? ville.count : 0;
+};
+
+const getAveragePriceByZipCode = (zipCode, data) => {
+  // Cherche la ville avec le zipCode correspondant dans le tableau "villes"
+  const ville = data.villes.find((ville) => ville.zipCode === zipCode);
+
+  // Si la ville existe, retourne le count. Sinon, retourne 0.
+  return ville ? ville.avgPricePerM2 : 0;
+};
+
+// Fonction pour convertir une commune en GeoJSON
+const convertToGeoJSON = (commune, average) => {
+  return {
+    type: "Feature",
+    properties: {
+      name: commune.name,
+      zipCode: commune.zipCode,
+      avgPrice: average, // Exemple de prix moyen
+    },
+    geometry: {
+      type: "Polygon",
+      coordinates: [commune.polygon],
+    },
+  };
 };
 
 // Fonction pour obtenir la couleur en fonction du nombre d'annonces
@@ -62,7 +95,6 @@ const getColorForNumberOfAdds = (numberOfAdds) => {
   if (numberOfAdds < 150) return "#FF3300";  // Rouge orangé
   return "#FF0000";  // Rouge (beaucoup d'annonces)
 };
-
 // Fonction pour obtenir la couleur en fonction du prix
 const getColorForPrice = (avgPrice) => {
   if (avgPrice < 1) return "#66000000";
@@ -110,42 +142,40 @@ const MapWithDynamicZoom = () => {
   // Fonction pour changer la couleur en fonction du critère
   const getColor = (commune) => {
     if (colorBy === "annonces") {
-      const nombreAnnoncesPourMaVille = annoncesParVille.villes.find((ville) => ville.zipCode === commune.zipCode)?.count || 0;
+      const nombreAnnoncesPourMaVille = getCountAnnonceByZipCode(commune.zipCode, annoncesParVille);
       return getColorForNumberOfAdds(nombreAnnoncesPourMaVille);
     } else {
-      const prixMoyenPourMaVille = averagePricePrVille.villes.find((ville) => ville.zipCode === commune.zipCode)?.avgPricePerM2 || 0;
+      const prixMoyenPourMaVille = getAveragePriceByZipCode(commune.zipCode, averagePricePrVille)
+      console.log("prix moyen pour ma ville : ", prixMoyenPourMaVille);
       return getColorForPrice(prixMoyenPourMaVille);
     }
   };
 
-  // Fonction pour générer le contenu de la légende
-  const getLegendContent = () => {
-    if (colorBy === "annonces") {
-      return (
-        <div>
-          <b>Légende - Nombre d&apos;annonces</b><br />
-          <div style={{ color: "#00FF00" }}>0-5 annonces</div>
-          <div style={{ color: "#66FF00" }}>6-10 annonces</div>
-          <div style={{ color: "#99FF00" }}>11-20 annonces</div>
-          <div style={{ color: "#FFFF00" }}>21-30 annonces</div>
-          <div style={{ color: "#FF7F00" }}>31-50 annonces</div>
-          <div style={{ color: "#FF0000" }}>Plus de 50 annonces</div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <b>Légende - Prix moyen par m²</b><br />
-          <div style={{ color: "#00FF00" }}>0-3000 €</div>
-          <div style={{ color: "#66FF00" }}>3001-4000 €</div>
-          <div style={{ color: "#FFFF00" }}>4001-5000 €</div>
-          <div style={{ color: "#FFCC00" }}>5001-6000 €</div>
-          <div style={{ color: "#FF7F00" }}>6001-7000 €</div>
-          <div style={{ color: "#FF0000" }}>Plus de 7000 €</div>
-        </div>
-      );
+  const onEachFeature = (feature, layer) => {
+    if (feature.properties) {
+      const zipCode = feature.properties.zipCode;
+      const villeName = feature.properties.name;
+      const count = getCountAnnonceByZipCode(zipCode, annoncesParVille);
+  
+      layer.on("mouseover", function (e) {
+        this.bindTooltip(
+          `<b>${villeName}</b><br>${count} annonce${count > 1 ? "s" : ""}`,
+          { sticky: true }
+        ).openTooltip(e.latlng);
+      });
+  
+      layer.on("mouseout", function () {
+        this.closeTooltip();
+      });
+  
+      // Empêche l'ouverture de popup au clic
+      layer.on("click", function (e) {
+        e.originalEvent.preventDefault();
+        e.originalEvent.stopPropagation();
+      });
     }
   };
+  
 
   return (
     <div style={{ position: 'relative', height: '100vh' }}>
@@ -165,12 +195,14 @@ const MapWithDynamicZoom = () => {
 
         {communesData.length > 0 &&
           communesData.map((commune, index) => {
-            const geojsonData = convertToGeoJSON(commune);
+            const average = getAveragePriceByZipCode(commune.zipCode, averagePricePrVille);
+            const geojsonData = convertToGeoJSON(commune, average);
 
             return (
               <GeoJSON
                 key={`city-${index}`}
                 data={geojsonData}
+                onEachFeature={onEachFeature}
                 style={{
                   weight: 2,
                   opacity: 0.6,
@@ -182,6 +214,7 @@ const MapWithDynamicZoom = () => {
           })}
       </MapContainer>
 
+      {/* Ajout d'un bouton pour changer l'affichage */}
       <Button
         onClick={() => setColorBy(colorBy === "annonces" ? "prix" : "annonces")}
         style={{
@@ -196,22 +229,8 @@ const MapWithDynamicZoom = () => {
       >
         {colorBy === "annonces" ? "Afficher par prix" : "Afficher par annonces"}
       </Button>
-
-      <div
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          zIndex: 1000,
-          backgroundColor: "#fff",
-          border: "1px solid #000",
-          padding: "10px",
-        }}
-      >
-        {getLegendContent()}
-      </div>
     </div>
   );
 };
 
-export default MapWithDynamicZoom;
+export default MapWithDynamicZoom; 
