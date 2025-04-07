@@ -65,7 +65,9 @@ const Map = () => {
     fetch("http://localhost:5000/api/annonces")
       .then((response) => response.json())
       .then((data) => {
-        if (Array.isArray(data)) setMarkers(data);
+        if (Array.isArray(data)) {
+          setMarkers(data);
+        }
         else {
           console.error("Données non valides :", data);
           setMarkers([]);
@@ -92,15 +94,23 @@ const Map = () => {
 
         {mode === "heatmap" && (
           <HeatmapLayer
-            points={markers}
-            longitudeExtractor={(m) => m.longitude}
-            latitudeExtractor={(m) => m.latitude}
-            intensityExtractor={(m) => m.price}
-            radius={20}
-            blur={15}
-            max={10000}
-          />
-        )}
+          key={`heatmap-${markers.length}`}
+          points={markers}
+          longitudeExtractor={(m) => m.longitude}
+          latitudeExtractor={(m) => m.latitude}
+          intensityExtractor={() => 1} // Chaque annonce compte pour 1
+          radius={25}
+          blur={20}
+          max={10}
+          gradient={{
+            0.0: "#00ff00",   // Vert vif (faible)
+            0.3: "#aaff00",   // Vert-jaune
+            0.5: "#ffff00",   // Jaune
+            0.7: "#ffaa00",   // Orange
+            0.9: "#ff5500",   // Orange-rouge
+            1.0: "#ff0000"    // Rouge vif (forte densité)
+          }}
+        /> )}
 
         {mode === "cluster" && (
           <MarkerClusterGroup chunkedLoading iconCreateFunction={createCustomClusterIcon}>
@@ -117,6 +127,30 @@ const Map = () => {
             ))}
           </MarkerClusterGroup>
         )}
+
+        <div className="legend-container">
+          {mode === "heatmap" && (
+            <div className="legend">
+              <h4>Heatmap – Densité dannonces</h4>
+              <div className="gradient-bar"></div>
+              <div className="labels">
+                <span>Faible</span>
+                <span>Élevée</span>
+              </div>
+            </div>
+          )}
+          {mode === "cluster" && (
+            <div className="legend">
+              <h4>Clusters – Nb dannonces</h4>
+              <div className="cluster-example">
+                <div style={{ backgroundColor: "#27ae60" }}>-10</div>
+                <div style={{ backgroundColor: "#f1c40f" }}>10-30</div>
+                <div style={{ backgroundColor: "#e67e22" }}>30-50</div>
+                <div style={{ backgroundColor: "#e74c3c" }}>50+</div>
+              </div>
+            </div>
+          )}
+        </div>
       </MapContainer>
 
       {/* Toggle Button pour changer de mode */}
