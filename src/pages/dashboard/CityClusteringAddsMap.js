@@ -156,7 +156,7 @@ const MapWithDynamicZoom = () => {
   const [annoncesParVille, setAnnoncesParVille] = useState(null);
   const [averagePricePrVille, setAveragePriceParVille] = useState(null);
   const [mode, setMode] = useState("annonces");
-  const [zoom, setZoom] = useState(12);
+  const [zoom, setZoom] = useState(11);
   const mapRef = useRef(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [favoris, setFavoris] = useState([]);
@@ -239,10 +239,15 @@ const MapWithDynamicZoom = () => {
   }
 
   return (
-    <div style={{ position: "relative", height: "100vh", background: "#f4f6f9" }}>
+      <div style={{ position: "relative", height: "100vh", background: "#f4f6f9" }}>
       <MapContainer
-        center={[48.9027, 2.2006]}
+        center={[48.8317, 2.2006]}
         zoom={zoom}
+        scrollWheelZoom={false}
+        doubleClickZoom={false}
+        touchZoom={false}
+        zoomControl={true}
+        dragging={true} // ou false pour une carte totalement figée
         style={{
           height: "100%",
           width: "100%",
@@ -293,7 +298,7 @@ const MapWithDynamicZoom = () => {
                     key={`annonce-${idx}`}
                     center={[annonce.lat, annonce.lng]}
                     radius={5 + annonce.favorites / 100}
-                    fillColor="#0077ff"
+                    fillColor="#e91e63"
                     color="#ffffff"
                     weight={1}
                     fillOpacity={0.7}
@@ -314,7 +319,7 @@ const MapWithDynamicZoom = () => {
                     key={`annonce-${idx}`}
                     center={[annonce.lat, annonce.lng]}
                     radius={5 + annonce.days_difference / 100}
-                    fillColor="red"
+                    fillColor="#ff9800"
                     color="#ffffff"
                     weight={1}
                     fillOpacity={0.7}
@@ -397,7 +402,7 @@ const MapWithDynamicZoom = () => {
         sx={{
           position: "absolute",
           top: 20,
-          right: 20,
+          left: 50,
           zIndex: 1000,
           backgroundColor: "rgba(255, 255, 255, 0.95)",
           borderRadius: "8px",
@@ -423,14 +428,15 @@ const MapWithDynamicZoom = () => {
       </ToggleButtonGroup>
 
       <Legend type={mode} />
-
+      
       {selectedCity && (
-        <CitySideBar
-          selectedCity={selectedCity}
-          onClose={() => setSelectedCity(null)}
-        />
-      )}
-    </div>
+          <CitySideBar
+            selectedCity={selectedCity}
+            onClose={() => setSelectedCity(null)}
+          />
+        )}
+
+      </div>
   );
 };
 
