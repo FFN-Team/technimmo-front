@@ -1,22 +1,11 @@
 //import { useState } from 'react';
 
 // material-ui
-import {
-  //Avatar,
-  //AvatarGroup,
-  //Box,
-  //Button,
-  Grid,
-  //List,
-  /*ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
-  ListItemText,
-  MenuItem,
-  Stack,
-  TextField,*/
-  Typography
-} from '@mui/material';
+import React, { useState } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { Grid, Typography } from '@mui/material';
+import Card from 'pages/components/Card.js';
 
 // project import
 //import OrdersTable from './OrdersTable';
@@ -24,10 +13,7 @@ import {
 //import MonthlyBarChart from './MonthlyBarChart';
 //import ReportAreaChart from './ReportAreaChart';
 //import SalesColumnChart from './SalesColumnChart';
-import ProspectAgeGroupChart from './ProspectAgeGroupChart';
-import ProspectProfessionChart from './ProspectProfessionChart';
-import ProspectContactOriginChart from './ProspectContactOriginChart';
-import MainCard from 'components/MainCard';
+
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
@@ -75,53 +61,42 @@ const status = [
 const DashboardDefault = () => {
   //const [value, setValue] = useState('today');
   //const [slot, setSlot] = useState('week');
+  const [activeTab, setActiveTab] = useState(0);
+
+  const handleTabSelect = (index) => {
+    setActiveTab(index);
+  };
 
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
+    <div className="property-details">
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
 
-      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+      <br></br>
 
-      {/* row 2 */}
-      <Grid item xs={12} md={9} lg={8}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Number of prospects by age group</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <ProspectAgeGroupChart />
-        </MainCard>
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Number of prospects by profession</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <ProspectProfessionChart />
-        </MainCard>
-      </Grid>
+      <Tabs className="custom-tabs" selectedIndex={activeTab} onSelect={handleTabSelect}>
+        <TabList className="custom-tab-list">
+          <Tab>Annonces disponibles</Tab>
+          <Tab>Analyse des biens</Tab>
+          <Tab>Tendance du marché par ville</Tab>
+          <Tab>Carte</Tab>
+        </TabList>
 
-      {/* row 3 */}
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Number of prospects by contact origin</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <ProspectContactOriginChart />
-        </MainCard>
-      </Grid>
-    </Grid>
+        <TabPanel>
+          <Card></Card>
+        </TabPanel>
+        <TabPanel>
+          <Card></Card>
+        </TabPanel>
+        <TabPanel>
+          <Card></Card>
+        </TabPanel>
+        <TabPanel>
+          <Card></Card>
+        </TabPanel>
+      </Tabs>
+    </div>
   );
 };
 
