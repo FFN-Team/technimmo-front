@@ -1,9 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  GeoJSON,
+  CircleMarker,
+  Tooltip,
+} from "react-leaflet";
 import "./map.css";
 import Legend from "./Legend";
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { FormatListBulleted, Euro } from '@mui/icons-material';
+import CitySideBar from "./CitySideBar";
+import { ToggleButton, ToggleButtonGroup, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { FormatListBulleted, Euro } from "@mui/icons-material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+
+// ... (toutes tes fonctions de fetch, getColor, etc. inchangées)
 
 // Fonction pour charger les données des polygones (à partir de votre API)
 const fetchPolygons = async () => {
@@ -47,6 +60,32 @@ const fetchAveragePriceAnnonces = async () => {
     return data;
   } catch (error) {
     console.error("Erreur de récupération des annonces :", error);
+    return [];
+  }
+};
+
+const fetchFavoris = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/best-favorites"); // remplace avec ta vraie URL si besoin
+    if (!response.ok) {
+      throw new Error("Erreur de chargement des annonces géolocalisées");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur de récupération des annonces géo :", error);
+    return [];
+  }
+};
+
+const fetchBadAdds = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/bad-ads"); // remplace avec ta vraie URL si besoin
+    if (!response.ok) {
+      throw new Error("Erreur de chargement des annonces géolocalisées");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur de récupération des annonces géo :", error);
     return [];
   }
 };
@@ -112,24 +151,32 @@ const getColorForPrice = (avgPrice) => {
   return "#FF0000";  // Rouge (prix très élevé)
 };
 
-// Composant principal avec le bouton pour changer de critère
 const MapWithDynamicZoom = () => {
   const [communesData, setCommunesData] = useState([]);
   const [annoncesParVille, setAnnoncesParVille] = useState(null);
   const [averagePricePrVille, setAveragePriceParVille] = useState(null);
-  const [mode, setMode] = useState("annonces"); // "annonces" ou "prix"
+  const [mode, setMode] = useState("annonces");
   const [zoom, setZoom] = useState(12);
   const mapRef = useRef(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [favoris, setFavoris] = useState([]);
+  const [showFavorites, setShowFavorites] = useState("true");
+  const [badAdds, setBadAdds] = useState([]);
+  const [showBadAdds, setShowBadAdds] = useState("false");
 
   useEffect(() => {
     const loadData = async () => {
       const polygons = await fetchPolygons();
       const countAnnonces = await fetchCountAnnonces();
       const averagePriceAnnonces = await fetchAveragePriceAnnonces();
+      const favorisData = await fetchFavoris();
+      const badAddsData = await fetchBadAdds();
 
       setCommunesData(polygons);
       setAnnoncesParVille(countAnnonces);
       setAveragePriceParVille(averagePriceAnnonces);
+      setFavoris(favorisData);
+      setBadAdds(badAddsData);
     };
 
     loadData();
@@ -141,82 +188,206 @@ const MapWithDynamicZoom = () => {
     }
   };
 
-  // Fonction pour changer la couleur en fonction du critère
   const getColor = (mode, average, count) => {
-    console.log("dans getColor mode vaut : ", mode);
-    if (mode === "annonces") {
-      return getColorForNumberOfAdds(count);
-    } else {
-      return getColorForPrice(average);
-    }
+    if (mode === "annonces") return getColorForNumberOfAdds(count);
+    else return getColorForPrice(average);
   };
 
   const onEachFeature = (feature, layer, average, count) => {
     if (feature.properties) {
       const villeName = feature.properties.name;
 
-      console.log("dans onEachFeature mode vaut : ", mode);
-  
       layer.on("mouseover", function (e) {
-        let tooltipContent;
-        tooltipContent = `<b>${villeName}</b><br>${count} annonce${count > 1 ? "s" : ""}
-          <br>${average.toLocaleString()} €/m²`;
-  
+        let tooltipContent = `
+          <div style="padding: 6px; font-size: 13px;">
+            <strong>${villeName}</strong><br/>
+            ${count} annonce${count > 1 ? "s" : ""}
+            <br/>${average.toLocaleString()} €/m²
+          </div>`;
         this.bindTooltip(tooltipContent, { sticky: true }).openTooltip(e.latlng);
       });
-  
+
       layer.on("mouseout", function () {
         this.closeTooltip();
       });
-  
-      // Empêche l'ouverture de popup au clic
-      layer.on("click", function (e) {
-        e.originalEvent.preventDefault();
-        e.originalEvent.stopPropagation();
+
+      layer.on("click", function () {
+        setSelectedCity({
+          name: feature.properties.name,
+          zipCode: feature.properties.zipCode,
+          averagePrice: average,
+          annoncesCount: count,
+        });
       });
     }
   };
 
+  const handleChangeFavoriCheckBox = () => {
+    if (showFavorites === "true") {
+      setShowFavorites("false");
+    } else  {
+      setShowFavorites("true");
+    }
+  }
+
+  const handleChangeBadAddsCheckBox = () => {
+    if (showBadAdds === "true") {
+      setShowBadAdds("false");
+    } else  {
+      setShowBadAdds("true");
+    }
+  }
+
   return (
-    <div style={{ position: 'relative', height: '100vh' }}>
+    <div style={{ position: "relative", height: "100vh", background: "#f4f6f9" }}>
       <MapContainer
-        center={[48.902705531753895, 2.2006715083823996]}
+        center={[48.9027, 2.2006]}
         zoom={zoom}
-        style={{ height: "100%", width: "100%" }}
+        style={{
+          height: "100%",
+          width: "100%",
+          filter: selectedCity ? "blur(1px)" : "none",
+          transition: "filter 0.3s ease-in-out",
+        }}
         whenCreated={(mapInstance) => {
           mapRef.current = mapInstance;
         }}
         onZoomEnd={handleZoomChange}
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap"
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         />
 
         {communesData.length > 0 &&
           communesData.map((commune, index) => {
-            const average = getAveragePriceByZipCode(commune.zipCode, averagePricePrVille);
-            const count = getCountAnnonceByZipCode(commune.zipCode, annoncesParVille);
+            const average = getAveragePriceByZipCode(
+              commune.zipCode,
+              averagePricePrVille
+            );
+            const count = getCountAnnonceByZipCode(
+              commune.zipCode,
+              annoncesParVille
+            );
             const geojsonData = convertToGeoJSON(commune, average);
 
             return (
-              <GeoJSON
-                key={`city-${index}`}
-                data={geojsonData}
-                onEachFeature={(feature, layer) => {
-                  onEachFeature(feature, layer, average, count)}}
-                style={{
-                  weight: 2,
-                  opacity: 0.6,
-                  fillOpacity: 0.6,
-                  fillColor: getColor(mode, average, count),
-                }}
-              />
+              <div key={`commune-${index}`}>
+                <GeoJSON
+                  data={geojsonData}
+                  onEachFeature={(feature, layer) =>
+                    onEachFeature(feature, layer, average, count)
+                  }
+                  style={{
+                    weight: 1,
+                    opacity: 0.4,
+                    color: "#333",
+                    fillOpacity: 0.6,
+                    fillColor: getColor(mode, average, count),
+                    borderRadius: "10px",
+                  }}
+                />
+
+                {showFavorites === "true" && favoris.map((annonce, idx) => (
+                  <CircleMarker
+                    key={`annonce-${idx}`}
+                    center={[annonce.lat, annonce.lng]}
+                    radius={5 + annonce.favorites / 100}
+                    fillColor="#0077ff"
+                    color="#ffffff"
+                    weight={1}
+                    fillOpacity={0.7}
+                  >
+                    <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent={false}>
+                      <span>
+                        <b>Annonces</b><br />
+                        {annonce.favorites} favoris<br />
+                        Code postal : {annonce.zipcode}<br/>
+                        <a href={annonce.url} target="_blank" rel="noopener noreferrer">Voir lannonce</a>
+                      </span>
+                    </Tooltip>
+                  </CircleMarker>
+                ))}
+
+                {showBadAdds === "true" && badAdds.map((annonce, idx) => (
+                  <CircleMarker
+                    key={`annonce-${idx}`}
+                    center={[annonce.lat, annonce.lng]}
+                    radius={5 + annonce.days_difference / 100}
+                    fillColor="red"
+                    color="#ffffff"
+                    weight={1}
+                    fillOpacity={0.7}
+                  >
+                    <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent={false}>
+                      <span>
+                        <b>Annonces</b><br />
+                        Date de première publication : {annonce.first_publication_date}<br />
+                        Code postal : {annonce.zipcode}<br/>
+                        <a href={annonce.url} target="_blank" rel="noopener noreferrer">Voir lannonce</a>
+                      </span>
+                    </Tooltip>
+                  </CircleMarker>
+                ))}
+
+              </div>
             );
           })}
       </MapContainer>
 
-      {/* Ajout d'un bouton pour changer l'affichage */}
+      <FormGroup
+  sx={{
+    position: "absolute",
+    top: 80,
+    left: 10,
+    zIndex: 1000,
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: "12px",
+    boxShadow: 5,
+    padding: "12px 16px",
+    gap: 1,
+    minWidth: "220px",
+    "& .MuiFormControlLabel-root": {
+      marginLeft: 0,
+      alignItems: "center",
+    },
+  }}
+>
+  <FormControlLabel
+    control={
+      <Checkbox
+        defaultChecked
+        icon={<FavoriteBorderIcon sx={{ color: "#999" }} />}
+        checkedIcon={<FavoriteIcon sx={{ color: "#e91e63" }} />}
+        onChange={handleChangeFavoriCheckBox}
+        sx={{
+          transition: "all 0.3s ease-in-out",
+          "&.Mui-checked": {
+            transform: "scale(1.2)",
+          },
+        }}
+      />
+    }
+    label="Annonces populaires"
+  />
+  <FormControlLabel
+    control={
+      <Checkbox
+        icon={<AccessTimeIcon sx={{ color: "#999" }} />}
+        checkedIcon={<AccessTimeFilledIcon sx={{ color: "#ff9800" }} />}
+        onChange={handleChangeBadAddsCheckBox}
+        sx={{
+          transition: "all 0.3s ease-in-out",
+          "&.Mui-checked": {
+            transform: "scale(1.2)",
+          },
+        }}
+      />
+    }
+    label="Annonces stagnantes"
+  />
+</FormGroup>
+
       <ToggleButtonGroup
         value={mode}
         exclusive
@@ -225,12 +396,19 @@ const MapWithDynamicZoom = () => {
         }}
         sx={{
           position: "absolute",
-          top: "10px",
-          right: "10px",
+          top: 20,
+          right: 20,
           zIndex: 1000,
-          backgroundColor: "white",
-          borderRadius: 1,
-          boxShadow: 3,
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          borderRadius: "8px",
+          boxShadow: 5,
+          padding: "4px",
+          "& .MuiToggleButton-root": {
+            textTransform: "none",
+            padding: "6px 12px",
+            fontSize: "14px",
+            transition: "all 0.2s ease-in-out",
+          },
         }}
         size="small"
       >
@@ -245,8 +423,15 @@ const MapWithDynamicZoom = () => {
       </ToggleButtonGroup>
 
       <Legend type={mode} />
+
+      {selectedCity && (
+        <CitySideBar
+          selectedCity={selectedCity}
+          onClose={() => setSelectedCity(null)}
+        />
+      )}
     </div>
   );
 };
 
-export default MapWithDynamicZoom; 
+export default MapWithDynamicZoom;

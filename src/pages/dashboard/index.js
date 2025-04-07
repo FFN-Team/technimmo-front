@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // material-ui
 import {
@@ -8,7 +8,7 @@ import {
   Button,
   ButtonGroup,
   Grid,
-  Paper,
+  // Paper,
   //List,
   /*ListItemAvatar,
   ListItemButton,
@@ -34,7 +34,7 @@ import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDi
 import ProspectContactOriginChart from './ProspectContactOriginChart';
 import MainCard from 'components/MainCard';
 import Map from './ProximityClusteringAddsMap';
-import Filters from './Filters'; 
+// import Filters from './Filters'; 
 // import MapTest from './AddsMapTest copy';
 import MapTest2 from './CityClusteringAddsMap';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
@@ -85,10 +85,10 @@ const DashboardDefault = () => {
   //const [value, setValue] = useState('today');
   //const [slot, setSlot] = useState('week');
   const [selectedMap, setSelectedMap] = useState("map1");
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(10000);
-  const [showHeatmap, setShowHeatmap] = useState(true);
-  const [showClusters, setShowClusters] = useState(true)
+  // const [minPrice, setMinPrice] = useState(0);
+  // const [maxPrice, setMaxPrice] = useState(10000);
+  // const [showHeatmap, setShowHeatmap] = useState(true);
+  // const [showClusters, setShowClusters] = useState(true)
 
   return (
     <div>
@@ -229,7 +229,7 @@ const DashboardDefault = () => {
 <Grid item xs={12}>
   <Grid container spacing={2}>
     {/* Filtres (Sidebar) */}
-    <Paper sx={{ padding: 3, height: '100%' }}>
+    {/* <Paper sx={{ padding: 3, height: '100%' }}>
       <Filters
         showHeatmap={showHeatmap}
         setShowHeatmap={setShowHeatmap}
@@ -240,10 +240,10 @@ const DashboardDefault = () => {
         setMinPrice={setMinPrice}
         setMaxPrice={setMaxPrice}
       />
-    </Paper>
+    </Paper> */}
 
     {/* Carte interactive */}
-    <Grid item xs={12} md={8} lg={9}>
+    <Grid item xs={12} md={10} lg={10}>
       <MainCard content={false}>
         {selectedMap === 'map1' ? <Map /> : <MapTest2 />}
       </MainCard>
