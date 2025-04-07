@@ -193,13 +193,13 @@ const DashboardDefault = () => {
         }}
         size="small"
       >
-        <ToggleButton value="map1" aria-label="Carte par zone">
-          <Map fontSize="small" />
-          &nbsp; Carte par zone
-        </ToggleButton>
-        <ToggleButton value="map2" aria-label="Carte par villes">
+        <ToggleButton value="map1" aria-label="Carte par villes">
           <LocationCity fontSize="small" />
           &nbsp; Carte par villes
+        </ToggleButton>
+        <ToggleButton value="map2" aria-label="Carte par zones">
+          <Map fontSize="small" />
+          &nbsp; Carte par zones
         </ToggleButton>
       </ToggleButtonGroup>
       {/* IconButton for info */}
@@ -255,16 +255,16 @@ const DashboardDefault = () => {
     <Grid container xs={12} md={12} lg={12}>
       <MainCard content={false}>
         {selectedMap === 'map1' ? <Grid>
-          <ProximityMap />
+          <CityMap />
           <Grid item justifyContent="center" sx={{ pt: 3 }}>
-            <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>Analyse des informations</Typography>
+            <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>Analyse des informations concernant les annonces immobilières</Typography>
           </Grid>
           <RealEstateInsights />
         </Grid> : 
         <Grid>
-          <CityMap />
+          <ProximityMap />
           <Grid item  justifyContent="center" sx={{ pt: 3 }}>
-            <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>Analyse des informations</Typography>
+            <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>Analyse des informations concernant les annonces immobilières</Typography>
           </Grid>
           <RealEstateInsights />
         </Grid>}
