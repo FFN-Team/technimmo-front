@@ -84,6 +84,12 @@ const Map = () => {
       <MapContainer
         center={[48.8566, 2.3522]}
         zoom={6}
+        scrollWheelZoom={false}
+        doubleClickZoom={false}
+        touchZoom={false}
+        zoomControl={true}
+        dragging={true} // ou false pour une carte totalement figée
+
         style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
