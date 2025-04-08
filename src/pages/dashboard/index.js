@@ -20,6 +20,16 @@ import AdsPublicationDateChart from './AdsPublicationDateChart';
 import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
 import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
 import DashBoardMap from './DashBoardMap';
+import SellTypeChart from './SellTypeChart';
+import CityChart from './CityChart';
+import ProParticulierChart from './ProParticulierChart';
+import AgencyChart from './AgencyChart';
+import BuildingYearBoxplot from './BuildingYearBoxplot';
+import ClusterPlot from './ClusterPlot';
+import ClusterPercentageChart from './ClusterPercentageChart';
+import DemandeRecenteChart from './DemandeRecenteChart';
+import CorrelationGraph from './CorrelationGraph';
+
 
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
@@ -101,14 +111,34 @@ const DashboardDefault = () => {
         <TabPanel>
           <Card>
             <AdsPublicationDateChart />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ width: "48%" }}>
+                <SellTypeChart />
+              </div>
+              <div style={{ width: "48%" }}>
+                <ProParticulierChart />
+              </div>
+            </div>
           </Card>
         </TabPanel>
+
         <TabPanel>
-          <Card></Card>
+          <Card>
+            <ClusterPlot/>
+            <ClusterPercentageChart/>
+            <BuildingYearBoxplot/>
+            <CorrelationGraph/>
+          </Card>
         </TabPanel>
+
         <TabPanel>
-          <Card></Card>
+          <Card>
+            <CityChart/>
+            <DemandeRecenteChart/>
+            <AgencyChart/>
+          </Card>
         </TabPanel>
+
         <TabPanel>
           <Card>
             <p style={{ paddingLeft: '50px', paddingRight: '50px', paddingTop: '30px', textAlign: 'justify', textIndent: 5 }}>
@@ -128,6 +158,7 @@ const DashboardDefault = () => {
             <AverageFavoritesDistributionPerSellerTypeChart />
           </Card>
         </TabPanel>
+
         <TabPanel>
           <DashBoardMap />
         </TabPanel>
