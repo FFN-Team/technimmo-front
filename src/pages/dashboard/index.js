@@ -6,6 +6,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { Grid, Typography } from '@mui/material';
 import Card from 'pages/components/Card.js';
+import SellTypeChart from './SellTypeChart';
+import CityChart from './CityChart';
+import ProParticulierChart from './ProParticulierChart';
+import AgencyChart from './AgencyChart';
+import BuildingYearBoxplot from './BuildingYearBoxplot';
+import ClusterPlot from './ClusterPlot';
+import ClusterPercentageChart from './ClusterPercentageChart';
+import DemandeRecenteChart from './DemandeRecenteChart';
+import CorrelationGraph from './CorrelationGraph';
 
 // project import
 //import OrdersTable from './OrdersTable';
@@ -79,22 +88,44 @@ const DashboardDefault = () => {
         <TabList className="custom-tab-list">
           <Tab>Annonces disponibles</Tab>
           <Tab>Analyse des biens</Tab>
-          <Tab>Tendance du marché par ville</Tab>
+          <Tab>Tendance du marché</Tab>
           <Tab>Carte</Tab>
         </TabList>
 
         <TabPanel>
-          <Card></Card>
+          <Card>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ width: "48%" }}>
+              <SellTypeChart />
+            </div>
+            <div style={{ width: "48%" }}>
+              <ProParticulierChart />
+            </div>
+          </div>
+          </Card>
         </TabPanel>
+
+        <TabPanel>
+          <Card>
+            <ClusterPlot/>
+            <ClusterPercentageChart/>
+            <BuildingYearBoxplot/>
+            <CorrelationGraph/>
+          </Card>
+        </TabPanel>
+
+        <TabPanel>
+          <Card>
+            <CityChart/>
+            <DemandeRecenteChart/>
+            <AgencyChart/>
+          </Card>
+        </TabPanel>
+
         <TabPanel>
           <Card></Card>
         </TabPanel>
-        <TabPanel>
-          <Card></Card>
-        </TabPanel>
-        <TabPanel>
-          <Card></Card>
-        </TabPanel>
+
       </Tabs>
     </div>
   );
