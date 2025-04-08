@@ -14,6 +14,10 @@ import Card from 'pages/components/Card.js';
 //import ReportAreaChart from './ReportAreaChart';
 //import SalesColumnChart from './SalesColumnChart';
 
+import AdsPublicationDateChart from './AdsPublicationDateChart';
+import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
+import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
+
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
@@ -68,7 +72,7 @@ const DashboardDefault = () => {
   };
 
   return (
-    <div className="property-details">
+    <div>
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
@@ -80,17 +84,39 @@ const DashboardDefault = () => {
           <Tab>Annonces disponibles</Tab>
           <Tab>Analyse des biens</Tab>
           <Tab>Tendance du marché par ville</Tab>
+          <Tab>Analyse des annonces</Tab>
           <Tab>Carte</Tab>
         </TabList>
 
         <TabPanel>
-          <Card></Card>
+          <Card>
+            <AdsPublicationDateChart />
+          </Card>
         </TabPanel>
         <TabPanel>
           <Card></Card>
         </TabPanel>
         <TabPanel>
           <Card></Card>
+        </TabPanel>
+        <TabPanel>
+          <Card>
+            <p style={{ paddingLeft: '50px', paddingRight: '50px', paddingTop: '30px', textAlign: 'justify', textIndent: 5 }}>
+              {
+                "Dans cette section, comme le jeu de données ne possède pas des annonces de biens déjà vendus, nous évaluons le succès d'une annonce à son nombre de mises en favori."
+              }
+              <br></br>
+              {
+                "Analyser le nombre de mises en favori des annonces sans prendre en compte leur durée passée en ligne provoquerait un biais. En effet, une annonce publiée antérieurement à une autre risque d'obtenir plus de mises en favori que cette dernière, compte tenu de sa durée d'accessibilité plus élévée. Ainsi, nous avons réparti les données par mois afin de corriger ce biais. Cependant, cette correction est partielle puisqu'il subsiste une différence de temps entre la date de publication en début et en fin de mois."
+              }
+              <br></br>
+              {
+                "De plus, pour ces graphiques, seuls les mois ayant chaque type d'annonces souhaité sont conservées. Par exemple, pour le graphique 'Distribution moyenne de mises en favori par annonce', les mois ayant seulement des annonces boostées ou seulement des annonces non boostées ne sont pas gardés, la comparaison entre les annonces boostées et non boostées étant impossible."
+              }
+            </p>
+            <AverageFavoritesDistributionPerAdBoostingChart />
+            <AverageFavoritesDistributionPerSellerTypeChart />
+          </Card>
         </TabPanel>
         <TabPanel>
           <Card></Card>
