@@ -35,6 +35,27 @@ const AdsPublicationDateChart = () => {
       <Plot
         data={[
           {
+<<<<<<< HEAD
+            type: "pie",
+            labels,
+            values,
+            textinfo: "label+percent",
+            textposition: "outside",
+            automargin: true,
+            marker: {
+              colors: ["rgba(255, 99, 132, 0.7)", "rgba(255, 206, 86, 0.7)"],
+            },
+          }
+        ]}
+        layout={{
+          title: "Répartition des annonces par type de vente",
+          showlegend: true,
+          margin: { t: 50, b: 50, l: 50, r: 50 },
+        }}
+        useResizeHandler={true}
+      />
+
+=======
             x: dates,
             type: 'box',
             name: 'Dates',
@@ -72,8 +93,13 @@ const AdsPublicationDateChart = () => {
           </div>
         }
       />
+>>>>>>> develop
     </div>
   );
 };
 
+<<<<<<< HEAD
 export default AdsPublicationDateChart;
+=======
+export default AdsPublicationDateChart;
+>>>>>>> develop
