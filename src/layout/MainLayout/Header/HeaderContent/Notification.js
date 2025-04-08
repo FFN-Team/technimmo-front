@@ -334,6 +334,7 @@ const Notification = () => {
                         '& .MuiListItemSecondaryAction-root': { ...actionSX, position: 'relative' }
                       }
                     }}
+                    style={{ overflowY: 'auto', maxHeight: '350px' }}
                   >
                     <div>
                       {notificationsPotentialProject.map((notification, index) => (

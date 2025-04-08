@@ -6,7 +6,7 @@ import { ButtonBase } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 // project import
-import Logo from './Logo';
+// import Logo from './Logo';
 import config from 'config';
 import { activeItem } from 'store/reducers/menu';
 
@@ -23,7 +23,7 @@ const LogoSection = ({ sx, to }) => {
       to={!to ? config.defaultPath : to}
       sx={sx}
     >
-      <Logo />
+      {/* <Logo /> */}
     </ButtonBase>
   );
 };
