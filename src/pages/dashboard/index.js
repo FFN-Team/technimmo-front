@@ -4,9 +4,11 @@
 import React, { useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { Grid, Typography } from '@mui/material';
+import { Box, Typography, Divider } from '@mui/material';
 import Card from 'pages/components/Card.js';
 
+
+import 'pages/components/Onglets.css'; // Importer le fichier de style CSS
 // project import
 //import OrdersTable from './OrdersTable';
 //import IncomeAreaChart from './IncomeAreaChart';
@@ -17,6 +19,7 @@ import Card from 'pages/components/Card.js';
 import AdsPublicationDateChart from './AdsPublicationDateChart';
 import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
 import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
+import DashBoardMap from './DashBoardMap';
 
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
@@ -73,20 +76,27 @@ const DashboardDefault = () => {
 
   return (
     <div>
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
-        <Typography variant="h5">Dashboard</Typography>
-      </Grid>
+      <Box sx={{ px: 4, py: 3 }}>
+       {/* EN-TÊTE DU DASHBOARD */}
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h4" fontWeight="bold" gutterBottom>
+                Piloter son secteur : Vision 360° du marché immobilier local
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                Cartographie & Analyse stratégique du marché immobilier
+                </Typography>
+                <Divider sx={{ mt: 2 }} />
+              </Box>
 
-      <br></br>
-
-      <Tabs className="custom-tabs" selectedIndex={activeTab} onSelect={handleTabSelect}>
-        <TabList className="custom-tab-list">
-          <Tab>Annonces disponibles</Tab>
-          <Tab>Analyse des biens</Tab>
-          <Tab>Tendance du marché par ville</Tab>
-          <Tab>Analyse des annonces</Tab>
-          <Tab>Carte</Tab>
-        </TabList>
+      {/* ONGLET REACT-TABS */}
+              <Tabs selectedIndex={activeTab} onSelect={handleTabSelect}>
+              <TabList className="custom-tab-list">
+                <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>🏡 Annonces disponibles</Tab>
+                <Tab className={`custom-tab ${activeTab === 1 ? 'active' : ''}`}>📊 Analyse des biens</Tab>
+                <Tab className={`custom-tab ${activeTab === 2 ? 'active' : ''}`}>🌆 Tendance par ville</Tab>
+                <Tab className={`custom-tab ${activeTab === 3 ? 'active' : ''}`}>🧠 Analyse des annonces</Tab>
+                <Tab className={`custom-tab ${activeTab === 4 ? 'active' : ''}`}>🗺️ Carte interactive</Tab>
+              </TabList>
 
         <TabPanel>
           <Card>
@@ -119,9 +129,10 @@ const DashboardDefault = () => {
           </Card>
         </TabPanel>
         <TabPanel>
-          <Card></Card>
+          <DashBoardMap />
         </TabPanel>
       </Tabs>
+      </Box>
     </div>
   );
 };
