@@ -30,9 +30,9 @@ import { Map, LocationCity, Info } from "@mui/icons-material";
 //import MonthlyBarChart from './MonthlyBarChart';
 //import ReportAreaChart from './ReportAreaChart';
 //import SalesColumnChart from './SalesColumnChart';
-import MainCard from 'components/MainCard';
 import ProximityMap from './ProximityClusteringAddsMap';
 import InteractiveMapGuide from './InteractiveMapGuide';
+import Card from 'pages/components/Card.js';
 // import Filters from './Filters'; 
 // import MapTest from './AddsMapTest copy';
 import CityMap from './CityClusteringAddsMap';
@@ -101,146 +101,142 @@ const DashBoardMap = () => {
 
   return (
     <div>
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
-      <Grid item xs={12}>
-        <Typography
-          variant="h1"
-          sx={{
-            fontWeight: 'bold',
-            color: 'black',
-            mb: 1,
-            borderColor: 'primary.light',
-            display: 'center',
-          }}
-        >
-          Connaissance Terrain
-        </Typography>
-      </Grid>
-
-      <Grid item xs={12} sx={{ mb: 2 }}>
-  <Grid
-    container
-    spacing={2}
-    alignItems="center"
-    justifyContent="space-between"
-    flexWrap="wrap"
-  >
-    {/* Titre */}
-    <Grid item xs={12} sm={6}>
-      <Typography variant="h4" sx={{ fontWeight: 600 }}>
-        Carte des annonces immobilières
-      </Typography>
-    </Grid>
-
-    {/* Filtres + Bouton info */}
-    <Grid
-      item
-      xs={12}
-      sm={6}
-      sx={{
-        display: 'flex',
-        justifyContent: { xs: 'flex-start', sm: 'flex-end' },
-        alignItems: 'center',
-        gap: 1,
-        flexWrap: 'wrap',
-      }}
-    >
-      <ToggleButtonGroup
-        value={selectedMap}
-        exclusive
-        onChange={(event, newValue) => {
-          if (newValue !== null) setSelectedMap(newValue);
-        }}
-        sx={{
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-          borderRadius: "8px",
-          boxShadow: 3,
-          padding: "4px",
-          "& .MuiToggleButton-root": {
-            textTransform: "none",
-            padding: "6px 12px",
-            fontSize: "14px",
-            transition: "all 0.2s ease-in-out",
-          },
-        }}
-        size="small"
-      >
-        <ToggleButton value="map1" aria-label="Carte par villes">
-          <LocationCity fontSize="small" />
-          &nbsp; Carte par villes
-        </ToggleButton>
-        <ToggleButton value="map2" aria-label="Carte par zones">
-          <Map fontSize="small" />
-          &nbsp; Carte par zones
-        </ToggleButton>
-      </ToggleButtonGroup>
-
-      {/* Bouton Info */}
-      <IconButton
-        onClick={handleClickOpen}
-        sx={{
-          backgroundColor: "white",
-          borderRadius: "50%",
-          boxShadow: 3,
-          ml: 1,
-        }}
-      >
-        <Info fontSize="small" />
-      </IconButton>
-    </Grid>
-  </Grid>
-
-  {/* Dialog d'information */}
-  <Dialog open={openMapInformationDialog} onClose={handleCloseMapInformationDialog}>
-    <DialogTitle>Informations</DialogTitle>
-    <DialogContent>
-      <InteractiveMapGuide />
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={handleCloseMapInformationDialog} color="primary">
-        Fermer
-      </Button>
-    </DialogActions>
-  </Dialog>
-</Grid>
-
-
-
-    {/* ROW - Filtres + Carte côte à côte */}
-    <Grid container spacing={2}>
-  <Grid item xs={12}>
-    <MainCard content={false}>
-      <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}> {/* Padding responsive */}
-        {selectedMap === 'map1' ? (
-          <>
-            <CityMap />
-            <Typography 
-              variant="h4"
-              align="center"
-              sx={{ fontWeight: 'bold', my: 3, fontSize: { xs: '1.5rem', sm: '2rem' } }}
+        <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+        {/* row 1 */}
+        {/* <Grid item xs={12}>
+            <Typography
+            variant="h1"
+            sx={{
+                fontWeight: 'bold',
+                color: 'black',
+                mb: 1,
+                borderColor: 'primary.light',
+                display: 'center',
+            }}
             >
-              Analyse des informations concernant les annonces immobilières
+            Connaissance Terrain
             </Typography>
-            <RealEstateInsights />
-          </>
-        ) : (
-          <>
-            <ProximityMap />
-            <Typography 
-              variant="h4"
-              align="center"
-              sx={{ fontWeight: 'bold', my: 3, fontSize: { xs: '1.5rem', sm: '2rem' } }}
-            >
-              Analyse des informations concernant les annonces immobilières
-            </Typography>
-            <RealEstateInsights />
-          </>
-        )}
-      </Box>
-    </MainCard>
-  </Grid>
-</Grid>
+        </Grid> */}
+
+        <Grid item xs={12} sx={{ mb: 2 }}> {/* row 1 */}
+            <Card>
+                <Grid
+                    container
+                    spacing={2}
+                    alignItems="center"
+                    justifyContent="space-between"
+                    flexWrap="wrap"
+                >
+                    {/* Titre */}
+                    <Grid item xs={12} sm={6}>
+                        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                            Carte des annonces immobilières
+                        </Typography>
+                    </Grid>
+
+                    {/* Filtres + Bouton info */}
+                    <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: { xs: 'flex-start', sm: 'flex-end' },
+                        alignItems: 'center',
+                        gap: 1,
+                        flexWrap: 'wrap',
+                    }}
+                    >
+                        <ToggleButtonGroup
+                            value={selectedMap}
+                            exclusive
+                            onChange={(event, newValue) => {
+                            if (newValue !== null) setSelectedMap(newValue);
+                            }}
+                            sx={{
+                            backgroundColor: "rgba(255, 255, 255, 0.95)",
+                            borderRadius: "8px",
+                            boxShadow: 3,
+                            padding: "4px",
+                            "& .MuiToggleButton-root": {
+                                textTransform: "none",
+                                padding: "6px 12px",
+                                fontSize: "14px",
+                                transition: "all 0.2s ease-in-out",
+                            },
+                            }}
+                            size="small"
+                        >
+                            <ToggleButton value="map1" aria-label="Carte par villes">
+                            <LocationCity fontSize="small" />
+                            &nbsp; Carte par villes
+                            </ToggleButton>
+                            <ToggleButton value="map2" aria-label="Carte par zones">
+                            <Map fontSize="small" />
+                            &nbsp; Carte par zones
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+
+                        {/* Bouton Info */}
+                        <IconButton
+                            onClick={handleClickOpen}
+                            sx={{
+                            backgroundColor: "white",
+                            borderRadius: "50%",
+                            boxShadow: 3,
+                            ml: 1,
+                            }}
+                        >
+                            <Info fontSize="small" />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+
+                {/* Dialog d'information */}
+                <Dialog open={openMapInformationDialog} onClose={handleCloseMapInformationDialog}>
+                    <DialogTitle>Informations</DialogTitle>
+                    <DialogContent>
+                    <InteractiveMapGuide />
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleCloseMapInformationDialog} color="primary">
+                        Fermer
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+                
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}> {/* Padding responsive */}
+                            {selectedMap === 'map1' ? (<CityMap />) : (<ProximityMap />)}
+                        </Box>
+                    </Grid>
+                </Grid>
+
+            </Card>
+        </Grid>
+
+
+
+        {/* ROW - Filtres + Carte côte à côte */}
+        
+
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}> {/* Padding responsive */}
+                        <Card>
+                            <Typography 
+                            variant="h4"
+                            align="center"
+                            sx={{ fontWeight: 'bold', my: 3, fontSize: { xs: '1.5rem', sm: '2rem' } }}
+                            >
+                            Analyse des informations concernant les annonces immobilières
+                            </Typography>
+                            <RealEstateInsights />
+                        </Card>
+                </Box>
+            </Grid>
+        </Grid>
     </Grid>
     </div>
   );

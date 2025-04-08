@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import {
   //Avatar,
   //AvatarGroup,
-  //Box,
-  Grid,
+  Box,
+  Divider,
   // Paper,
   //List,
   /*ListItemAvatar,
@@ -15,14 +15,11 @@ import {
   MenuItem,
   Stack,
   TextField,*/
-  ToggleButton, 
-  ToggleButtonGroup,
-  Typography,
-   IconButton, 
-   Dialog, 
-   DialogActions, DialogContent, DialogTitle, Button
+  Typography
 } from '@mui/material';
-import { Map, LocationCity, Info } from "@mui/icons-material";
+
+
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // project import
 //import OrdersTable from './OrdersTable';
@@ -31,18 +28,10 @@ import { Map, LocationCity, Info } from "@mui/icons-material";
 //import ReportAreaChart from './ReportAreaChart';
 //import SalesColumnChart from './SalesColumnChart';
 
-import AdsPublicationDateChart from './AdsPublicationDateChart';
-import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
-import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
-
-import ProspectContactOriginChart from './ProspectContactOriginChart';
-import MainCard from 'components/MainCard';
-import ProximityMap from './ProximityClusteringAddsMap';
-import InteractiveMapGuide from './InteractiveMapGuide';
 // import Filters from './Filters'; 
 // import MapTest from './AddsMapTest copy';
-import CityMap from './CityClusteringAddsMap';
-import RealEstateInsights from './RealEstateInsights';
+import DashBoardMap from './DashBoardMap';
+import CustomerKnowledge from './CustomerKnowledge';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
