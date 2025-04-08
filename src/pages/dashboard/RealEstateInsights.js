@@ -24,7 +24,9 @@ Le sud du département, notamment Antony et Fontenay-aux-Roses, concentre un nom
   {
     ongletTitle: "❤️ Comportement des acheteurs",
     title: "❤️ Comportement des acheteurs : où va l’attention ?",
-    content: `En analysant les favoris des internautes, on distingue deux dynamiques : (1) Une zone sud avec de nombreuses annonces moyennement populaires (100 à 600 likes). Un signe d’intérêt diffus, mais pas toujours décisif. (2) Des “pépites” au centre du département, où quelques biens concentrent l’engagement :
+    content: `En analysant les favoris des internautes, on distingue deux dynamiques : 
+    (1) Une zone sud avec de nombreuses annonces moyennement populaires (100 à 600 likes). Un signe d’intérêt diffus, mais pas toujours décisif. 
+    (2) Des “pépites” au centre du département, où quelques biens concentrent l’engagement :
     - Suresnes : 1 554 favoris  
     - Saint-Cloud : 1 074 favoris
     - Sèvres : 1 035 favoris 
@@ -106,7 +108,7 @@ export default function RealEstateInsights() {
         <Collapse key={index} in={tabIndex === index} timeout="auto" unmountOnExit>
           <Card
           >
-            <CardContent>
+            <CardContent sx={{ fontFamily: 'Inter, sans-serif' , fontSize: '1rem'}}>
             <h2 className="text-xl font-semibold mb-4 text-gray-800">{section.title}</h2>
             <p className="whitespace-pre-line text-sm text-gray-700 mb-4">{section.content && section.content.split('\n').map((line, i) => (
                     <React.Fragment key={i}>
@@ -122,7 +124,8 @@ export default function RealEstateInsights() {
                 mt: 2,
                 backgroundColor: '#1976d2',
                 color: 'white',
-                textTransform: 'none',
+                textTransform: 'none', 
+                fontSize: '1rem',
                 '&:hover': {
                     backgroundColor: '#1565c0',
                 },
@@ -135,14 +138,15 @@ export default function RealEstateInsights() {
             <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
                 <Box
                     sx={{
-                    backgroundColor: '#f0f4ff',
-                    color: '#0d47a1',
-                    p: 3,
-                    mt: 3,
-                    borderLeft: '4px solid #1976d2',
-                    borderRadius: 2,
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
+                      backgroundColor: '#f0f4ff',
+                      color: '#0d47a1',
+                      p: 3,
+                      mt: 3,
+                      borderLeft: '4px solid #1976d2',
+                      borderRadius: 2,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
+                      fontFamily: 'Inter, sans-serif'
                     }}
                 >
                     {section.tip.split('\n').map((line, i) => (
