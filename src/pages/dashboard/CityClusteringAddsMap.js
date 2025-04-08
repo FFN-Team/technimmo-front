@@ -9,14 +9,12 @@ import {
 import "./map.css";
 import Legend from "./Legend";
 import CitySideBar from "./CitySideBar";
-import { ToggleButton, ToggleButtonGroup, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { ToggleButton, ToggleButtonGroup, FormGroup, FormControlLabel, Checkbox, CircularProgress } from "@mui/material";
 import { FormatListBulleted, Euro } from "@mui/icons-material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-
-// ... (toutes tes fonctions de fetch, getColor, etc. inchangées)
 
 // Fonction pour charger les données des polygones (à partir de votre API)
 const fetchPolygons = async () => {
@@ -64,6 +62,7 @@ const fetchAveragePriceAnnonces = async () => {
   }
 };
 
+// Fonction pour charger les annonces favoris
 const fetchFavoris = async () => {
   try {
     const response = await fetch("http://localhost:5000/best-favorites"); // remplace avec ta vraie URL si besoin
@@ -77,6 +76,7 @@ const fetchFavoris = async () => {
   }
 };
 
+// fonctions pour charger les annonces stagnantes
 const fetchBadAdds = async () => {
   try {
     const response = await fetch("http://localhost:5000/bad-ads"); // remplace avec ta vraie URL si besoin
@@ -163,22 +163,27 @@ const MapWithDynamicZoom = () => {
   const [showFavorites, setShowFavorites] = useState("true");
   const [badAdds, setBadAdds] = useState([]);
   const [showBadAdds, setShowBadAdds] = useState("false");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true); // Démarre le chargement
+  
       const polygons = await fetchPolygons();
       const countAnnonces = await fetchCountAnnonces();
       const averagePriceAnnonces = await fetchAveragePriceAnnonces();
       const favorisData = await fetchFavoris();
       const badAddsData = await fetchBadAdds();
-
+  
       setCommunesData(polygons);
       setAnnoncesParVille(countAnnonces);
       setAveragePriceParVille(averagePriceAnnonces);
       setFavoris(favorisData);
       setBadAdds(badAddsData);
+  
+      setLoading(false); // Termine le chargement
     };
-
+  
     loadData();
   }, []);
 
@@ -212,12 +217,15 @@ const MapWithDynamicZoom = () => {
       });
 
       layer.on("click", function () {
+        setLoading(true)
+        setSelectedCity(null)
         setSelectedCity({
           name: feature.properties.name,
           zipCode: feature.properties.zipCode,
           averagePrice: average,
           annoncesCount: count,
         });
+        setLoading(false)
       });
     }
   };
@@ -240,6 +248,22 @@ const MapWithDynamicZoom = () => {
 
   return (
       <div style={{ position: "relative", height: "100vh", background: "#f4f6f9" }}>
+        {loading && (
+          <div style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1500,
+            backgroundColor: "rgba(255,255,255,0.8)",
+            padding: "2rem",
+            borderRadius: "12px",
+            textAlign: "center"
+          }}>
+            <CircularProgress size={60} thickness={5} />
+            <div style={{ marginTop: "1rem", fontSize: "1.2rem", fontWeight: "500" }}>Chargement des données...</div>
+          </div>
+        )}
       <MapContainer
         center={[48.8317, 2.2006]}
         zoom={zoom}
