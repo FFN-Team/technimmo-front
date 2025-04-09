@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "@ant-design/colors": "^6.0.0",
     "@ant-design/icons": "^4.7.0",
     "@emotion/cache": "^11.10.3",
@@ -82,6 +83,15 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
 >>>>>>> dafa69b (Revert "Feature/ti 102 second step front for prospects search")
+=======
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+>>>>>>> c674725dff26c09d460560f1bdd829f80eb5257d
   },
   "scripts": {
     "start": "react-scripts start",

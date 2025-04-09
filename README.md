@@ -1,9 +1,15 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Mantis Free React Material UI Dashboard Template [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Download%20Mantis%20React%20-%20The%20professional%20Material%20designed%20React%20Admin%20Dashboard%20Template%20&url=https://mantisdashboard.io&via=codedthemes&hashtags=reactjs,webdev,developers,javascript)
 =======
 # Getting Started with Create React App
 >>>>>>> dafa69b (Revert "Feature/ti 102 second step front for prospects search")
+=======
+# technimmo-front
+=======
+# Getting Started with Create React App
+>>>>>>> c674725dff26c09d460560f1bdd829f80eb5257d
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -73,6 +79,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Author
 
 Mantis is managed by team [CodedThemes](https://codedthemes.com).
@@ -109,3 +116,7 @@ Please generate a [GitHub issue](https://github.com/codedthemes/mantis-free-reac
 =======
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 >>>>>>> dafa69b (Revert "Feature/ti 102 second step front for prospects search")
+=======
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+>>>>>>> 846cd6b73199d4c870a1a8dd663de9e80eff7e70
+>>>>>>> c674725dff26c09d460560f1bdd829f80eb5257d
