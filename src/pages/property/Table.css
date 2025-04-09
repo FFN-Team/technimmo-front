@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+table thead, table thead td {
+    padding: 14px 16px;
+}
+
+table tbody, table tbody td {
+    padding: 0px 16px;
+}
+
+table thead {
+    color: white;
+    border-radius: 0 0 8px 8px;
+    text-align: center;
+}
+
+table thead td {
+    background-color: #f2f2f2;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-weight: bold;
+}
