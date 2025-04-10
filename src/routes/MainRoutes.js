@@ -5,11 +5,14 @@ import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 
 // render - dashboard
-const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
+const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/ads/analytics')));
+const DashboardAdsAnalytics = Loadable(lazy(() => import('pages/dashboard/ads/analytics')));
+const DashboardAdsInteractiveMap = Loadable(lazy(() => import('pages/dashboard/ads/interactive-map')));
+const DashboardCustomerKnowledge = Loadable(lazy(() => import('pages/dashboard/knowledge/customer')));
 
 //render - buyers
 const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
-const Buyer = Loadable(lazy(() => import('pages/buyer')))
+// const Buyer = Loadable(lazy(() => import('pages/buyer')))
 
 //render - properties
 const TableProperties = Loadable(lazy(() => import('pages/properties')));
@@ -20,8 +23,8 @@ const AccountSettings = Loadable(lazy(() => import('pages/accountSettings')));
 
 //render - prospects
 const SearchProspects = Loadable(lazy(() => import('pages/prospects/search-prospects')));
-const Prospect = Loadable(lazy(() => import('pages/prospects/prospect')))
-const FiltredProspects = Loadable(lazy(() => import('pages/prospects/filtred-prospects')));
+// const Prospect = Loadable(lazy(() => import('pages/prospects/prospect')))
+// const FiltredProspects = Loadable(lazy(() => import('pages/prospects/filtred-prospects')));
 
 
 // render - sample page
@@ -64,42 +67,42 @@ const MainRoutes = {
       element: <Color />
     },
 
-    {
-      path: 'prospects',
-      children: [
-        {
-          path: '',
-          element: <SearchProspects />
-        },
-        {
-          path: 'filtre',
-          children: [
-            {
-              path: ':filterName',
-              element: <FiltredProspects />
-            }        
-          ]
-        },
-        {
-          path: ':id',
-          element: <Prospect />
-        },   
-      ]
-    },
+    // {
+    //   path: 'prospects',
+    //   children: [
+    //     {
+    //       path: 'recherche-prospects',
+    //       element: <SearchProspects />
+    //     },
+    //     {
+    //       path: 'filtre',
+    //       children: [
+    //         {
+    //           path: ':filterName',
+    //           element: <FiltredProspects />
+    //         }        
+    //       ]
+    //     },
+    //     {
+    //       path: ':id',
+    //       element: <Prospect />
+    //     },   
+    //   ]
+    // },
 
-    {
-      path: 'acquereurs',
-      children: [
-        {
-          path: '',
-          element: <TableBuyers />,
-        },
-        {
-          path: ':id',
-          element: <Buyer />
-        }
-      ]
-    },
+    // {
+    //   path: 'acquereurs',
+    //   children: [
+    //     {
+    //       path: 'all',
+    //       element: <TableBuyers />,
+    //     },
+    //     {
+    //       path: 'test',
+    //       element: <Buyer />
+    //     }
+    //   ]
+    // },
 
 
     {
@@ -119,7 +122,50 @@ const MainRoutes = {
           element: <Property />
         }
       ]
-    },  
+    }, 
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'annonces',
+          children: [
+            {
+              path: 'carte-interactive',
+              element: <DashboardAdsInteractiveMap />
+            },
+            {
+              path: 'analyse-annonce',
+              element: <DashboardAdsAnalytics />
+            }
+          ]
+        },
+        {
+          path: 'expertise-locale',
+          children: [
+            {
+              path: 'connaissance-clients',
+              element: <DashboardCustomerKnowledge />
+            },
+            {
+              path: 'connaissance-biens'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      path: 'prospects',
+      children: [
+        {
+          path: 'recherche',
+          element: <SearchProspects />
+        },
+        {
+          path: 'acquereurs',
+          element: <TableBuyers />
+        }
+      ]
+    }
   ]
 };
 

@@ -29,7 +29,7 @@ const Prospect = () => {
           const data = await response.json();
           setProspect(data);
         } catch (error) {
-          setError(error.message);
+          console.error("Erreur de récupération des données :", error);
         } finally {
           setLoading(false);
         }

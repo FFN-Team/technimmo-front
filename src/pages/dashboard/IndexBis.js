@@ -14,9 +14,9 @@ import Card from 'pages/components/Card.js';
 //import SalesColumnChart from './SalesColumnChart';
 
 import AdsPublicationDateChart from './AdsPublicationDateChart';
-import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
+import AverageFavoritesDistributionPerAdBoostingChart from './ads/analytics/AverageFavoritesDistributionPerAdBoostingChart';
 import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
-import DashBoardMap from './DashBoardMap';
+import DashBoardMap from './ads/interactive-map/DashBoardMap';
 
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
