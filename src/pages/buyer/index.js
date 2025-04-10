@@ -3,16 +3,24 @@ import { useParams} from 'react-router-dom';
 import { format } from 'date-fns';
 import Card from './Card';
 import PropertiesTable from './PropertiesTable';
+import BuyerDetails from './BuyerDetails';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'pages/components/Onglets.css';
 
 const Buyer = () => {
   const { id } = useParams();
   const [buyer, setBuyer] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState(0);
+
+  
   const [error, setError] = useState(null);
   const [propertiesToFollow, setPropertiesToFollow] = useState([]);
 
+  const handleTabSelect = (index) => {
+    setActiveTab(index);
+  };
 
-  //fetchBuyerDataFromBuyerId
   useEffect(() => {
     const fetchBuyerDataFromBuyerId = async () => {
       try {
@@ -80,6 +88,20 @@ const Buyer = () => {
 
   return (
     <div className="buyer-details">
+      <div className="property-details">
+      <Tabs className="custom-tabs" selectedIndex={activeTab} onSelect={handleTabSelect}>
+        <TabList className="custom-tab-list">
+          <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>🏠 Connaissance acquéreur</Tab>
+          <Tab className={`custom-tab ${activeTab === 1 ? 'active' : ''}`}>📄 Gestion des documents</Tab>
+        </TabList>
+
+        <TabPanel>
+          <BuyerDetails load={loading} data={buyer}/>
+        </TabPanel>
+        <TabPanel>
+        </TabPanel>
+      </Tabs>
+    </div>
       <div className="cards-container">
         <div className="cards">
           <Card>

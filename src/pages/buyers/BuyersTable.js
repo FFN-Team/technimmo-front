@@ -12,7 +12,7 @@ const BuyersTable = ({ buyers, columns }) => {
         <DataGrid
           rows={buyers}
           columns={columns}
-          onRowDoubleClick={(params) => navigate(`/acquereurs/${params.id}`)}
+          onRowDoubleClick={(params) => navigate(`/prospects/acquereurs/${params.id}`)}
           initialState={{
             pagination: {
               paginationModel: {

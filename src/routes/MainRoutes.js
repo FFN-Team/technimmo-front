@@ -12,7 +12,7 @@ const DashboardCustomerKnowledge = Loadable(lazy(() => import('pages/dashboard/k
 
 //render - buyers
 const TableBuyers = Loadable(lazy(() => import('pages/buyers')));
-// const Buyer = Loadable(lazy(() => import('pages/buyer')))
+const Buyer = Loadable(lazy(() => import('pages/buyer')))
 
 //render - properties
 const TableProperties = Loadable(lazy(() => import('pages/properties')));
@@ -162,7 +162,16 @@ const MainRoutes = {
         },
         {
           path: 'acquereurs',
-          element: <TableBuyers />
+          children: [
+            {
+              path: '',
+              element: <TableBuyers />
+            },
+            {
+              path: ':id',
+              element: <Buyer />
+            }
+          ]
         }
       ]
     }

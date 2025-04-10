@@ -74,7 +74,7 @@ useEffect(() => {
         </TabList>
 
         <TabPanel>
-          <PropertyDetails load={loading} />
+          <PropertyDetails isLoading={loading} data={property}/>
         </TabPanel>
         <TabPanel>
           <Document owner={property} documentData={documentData}/>
