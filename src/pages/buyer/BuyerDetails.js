@@ -8,21 +8,21 @@ import '../property/Form.css';
 const BuyerDetails = ( {data} ) => {
   const { id } = useParams();
   const [buyer, setBuyer] = useState({
-    id_buyer: 0,
     title: '',
     lastname: '',
     firstname: '',
     day_of_birth: '',
     profession: '',
     mobile: '',
-    mail: ''
+    mail: '',
+    comment: ''  // Nouveau champ commentaire
   });
   const [hunting, setHunting ] = useState({
     status: '',
     start_date: '',
     end_date: ''
   })
-  const [ propertyCriteria, setPropertyCriteria ] = useState({
+  const [propertyCriteria, setPropertyCriteria ] = useState({
     roomsNumber: 0,
     minimumSurface: 0
   })
@@ -34,14 +34,14 @@ const BuyerDetails = ( {data} ) => {
       const fetchBuyerDataFromBuyerId = async () => {
         try {
           const usedDataBuyerInfo = {
-            id_buyer: 4,
             title: data.prospect?.title,
             lastname: data.prospect?.lastName,
             firstname: data.prospect?.firstName,
             day_of_birth: data.prospect?.dateOfBirth,
             profession: data.prospect?.profession,
             mobile: data.prospect?.mobile,
-            mail: data.prospect?.email
+            mail: data.prospect?.email,
+            comment: data.prospect?.comment || ''  // Chargement du commentaire, s'il existe
           };
 
           setBuyer(usedDataBuyerInfo);
@@ -79,8 +79,13 @@ const BuyerDetails = ( {data} ) => {
     return <p>Error: {error}</p>;
   }
 
+  const handleChange = (e) => {
+    setBuyer({ ...buyer, [e.target.name]: e.target.value });
+  };
+
   return (
     <div className="property-details" style={{ display: 'flex', flexWrap: 'wrap' }}>
+      
       <Card>
         <FormControl className="form">
           <div>
@@ -164,6 +169,7 @@ const BuyerDetails = ( {data} ) => {
           </div>
         </FormControl>
       </Card>
+
       <Card>
         <FormControl className="form">
           <div>
@@ -196,13 +202,27 @@ const BuyerDetails = ( {data} ) => {
               type="date"
               id="endDate"
               name="endDate"
-              value={hunting.endDate}
+              value={hunting.end_date}
               required
               style={{ width: 300 }}
             />
           </div>
+
+          {/* Nouveau champ Commentaire */}
+          <div>
+            <label htmlFor="comment">Commentaire : </label>
+            <StyledInput
+              type="text"
+              id="comment"
+              name="comment"
+              value={buyer.comment}
+              onChange={handleChange}
+              style={{ width: '100%', height: '100px' }}  // Largeur et hauteur pour texte plus long
+            />
+          </div>
         </FormControl>
       </Card>
+
       <Card>
         <FormControl className="form">
           <div>
@@ -220,7 +240,7 @@ const BuyerDetails = ( {data} ) => {
           <div>
             <label htmlFor="startDate">Surface Minimum : </label>
             <StyledInput
-              type="date"
+              type="number"
               id="startDate"
               name="startDate"
               value={propertyCriteria.minimumSurface}

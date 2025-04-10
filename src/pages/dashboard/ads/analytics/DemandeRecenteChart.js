@@ -35,7 +35,7 @@ const DemandeRecenteChart = () => {
         x: labels,
         y: favoriteValues,
         name: "Nombre de favoris moyen par annonce         ",
-        marker: { color: "rgba(153, 102, 255, 0.7)" }
+        marker: { color: "rgba(255, 183, 77, 0.7)" }
       }
     ]);
 

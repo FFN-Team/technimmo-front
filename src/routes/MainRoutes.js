@@ -23,7 +23,7 @@ const AccountSettings = Loadable(lazy(() => import('pages/accountSettings')));
 
 //render - prospects
 const SearchProspects = Loadable(lazy(() => import('pages/prospects/search-prospects')));
-// const Prospect = Loadable(lazy(() => import('pages/prospects/prospect')))
+const Prospect = Loadable(lazy(() => import('pages/prospects/prospect')))
 // const FiltredProspects = Loadable(lazy(() => import('pages/prospects/filtred-prospects')));
 
 
@@ -66,44 +66,6 @@ const MainRoutes = {
       path: 'prospect-dashboard',
       element: <Color />
     },
-
-    // {
-    //   path: 'prospects',
-    //   children: [
-    //     {
-    //       path: 'recherche-prospects',
-    //       element: <SearchProspects />
-    //     },
-    //     {
-    //       path: 'filtre',
-    //       children: [
-    //         {
-    //           path: ':filterName',
-    //           element: <FiltredProspects />
-    //         }        
-    //       ]
-    //     },
-    //     {
-    //       path: ':id',
-    //       element: <Prospect />
-    //     },   
-    //   ]
-    // },
-
-    // {
-    //   path: 'acquereurs',
-    //   children: [
-    //     {
-    //       path: 'all',
-    //       element: <TableBuyers />,
-    //     },
-    //     {
-    //       path: 'test',
-    //       element: <Buyer />
-    //     }
-    //   ]
-    // },
-
 
     {
       path: 'search-properties',
@@ -159,6 +121,10 @@ const MainRoutes = {
         {
           path: 'recherche',
           element: <SearchProspects />
+        },
+        {
+          path: ':id',
+          element: <Prospect />
         },
         {
           path: 'acquereurs',

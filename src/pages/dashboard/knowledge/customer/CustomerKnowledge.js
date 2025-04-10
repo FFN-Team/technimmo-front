@@ -3,9 +3,9 @@ import React from 'react';
 // material-ui
 import { Grid, Typography } from '@mui/material';
 
-import ProspectAgeGroupChart from '../../ads/analytics/ProspectAgeGroupChart';
-import ProspectProfessionChart from '../../ads/analytics/ProspectProfessionChart';
-import ProspectContactOriginChart from '../../ads/analytics/ProspectContactOriginChart';
+import ProspectAgeGroupChart from './ProspectAgeGroupChart';
+import ProspectProfessionChart from './ProspectProfessionChart';
+import ProspectContactOriginChart from './ProspectContactOriginChart';
 import MainCard from 'components/MainCard';
 
 const CustomerKnowledge = () => {

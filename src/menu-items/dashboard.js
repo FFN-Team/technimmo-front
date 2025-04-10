@@ -1,11 +1,10 @@
 // assets
-import { DashboardOutlined, BookOutlined, LikeOutlined } from '@ant-design/icons';
+import { DashboardOutlined, BookOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
   DashboardOutlined,
-  BookOutlined,
-  LikeOutlined
+  BookOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -34,14 +33,6 @@ const dashboard = {
           type: 'item',
           url: 'dashboard/annonces/carte-interactive',
           icon: icons.BookOutlined,
-          breadcrumbs: false
-        },
-        {
-          id: 'ads-recommendation',
-          title: 'Recommandations',
-          type: 'item',
-          url: 'dashboard/annonces/recommandation-annonces',
-          icon: icons.LikeOutlined,
           breadcrumbs: false
         }
       ]

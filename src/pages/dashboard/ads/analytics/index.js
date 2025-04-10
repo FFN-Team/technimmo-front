@@ -98,7 +98,7 @@ const DashboardDefault = () => {
               </Box>
 
       {/* ONGLET REACT-TABS */}
-              <Tabs selectedIndex={activeTab} onSelect={handleTabSelect}>
+            <Tabs selectedIndex={activeTab} onSelect={handleTabSelect}>
               <TabList className="custom-tab-list">
                 <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>🏡 Annonces disponibles</Tab>
                 <Tab className={`custom-tab ${activeTab === 1 ? 'active' : ''}`}>📊 Analyse des biens</Tab>

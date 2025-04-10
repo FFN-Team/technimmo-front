@@ -24,7 +24,7 @@ const AgencyChart = () => {
           type: "bar",
           x: labels,
           y: values,
-          marker: { color: "rgba(153, 102, 255, 0.7)" },
+          marker: { color: "rgba(199, 230, 20, 0.7)"},
         },
       ]);
 

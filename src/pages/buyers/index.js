@@ -1,21 +1,33 @@
 import React, { useEffect, useState } from 'react';
 
-import BuyersTable from './BuyersTable'
+import CustomTable from '../components/CustomTable';
 
 const columns = [
-  { field: 'title', headerName: 'Civilité', width: 60 },
-  { field: 'firstName', headerName: 'Prénom', width: 120, /*editable: true,*/ },
-  { field: 'lastName', headerName: 'Nom', width: 120},
-  { field: 'dateOfBirth', headerName: 'Date de naissance', width: 120 },
-  { field: 'profession', headerName: 'Profession', width: 120 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'mobile', headerName: 'Tél', width: 100 },
-  { field: 'contactOrigin', headerName: 'Origine du contact', width: 120 },
-  { field: 'status', headerName: 'Statut', width: 120 },
+  { id: 'title', label: 'Civilité', minWidth: 60 },
+  { id: 'firstName', label: 'Prénom', minWidth: 120, /*editable: true,*/ },
+  { id: 'lastName', label: 'Nom', minWidth: 120},
+  { id: 'dateOfBirth', label: 'Date de naissance', minWidth: 120 },
+  { id: 'profession', label: 'Profession', minWidth: 120 },
+  { id: 'mail', label: 'Email', minWidth: 200 },
+  { id: 'mobile', label: 'Tél', minWidth: 100 },
+  { id: 'contactOrigin', label: 'Origine du contact', minWidth: 120 },
+  { id: 'status', label: 'Statut', minWidth: 120 },
 ];
 
+const values = (column, row) => {
+  return column.id === 'title' ? row.title :
+                    column.id === 'firstname' ? row.firstName :
+                    column.id === 'lastname' ? row.lastName :
+                    column.id === 'day_of_birth' ? row.dateOfBirth :
+                    column.id === 'profession' ? row.profession :
+                    column.id === 'mail' ? row.email :
+                    column.id === 'mobile' ? row.mobile :
+                    column.id === 'contact_origin' ? row.contactOrigin : 
+                    column.id === 'status' ? row.status :
+                    row[column.id];
+} 
 
-const TableBuyers = () => {
+const Buyers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [buyers, setBuyers] = useState([]);
@@ -80,8 +92,8 @@ const TableBuyers = () => {
   }
 
   return (
-    <BuyersTable buyers={buyers} columns={columns} />
+    <CustomTable rows={buyers} columns={columns} values={values} navigationDirection={'prospects/acquereurs'}/>
   );
 };
 
-export default TableBuyers;
+export default Buyers;

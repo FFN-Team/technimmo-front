@@ -24,7 +24,7 @@ const ProParticulierChart = () => {
           textposition: "outside",
           automargin: true,
           marker: {
-            colors: ["rgba(199, 230, 20, 0.7)", "rgba(86, 168, 255, 0.7)"],
+            colors: ["rgba(199, 230, 20, 0.7)", "rgba(255, 183, 77, 0.7)"],
           },
         },
       ]);
