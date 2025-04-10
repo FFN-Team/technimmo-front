@@ -69,8 +69,8 @@ useEffect(() => {
     <div className="property-details">
       <Tabs className="custom-tabs" selectedIndex={activeTab} onSelect={handleTabSelect}>
         <TabList className="custom-tab-list">
-          <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>Informations du bien</Tab>
-          <Tab className={`custom-tab ${activeTab === 1 ? 'active' : ''}`}>Gestion des documents</Tab>
+          <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>🏠 Informations du bien</Tab>
+          <Tab className={`custom-tab ${activeTab === 1 ? 'active' : ''}`}>📄 Gestion des documents</Tab>
         </TabList>
 
         <TabPanel>
