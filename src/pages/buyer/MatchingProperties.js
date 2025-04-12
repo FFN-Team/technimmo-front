@@ -12,6 +12,7 @@ import {
   Slider,
   Paper
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const MatchingProperties = ({ buyer }) => {
   const [criteria, setCriteria] = useState({
@@ -39,6 +40,7 @@ const MatchingProperties = ({ buyer }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const fetchBuyerData = () => {
@@ -53,6 +55,7 @@ const MatchingProperties = ({ buyer }) => {
         propertyType: buyer?.propertyCriteria?.propertyType ?? ''
       };
       setCriteria(usedDataBuyerInfo);
+      setIsInitialized(true);
     };
 
     fetchBuyerData();
@@ -70,25 +73,46 @@ const MatchingProperties = ({ buyer }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
-      const response = await fetch('http://localhost:9001/api/v1/matching-properties', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ criteria, weights })
-      });
+      // const response = await fetch('http://localhost:9001/api/v1/properties'
+        // , {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ criteria, weights })
+      // });
 
-      if (!response.ok) {
-        throw new Error('Erreur lors de la recherche');
-      }
+      // if (!response.ok) {
+      //   throw new Error('Erreur lors de la recherche');
+      // }
 
-      const data = await response.json();
-      setResults(data);
+      // const data = await response.json();
+
+      const data = [2905282274, 2888689993, 2783453323, 2848263049, 2929426493];
+  
+      // Utiliser Promise.all pour attendre toutes les requêtes
+      const promises = data.map(element => fetchMatchingAnnonces(element));
+      await Promise.all(promises);
+  
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+  
+  const fetchMatchingAnnonces = async (ID) => {
+    const response = await fetch(`http://localhost:5000/api/annonces/${ID}`);
+  
+    if (!response.ok) {
+      throw new Error('Erreur lors de la recherche');
+    }
+  
+    const data = await response.json();
+    console.log(data);
+  
+    // Utiliser la forme fonctionnelle de setResults pour accumuler les résultats
+    setResults(prevResults => [...prevResults, ...data]);
   };
 
   const fields = [
@@ -112,14 +136,24 @@ const MatchingProperties = ({ buyer }) => {
   ];
 
   return (
-    <Box sx={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', backgroundColor: '#f4f6f8', borderRadius: '10px' }}>
+    <Box
+      sx={{
+        px: { xs: 2, sm: 3, md: 6 },
+        py: { xs: 3, sm: 4 },
+        width: '100%',
+        mx: 'auto',
+        backgroundColor: '#f4f6f8',
+        borderRadius: '10px',
+        boxSizing: 'border-box',
+      }}
+    >
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#3c4858' }}>
         Rechercher des biens pour l’acquéreur
       </Typography>
 
       <form onSubmit={handleSearch}>
         <Grid container spacing={3}>
-          {fields.map((field) => (
+          {isInitialized && fields.map((field) => (
             <Grid item xs={12} sm={6} md={4} key={field.name}>
               <Paper sx={{ padding: '16px', boxShadow: 3, borderRadius: '8px' }}>
                 <TextField
@@ -206,23 +240,52 @@ const MatchingProperties = ({ buyer }) => {
             </Paper>
           </Grid>
 
+          {/* Boutons d'action */}
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Button
               type="submit"
               variant="contained"
-              color="primary"
               disabled={loading}
               sx={{
-                padding: '10px 20px',
+                backgroundColor: '#e0e0e0',
+                color: '#333',
+                padding: '12px 28px',
                 fontSize: '16px',
-                borderRadius: '50px',
-                boxShadow: 2,
+                fontWeight: 'bold',
+                borderRadius: '30px',
+                boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                  backgroundColor: '#303f9f',
+                  backgroundColor: '#cfcfcf',
+                  transform: 'scale(1.03)',
+                  boxShadow: '0px 6px 14px rgba(0,0,0,0.15)',
                 },
               }}
             >
               {loading ? <CircularProgress size={24} color="inherit" /> : 'Lancer la recherche'}
+            </Button>
+          </Grid>
+
+          {/* Bouton pour enregistrer les critères */}
+          <Grid item xs={12} sx={{ textAlign: 'center', mt: 2 }}>
+            <Button
+              variant="outlined"
+              color="primary"// Appelle une fonction pour sauvegarder les critères
+              sx={{
+                padding: '12px 28px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                borderRadius: '30px',
+                boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  backgroundColor: '#e0e0e0',
+                  transform: 'scale(1.03)',
+                  boxShadow: '0px 6px 14px rgba(0,0,0,0.15)',
+                },
+              }}
+            >
+              Enregistrer les critères
             </Button>
           </Grid>
         </Grid>
@@ -235,24 +298,51 @@ const MatchingProperties = ({ buyer }) => {
       )}
 
       {results.length > 0 && (
-        <Box mt={5}>
-          <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#3c4858' }}>
-            Biens correspondants :
+        <Box mt={10}>
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#2d2d2d', mb: 2, fontSize: '1.3rem'  }}>
+            Biens qui pourraient lui plaire :
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             {results.map((property, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card sx={{ boxShadow: 3, borderRadius: '8px' }}>
-                  <CardContent sx={{ padding: '16px' }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                      {property.title || 'Titre non disponible'}
+              <Grid item xs={12} sm={6} md={12} key={index}>
+                <Card
+                  sx={{
+                    borderRadius: '20px',
+                    boxShadow: '0 6px 20px rgba(0,0,0,0.1)',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.02)',
+                    },
+                    backgroundColor: '#fefefe',
+                  }}
+                >
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#2d2d2d', fontSize: '1.2rem' }}>
+                      Maison {property.rooms} pièces - {property.square} m²
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">Surface : {property.surface} m²</Typography>
-                    <Typography variant="body2" color="textSecondary">Prix : {property.price} €</Typography>
-                    <Typography variant="body2" color="textSecondary">Ville : {property.city}</Typography>
-                    <Typography variant="body2" color="textSecondary">Pièces : {property.rooms}</Typography>
-                    <Typography variant="body2" color="textSecondary">Chambres : {property.bedrooms}</Typography>
-                    <Typography variant="body2" color="textSecondary">Type : {property.propertyType}</Typography>
+                    <Typography variant="body2" sx={{ mt: 1, color: '#555', fontSize: '0.9rem' }}>
+                      <strong>📝 Description : </strong>{property.description}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1, fontSize: '0.9rem'  }}>
+                      <strong>🌐 Lien : </strong><Link to={property.url} target="_blank" rel="noopener noreferrer" style={{ color: '#1976d2', fontSize: '0.9rem' }}>{property.url}</Link>
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1, fontWeight: 'medium', fontSize: '0.9rem'  }}>
+                      <strong>💰 Prix : {property.price.toLocaleString()} €</strong>
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1, fontSize: '0.9rem' }}>
+                      <strong>📍 Ville :</strong> {property.zipCode}
+                    </Typography>
+                    
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleAddToFavorites(property)}
+                      >
+                        💖 Ajouter aux favoris
+                      </Button>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -260,6 +350,7 @@ const MatchingProperties = ({ buyer }) => {
           </Grid>
         </Box>
       )}
+
     </Box>
   );
 };

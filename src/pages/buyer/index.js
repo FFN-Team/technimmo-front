@@ -64,7 +64,7 @@ const Buyer = () => {
             <BuyerDetails load={loading} data={buyer}/>
         </TabPanel>
         <TabPanel>
-          <MatchingProperties />
+          <MatchingProperties buyer={buyer} />
         </TabPanel>
         <TabPanel>
             <Portfolio />
