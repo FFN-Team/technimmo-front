@@ -6,35 +6,46 @@ import {
   Card,
   CardContent,
   Typography,
-  MenuItem,
   Grid,
   Box,
   Slider,
-  Paper
+  Paper, 
+  Checkbox, 
+  FormControlLabel
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const MatchingProperties = ({ buyer }) => {
   const [criteria, setCriteria] = useState({
-    minSurface: '',
-    maxSurface: '',
-    maxBudget: '',
-    city: '',
+    price: '',
+    square: '',
+    land_plot_surface: '',
     rooms: '',
     bedrooms: '',
-    buildingYear: '',
-    propertyType: ''
+    nb_bathrooms: '',
+    nb_shower_room: '',
+    nb_floors: '',
+    nb_parkings: '',
+    annual_charges: '',
+    transport_exists_nearby: '',
+    sport_exists_nearby: '',
+    medical_service_exists_nearby: ''
   });
 
   const [weights, setWeights] = useState({
-    minSurface: 1,
-    maxSurface: 1,
-    maxBudget: 1,
-    city: 1,
+    price: 1,
+    square: 1,
+    land_plot_surface: 1,
     rooms: 1,
     bedrooms: 1,
-    buildingYear: 1,
-    propertyType: 1
+    nb_bathrooms: 1,
+    nb_shower_room: 1,
+    nb_floors: 1,
+    nb_parkings: 1,
+    annual_charges: 1,
+    transport_exists_nearby: 1,
+    sport_exists_nearby: 1,
+    medical_service_exists_nearby: 1
   });
 
   const [loading, setLoading] = useState(false);
@@ -45,14 +56,19 @@ const MatchingProperties = ({ buyer }) => {
   useEffect(() => {
     const fetchBuyerData = () => {
       const usedDataBuyerInfo = {
-        minSurface: buyer?.propertyCriteria?.minimumSurface ?? '',
-        maxSurface: buyer?.propertyCriteria?.maximumSurface ?? '',
-        maxBudget: buyer?.propertyCriteria?.maxBudget ?? '',
-        city: buyer?.propertyCriteria?.city ?? '',
+        price: buyer?.propertyCriteria?.maxBudget ?? '',
+        square: buyer?.propertyCriteria?.minimumSurface ?? '',
+        land_plot_surface: '',
         rooms: buyer?.propertyCriteria?.roomsNumber ?? '',
-        bedrooms: buyer?.propertyCriteria?.bedrooms ?? '',
-        buildingYear: buyer?.propertyCriteria?.buildingYear ?? '',
-        propertyType: buyer?.propertyCriteria?.propertyType ?? ''
+        bedrooms: '',
+        nb_bathrooms: '',
+        nb_shower_room: '',
+        nb_floors: '',
+        nb_parkings: '',
+        annual_charges: '',
+        transport_exists_nearby: '',
+        sport_exists_nearby: '',
+        medical_service_exists_nearby: ''
       };
       setCriteria(usedDataBuyerInfo);
       setIsInitialized(true);
@@ -75,11 +91,22 @@ const MatchingProperties = ({ buyer }) => {
     setError(null);
   
     try {
+    // Créer un tableau d'objets { name, value, weight } uniquement pour les critères remplis
+    const payload = Object.entries(criteria)
+      .filter(([, value]) => value !== '' && value !== null && value !== undefined)
+      .map(([key, value]) => ({
+        name: key,
+        value: value === 'true' ? true : value === 'false' ? false : value,
+        weight: weights[key] ?? 1 // Par défaut, 1 si aucun poids défini
+      }));
+
+      console.log(payload);
+
       // const response = await fetch('http://localhost:9001/api/v1/properties'
-        // , {
+      //   , {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ criteria, weights })
+      //   body: JSON.stringify(payload)
       // });
 
       // if (!response.ok) {
@@ -88,7 +115,7 @@ const MatchingProperties = ({ buyer }) => {
 
       // const data = await response.json();
 
-      const data = [2905282274, 2888689993, 2783453323, 2848263049, 2929426493];
+      // const data = [2905282274, 2888689993, 2783453323, 2848263049, 2929426493];
   
       // Utiliser Promise.all pour attendre toutes les requêtes
       const promises = data.map(element => fetchMatchingAnnonces(element));
@@ -116,13 +143,19 @@ const MatchingProperties = ({ buyer }) => {
   };
 
   const fields = [
-    { name: 'minSurface', label: 'Surface min (m²)', type: 'number' },
-    { name: 'maxSurface', label: 'Surface max (m²)', type: 'number' },
-    { name: 'maxBudget', label: 'Budget max (€)', type: 'number' },
-    { name: 'city', label: 'Ville', type: 'text' },
+    { name: 'price', label: 'Budget max (€)', type: 'number' },
+    { name: 'square', label: 'Surface habitable min (m²)', type: 'number' },
+    { name: 'land_plot_surface', label: 'Surface terrain min (m²)', type: 'number' },
     { name: 'rooms', label: 'Nb de pièces', type: 'number' },
     { name: 'bedrooms', label: 'Nb de chambres', type: 'number' },
-    { name: 'buildingYear', label: 'Année de construction min', type: 'number' }
+    { name: 'nb_bathrooms', label: 'Nb de sdb', type: 'number' },
+    { name: 'nb_shower_room', label: 'Nb de sdd', type: 'number' },
+    { name: 'nb_floors', label: 'Nb étages', type: 'number' },
+    { name: 'nb_parkings', label: 'Nb de parkings', type: 'number' },
+    { name: 'annual_charges', label: 'Charges annuelles max', type: 'number' },
+    { name: 'transport_exists_nearby', label: 'Proximité des transports', type: 'boolean' },
+    { name: 'sport_exists_nearby', label: 'Proximité d\'infrastructures sportives', type: 'boolean' },
+    { name: 'medical_service_exists_nearby', label: 'Proximité de services médicaux', type: 'boolean' }
   ];
 
   // Définir les points d'arrêt pour les sliders
@@ -132,7 +165,14 @@ const MatchingProperties = ({ buyer }) => {
     { value: 2, label: '2' },
     { value: 3, label: '3' },
     { value: 4, label: '4' },
-    { value: 5, label: '5' }
+    { value: 5, label: '5' },
+    { value: 6, label: '6' },
+    { value: 7, label: '7' },
+    { value: 8, label: '8' },
+    { value: 9, label: '9' },
+    { value: 10, label: '10' },
+    { value: 11, label: '11' },
+    { value: 12, label: '12' }
   ];
 
   return (
@@ -156,16 +196,31 @@ const MatchingProperties = ({ buyer }) => {
           {isInitialized && fields.map((field) => (
             <Grid item xs={12} sm={6} md={4} key={field.name}>
               <Paper sx={{ padding: '16px', boxShadow: 3, borderRadius: '8px' }}>
-                <TextField
-                  fullWidth
-                  name={field.name}
-                  label={field.label}
-                  type={field.type}
-                  value={criteria[field.name]}
-                  onChange={handleChange}
-                  variant="outlined"
-                  sx={{ marginBottom: '16px' }}
-                />
+              {field.type === 'boolean' ? (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={Boolean(criteria[field.name])}
+                        onChange={(e) =>
+                          setCriteria({ ...criteria, [field.name]: e.target.checked })
+                        }
+                        name={field.name}
+                      />
+                    }
+                    label={field.label}
+                  />
+                ) : (
+                  <TextField
+                    fullWidth
+                    name={field.name}
+                    label={field.label}
+                    type={field.type}
+                    value={criteria[field.name]}
+                    onChange={handleChange}
+                    variant="outlined"
+                    sx={{ marginBottom: '16px' }}
+                  />
+                )}
                 <Box sx={{ mt: 2 }}>
                   <Typography variant="caption" sx={{ color: '#555', marginBottom: '8px' }}>
                     Importance du critère ({weights[field.name]})
@@ -193,52 +248,6 @@ const MatchingProperties = ({ buyer }) => {
               </Paper>
             </Grid>
           ))}
-
-          {/* Type de bien avec slider */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Paper sx={{ padding: '16px', boxShadow: 3, borderRadius: '8px' }}>
-              <TextField
-                select
-                fullWidth
-                name="propertyType"
-                label="Type de bien"
-                value={criteria.propertyType}
-                onChange={handleChange}
-                variant="outlined"
-                sx={{ marginBottom: '16px' }}
-              >
-                <MenuItem value="">Tous types</MenuItem>
-                <MenuItem value="house">Maison</MenuItem>
-                <MenuItem value="apartment">Appartement</MenuItem>
-                <MenuItem value="duplex">Duplex</MenuItem>
-                <MenuItem value="villa">Villa</MenuItem>
-              </TextField>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="caption" sx={{ color: '#555', marginBottom: '8px' }}>
-                  Importance du critère ({weights.propertyType})
-                </Typography>
-                <Slider
-                  name="propertyType"
-                  value={weights.propertyType}
-                  onChange={handleWeightSlider('propertyType')}
-                  min={0}
-                  max={5}
-                  step={1}
-                  valueLabelDisplay="auto"
-                  valueLabelFormat={(value) => `${value}`}
-                  marks={marks}
-                  sx={{
-                    '& .MuiSlider-thumb': {
-                      backgroundColor: '#3f51b5',
-                    },
-                    '& .MuiSlider-track': {
-                      backgroundColor: '#3f51b5',
-                    },
-                  }}
-                />
-              </Box>
-            </Paper>
-          </Grid>
 
           {/* Boutons d'action */}
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
