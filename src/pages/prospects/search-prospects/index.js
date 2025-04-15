@@ -1,20 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import FilterButtons from './FilterButtons';
-import SearchResults from './SearchResults'; 
 import SearchForm from './SearchForm';
-import ModalComponent from './ModalComponent'; 
+import ModalComponent from './ModalComponent';
+import CustomTable from 'pages/components/CustomTable';
 
+// const columns = [
+//   { field: 'title', headerName: 'Civilité', width: 60 },
+//   { field: 'firstName', headerName: 'Prénom', width: 120, /*editable: true,*/ },
+//   { field: 'lastName', headerName: 'Nom', width: 120},
+//   { field: 'dateOfBirth', headerName: 'Date de naissance', width: 120 },
+//   { field: 'profession', headerName: 'Profession', width: 120 },
+//   { field: 'email', headerName: 'Email', width: 200 },
+//   { field: 'mobile', headerName: 'Tél', width: 100 },
+//   { field: 'contactOrigin', headerName: 'Origine du contact', width: 120 },
+// ];
 
-const columns = [
-  { field: 'title', headerName: 'Civilité', width: 60 },
-  { field: 'firstName', headerName: 'Prénom', width: 120, /*editable: true,*/ },
-  { field: 'lastName', headerName: 'Nom', width: 120},
-  { field: 'dateOfBirth', headerName: 'Date de naissance', width: 120 },
-  { field: 'profession', headerName: 'Profession', width: 120 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'mobile', headerName: 'Tél', width: 100 },
-  { field: 'contactOrigin', headerName: 'Origine du contact', width: 120 },
+const ColumnProspects = [
+  { id: 'civility', label: 'Civilité', minWidth: 80 },
+  { id: 'firstname', label: 'Prénom', minWidth: 100 },
+  { id: 'lastname', label: 'Nom', minWidth: 10 },
+  { id: 'day_of_birth', label: 'Date de naissance', minWidth: 20 },
+  { id: 'profession', label: 'Profession', minWidth: 100 },
+  { id: 'mail', label: 'E-mail', minWidth: 100 },
+  { id: 'mobile', label: 'Numéro de téléphone', minWidth: 100 },
+  { id: 'contact_origin', label: 'Origine du contact', minWidth: 100 }
 ];
+
+const values = (column, row) => {
+  return (
+     column.id === 'civility' ? row.title :
+    column.id === 'firstname' ? row.firstName :
+    column.id === 'lastname' ? row.lastName :
+    column.id === 'day_of_birth' ? row.dateOfBirth :
+    column.id === 'profession' ? row.profession :
+    column.id === 'mail' ? row.email :
+    column.id === 'mobile' ? row.mobile :
+    column.id === 'contact_origin' ? row.contactOrigin : 
+    row[column.id]
+  );
+}
 
 const SearchProspects = () => {
   const [prospectFilterName, setProspectFilterName] = useState('');
@@ -208,8 +232,6 @@ const SearchProspects = () => {
 
     }
   };
-  
-
 
   return (
     <div>
@@ -246,8 +268,7 @@ const SearchProspects = () => {
         handleModalSave={handleModalSave}
         handleModalCancel={handleModalCancel}
       />
-
-      <SearchResults prospects={prospects} columns={columns} />
+      <CustomTable rows={prospects} columns={ColumnProspects} values={values} navigationDirection={"prospects"}/>
     </div>
   );
 };

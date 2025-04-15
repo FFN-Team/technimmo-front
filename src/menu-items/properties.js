@@ -21,7 +21,7 @@ const properties = {
       title: 'Search properties',
       type: 'item',
       url: '/search-properties',
-      icon: icons.SearchOutlined,
+      icon: icons.SearchOutlined 
     },
     {
       id: 'properties',

@@ -16,25 +16,19 @@ const prospects = {
   type: 'group',
   children: [
     {
-      id: 'prospect-dashboard',
-      title: 'Prospects dashboard',
-      type: 'item',
-      url: '/prospect-dashboard',
-      icon: icons.AreaChartOutlined,
-    },
-    {
-      id: 'prospects',
-      title: 'Prospects',
-      type: 'item',
-      url: '/prospects',
-      icon: icons.SearchOutlined,
-    },
-    {
-      id: 'acquereur',
-      title: 'Acquéreurs',
-      type: 'item', 
-      url: '/acquereurs',
-      icon: icons.TeamOutlined,
+      id: 'find-prospects',
+      title: 'Rechercher des prospects',
+      type: 'collapse',
+      url: 'prospects/recherche',
+      children: [
+        {
+          id: 'buyer',
+          title: 'Acquéreurs',
+          type: 'item', 
+          url: 'prospects/acquereurs',
+          icon: icons.TeamOutlined,
+        }
+      ]
     }
   ]
 };

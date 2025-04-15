@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Table, TableHeader, TableCell, TableRow } from './TableComponents';
 
 
-const PropertiesTable = ({ properties }) => {
+const PortfolioPropertiesTable = ({ properties }) => {
     const navigate = useNavigate();
   
     const handlePropertyClick = (propertyId) => {
@@ -84,4 +84,4 @@ const PropertiesTable = ({ properties }) => {
     );
   };
 
-export default PropertiesTable;
+export default PortfolioPropertiesTable;

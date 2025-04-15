@@ -21,7 +21,7 @@ const BuildingYearBoxplot = () => {
         y: annees,
         boxpoints: false,
         marker: {
-          color: "rgba(255, 159, 64, 0.7)",
+          color: "rgba(86, 168, 255, 0.7)",
         },
       }));
 
@@ -31,7 +31,7 @@ const BuildingYearBoxplot = () => {
         yaxis: {
           title: "Année de construction",
           range: [1800, 2030],
-          gridcolor: "rgba(200, 200, 200, 0.2)",
+          gridcolor: "rgba(255, 183, 77, 0.7)",
         },
         xaxis: {
           tickangle: -30,

@@ -30,8 +30,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // import Filters from './Filters'; 
 // import MapTest from './AddsMapTest copy';
-import DashBoardMap from './DashBoardMap';
-import CustomerKnowledge from './CustomerKnowledge';
+import DashBoardMap from './ads/interactive-map/DashBoardMap';
+import CustomerKnowledge from './knowledge/customer/CustomerKnowledge';
 //import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets

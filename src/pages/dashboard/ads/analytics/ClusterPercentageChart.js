@@ -26,8 +26,14 @@ const ClusterPercentageChart = () => {
       const values = Object.values(clusterCounts).map(count => ((count / total) * 100).toFixed(2));
 
       const colors = [
-        "#e6194b", "#3cb44b", "#ffe119", "#4363d8",
-        "#f58231", "#911eb4", "#46f0f0", "#f032e6"
+        "#c7e614", // Vert clair
+        "#56a8ff", // Bleu clair
+        "#ffb74d", // Orange doux
+        "#fff176", // Jaune doux
+        "#4db6ac", // Turquoise clair
+        "#9575cd", // Violet doux
+        "#f48fb1", // Rouge clair
+        "#b0bec5"  // Gris doux
       ];
 
       setData([

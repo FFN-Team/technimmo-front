@@ -24,7 +24,7 @@ const CorrelationGraph = () => {
           x: variables,
           y: correlations,
           type: "bar",
-          marker: { color: "rgb(55, 83, 109)" }
+          marker: { color: "rgb(255, 183, 77, 0.7)" }
         }
       ]);
 

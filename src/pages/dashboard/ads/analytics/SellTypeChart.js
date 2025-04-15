@@ -28,7 +28,7 @@ const SellTypeChart = () => {
           textposition: "outside",
           automargin: true,
           marker: {
-            colors: ["rgba(255, 99, 132, 0.7)", "rgba(255, 206, 86, 0.7)"],
+            colors: ["rgba(86, 168, 255, 0.7)", "rgba(255, 241, 118, 0.7)"],
           },
         },
       ]);

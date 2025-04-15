@@ -11,7 +11,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 // Icône personnalisée
 const customIcon = L.icon({
-  iconUrl: require("../../assets/images/icons/map_location_icon.png"),
+  iconUrl: require("../../../../assets/images/icons/map_location_icon.png"),
   iconSize: [38, 38],
 });
 

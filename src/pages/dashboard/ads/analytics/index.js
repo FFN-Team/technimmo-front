@@ -19,7 +19,6 @@ import 'pages/components/Onglets.css'; // Importer le fichier de style CSS
 import AdsPublicationDateChart from './AdsPublicationDateChart';
 import AverageFavoritesDistributionPerAdBoostingChart from './AverageFavoritesDistributionPerAdBoostingChart';
 import AverageFavoritesDistributionPerSellerTypeChart from './AverageFavoritesDistributionPerSellerTypeChart';
-import DashBoardMap from './DashBoardMap';
 import SellTypeChart from './SellTypeChart';
 import CityChart from './CityChart';
 import ProParticulierChart from './ProParticulierChart';
@@ -99,13 +98,12 @@ const DashboardDefault = () => {
               </Box>
 
       {/* ONGLET REACT-TABS */}
-              <Tabs selectedIndex={activeTab} onSelect={handleTabSelect}>
+            <Tabs selectedIndex={activeTab} onSelect={handleTabSelect}>
               <TabList className="custom-tab-list">
                 <Tab className={`custom-tab ${activeTab === 0 ? 'active' : ''}`}>🏡 Annonces disponibles</Tab>
                 <Tab className={`custom-tab ${activeTab === 1 ? 'active' : ''}`}>📊 Analyse des biens</Tab>
                 <Tab className={`custom-tab ${activeTab === 2 ? 'active' : ''}`}>🌆 Tendance par ville</Tab>
                 <Tab className={`custom-tab ${activeTab === 3 ? 'active' : ''}`}>🧠 Analyse des annonces</Tab>
-                <Tab className={`custom-tab ${activeTab === 4 ? 'active' : ''}`}>🗺️ Carte interactive</Tab>
               </TabList>
 
         <TabPanel>
@@ -157,10 +155,6 @@ const DashboardDefault = () => {
             <AverageFavoritesDistributionPerAdBoostingChart />
             <AverageFavoritesDistributionPerSellerTypeChart />
           </Card>
-        </TabPanel>
-
-        <TabPanel>
-          <DashBoardMap />
         </TabPanel>
       </Tabs>
       </Box>
