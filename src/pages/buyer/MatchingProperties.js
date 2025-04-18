@@ -67,7 +67,7 @@ const MatchingProperties = ({ buyer }) => {
         nb_parkings: '',
         annual_charges: '',
         transport_exists_nearby: '',
-        sport_exists_nearby: '',
+        school_exists_nearby: '',
         medical_service_exists_nearby: ''
       };
       setCriteria(usedDataBuyerInfo);
@@ -89,6 +89,7 @@ const MatchingProperties = ({ buyer }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setResults('');
   
     try {
     // Créer un tableau d'objets { name, value, weight } uniquement pour les critères remplis
@@ -96,29 +97,31 @@ const MatchingProperties = ({ buyer }) => {
       .filter(([, value]) => value !== '' && value !== null && value !== undefined)
       .map(([key, value]) => ({
         name: key,
-        value: value === 'true' ? true : value === 'false' ? false : value,
+        value: (value == true) ? 1 : (value == false) ? 0 : Number(value),
         weight: weights[key] ?? 1 // Par défaut, 1 si aucun poids défini
       }));
 
+      console.log("cerfe")
       console.log(payload);
 
-      // const response = await fetch('http://localhost:9001/api/v1/properties'
-      //   , {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(payload)
-      // });
+      const response = await fetch('http://localhost:5000/biens-similaires'
+        , {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-      // if (!response.ok) {
-      //   throw new Error('Erreur lors de la recherche');
-      // }
+      if (!response.ok) {
+        throw new Error('Erreur lors de la recherche');
+      }
 
-      // const data = await response.json();
-
-      // const data = [2905282274, 2888689993, 2783453323, 2848263049, 2929426493];
+      const data = await response.json();
+      console.log(data)
+      console.log(fetchMatchingAnnonces)
   
       // Utiliser Promise.all pour attendre toutes les requêtes
       const promises = data.map(element => fetchMatchingAnnonces(element));
+      console.log(promises)
       await Promise.all(promises);
   
     } catch (err) {
@@ -136,7 +139,6 @@ const MatchingProperties = ({ buyer }) => {
     }
   
     const data = await response.json();
-    console.log(data);
   
     // Utiliser la forme fonctionnelle de setResults pour accumuler les résultats
     setResults(prevResults => [...prevResults, ...data]);
@@ -154,7 +156,7 @@ const MatchingProperties = ({ buyer }) => {
     { name: 'nb_parkings', label: 'Nb de parkings', type: 'number' },
     { name: 'annual_charges', label: 'Charges annuelles max', type: 'number' },
     { name: 'transport_exists_nearby', label: 'Proximité des transports', type: 'boolean' },
-    { name: 'sport_exists_nearby', label: 'Proximité d\'infrastructures sportives', type: 'boolean' },
+    { name: 'school_exists_nearby', label: 'Proximité d\'infrastructures scolaire', type: 'boolean' },
     { name: 'medical_service_exists_nearby', label: 'Proximité de services médicaux', type: 'boolean' }
   ];
 
