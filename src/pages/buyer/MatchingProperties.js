@@ -23,7 +23,7 @@ const MatchingProperties = ({ buyer }) => {
     square: '',
     land_plot_surface: '',
     transport_exists_nearby: '',
-    sport_exists_nearby: '',
+    school_exists_nearby: '',
     medical_service_exists_nearby: ''
   });
 
@@ -46,22 +46,22 @@ const MatchingProperties = ({ buyer }) => {
 
   useEffect(() => {
     const fetchBuyerData = () => {
-      const usedDataBuyerInfo = {
-        price: buyer?.propertyCriteria?.maxBudget ?? '',
-        square: buyer?.propertyCriteria?.minimumSurface ?? '',
-        land_plot_surface: '',
-        rooms: buyer?.propertyCriteria?.roomsNumber ?? '',
-        bedrooms: '',
-        nb_bathrooms: '',
-        nb_shower_room: '',
-        nb_floors: '',
-        nb_parkings: '',
-        annual_charges: '',
-        transport_exists_nearby: '',
-        school_exists_nearby: '',
-        medical_service_exists_nearby: ''
-      };
-      setCriteria(usedDataBuyerInfo);
+      // const usedDataBuyerInfo = {
+      //   price: buyer?.propertyCriteria?.maxBudget ?? '300000',
+      //   square: buyer?.propertyCriteria?.minimumSurface ?? '',
+      //   land_plot_surface: '10',
+      //   rooms: buyer?.propertyCriteria?.roomsNumber ?? '',
+      //   bedrooms: '',
+      //   nb_bathrooms: '',
+      //   nb_shower_room: '',
+      //   nb_floors: '',
+      //   nb_parkings: '',
+      //   annual_charges: '',
+      //   transport_exists_nearby: '',
+      //   school_exists_nearby: '',
+      //   medical_service_exists_nearby: ''
+      // };
+      // setCriteria(usedDataBuyerInfo);
       setIsInitialized(true);
     };
 
@@ -69,7 +69,7 @@ const MatchingProperties = ({ buyer }) => {
       try {
         const response = await fetch('http://localhost:5000/cities');
         const data = await response.json();
-        setCities(data); // Supposons que data = [{ id: 1, name: 'Paris' }, { id: 2, name: 'Lyon' }]
+        setCities(data);
       } catch (error) {
         console.error('Erreur lors du chargement des villes', error);
       }
@@ -97,11 +97,13 @@ const MatchingProperties = ({ buyer }) => {
       const filtres_names = [];
       const filtres_vals = {};
       const poids = {};
-  
+
       for (const [key, value] of Object.entries(criteria)) {
-        if (value !== '' && value !== null && value !== undefined) {
+
+        if (value !== '' && value !== null && value !== undefined && value !== false) {
           filtres_names.push(key);
-          filtres_vals[key] = (value === true) ? 1 : (value === false) ? 0 : Number(value);
+          if(key != "city") filtres_vals[key] = (value === true) ? 1 : (value === false) ? 0 : Number(value);
+          else filtres_vals[key] = (value === true) ? 1 : (value === false) ? 0 : value;
           poids[key] = weights[key] ?? 1;
         }
       }
@@ -111,9 +113,6 @@ const MatchingProperties = ({ buyer }) => {
         filtres_vals,
         poids
       };
-  
-      console.log("payload:");
-      console.log(payload);
   
       const response = await fetch('http://localhost:5000/biens-similaires', {
         method: 'POST',
@@ -126,11 +125,7 @@ const MatchingProperties = ({ buyer }) => {
       }
   
       const data = await response.json();
-      console.log(data);
-      console.log(fetchMatchingAnnonces);
-  
       const promises = data.map(element => fetchMatchingAnnonces(element));
-      console.log(promises);
       await Promise.all(promises);
   
     } catch (err) {
@@ -218,9 +213,9 @@ const MatchingProperties = ({ buyer }) => {
                         label={field.label}
                         onChange={handleChange}
                       >
-                        {cities.map((city) => (
-                          <MenuItem key={city.id} value={city.name}>
-                            {city.name}
+                        {cities.map((city,index) => (
+                          <MenuItem key={index} value={city}>
+                            {city}
                           </MenuItem>
                         ))}
                       </Select>
