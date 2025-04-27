@@ -14,19 +14,14 @@ import {
   FormControlLabel
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 const MatchingProperties = ({ buyer }) => {
   const [criteria, setCriteria] = useState({
     price: '',
+    city:'',
     square: '',
     land_plot_surface: '',
-    rooms: '',
-    bedrooms: '',
-    nb_bathrooms: '',
-    nb_shower_room: '',
-    nb_floors: '',
-    nb_parkings: '',
-    annual_charges: '',
     transport_exists_nearby: '',
     sport_exists_nearby: '',
     medical_service_exists_nearby: ''
@@ -34,14 +29,9 @@ const MatchingProperties = ({ buyer }) => {
 
   const [weights, setWeights] = useState({
     price: 1,
+    city:1,
     square: 1,
     land_plot_surface: 1,
-    rooms: 1,
-    bedrooms: 1,
-    nb_bathrooms: 1,
-    nb_shower_room: 1,
-    nb_floors: 1,
-    nb_parkings: 1,
     annual_charges: 1,
     transport_exists_nearby: 1,
     sport_exists_nearby: 1,
@@ -52,6 +42,7 @@ const MatchingProperties = ({ buyer }) => {
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
     const fetchBuyerData = () => {
@@ -74,7 +65,18 @@ const MatchingProperties = ({ buyer }) => {
       setIsInitialized(true);
     };
 
+    const fetchCities = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/cities');
+        const data = await response.json();
+        setCities(data); // Supposons que data = [{ id: 1, name: 'Paris' }, { id: 2, name: 'Lyon' }]
+      } catch (error) {
+        console.error('Erreur lors du chargement des villes', error);
+      }
+    };
+
     fetchBuyerData();
+    fetchCities();
   }, [buyer]);
 
   const handleChange = (e) => {
@@ -92,36 +94,43 @@ const MatchingProperties = ({ buyer }) => {
     setResults('');
   
     try {
-    // Créer un tableau d'objets { name, value, weight } uniquement pour les critères remplis
-    const payload = Object.entries(criteria)
-      .filter(([, value]) => value !== '' && value !== null && value !== undefined)
-      .map(([key, value]) => ({
-        name: key,
-        value: (value == true) ? 1 : (value == false) ? 0 : Number(value),
-        weight: weights[key] ?? 1 // Par défaut, 1 si aucun poids défini
-      }));
-
-      console.log("cerfe")
+      const filtres_names = [];
+      const filtres_vals = {};
+      const poids = {};
+  
+      for (const [key, value] of Object.entries(criteria)) {
+        if (value !== '' && value !== null && value !== undefined) {
+          filtres_names.push(key);
+          filtres_vals[key] = (value === true) ? 1 : (value === false) ? 0 : Number(value);
+          poids[key] = weights[key] ?? 1;
+        }
+      }
+  
+      const payload = {
+        filtres_names,
+        filtres_vals,
+        poids
+      };
+  
+      console.log("payload:");
       console.log(payload);
-
-      const response = await fetch('http://localhost:5000/biens-similaires'
-        , {
+  
+      const response = await fetch('http://localhost:5000/biens-similaires', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-
+  
       if (!response.ok) {
         throw new Error('Erreur lors de la recherche');
       }
-
-      const data = await response.json();
-      console.log(data)
-      console.log(fetchMatchingAnnonces)
   
-      // Utiliser Promise.all pour attendre toutes les requêtes
+      const data = await response.json();
+      console.log(data);
+      console.log(fetchMatchingAnnonces);
+  
       const promises = data.map(element => fetchMatchingAnnonces(element));
-      console.log(promises)
+      console.log(promises);
       await Promise.all(promises);
   
     } catch (err) {
@@ -130,6 +139,7 @@ const MatchingProperties = ({ buyer }) => {
       setLoading(false);
     }
   };
+  
   
   const fetchMatchingAnnonces = async (ID) => {
     const response = await fetch(`http://localhost:5000/api/annonces/${ID}`);
@@ -145,19 +155,13 @@ const MatchingProperties = ({ buyer }) => {
   };
 
   const fields = [
-    { name: 'price', label: 'Budget max (€)', type: 'number' },
-    { name: 'square', label: 'Surface habitable min (m²)', type: 'number' },
-    { name: 'land_plot_surface', label: 'Surface terrain min (m²)', type: 'number' },
-    { name: 'rooms', label: 'Nb de pièces', type: 'number' },
-    { name: 'bedrooms', label: 'Nb de chambres', type: 'number' },
-    { name: 'nb_bathrooms', label: 'Nb de sdb', type: 'number' },
-    { name: 'nb_shower_room', label: 'Nb de sdd', type: 'number' },
-    { name: 'nb_floors', label: 'Nb étages', type: 'number' },
-    { name: 'nb_parkings', label: 'Nb de parkings', type: 'number' },
-    { name: 'annual_charges', label: 'Charges annuelles max', type: 'number' },
-    { name: 'transport_exists_nearby', label: 'Proximité des transports', type: 'boolean' },
-    { name: 'school_exists_nearby', label: 'Proximité d\'infrastructures scolaire', type: 'boolean' },
-    { name: 'medical_service_exists_nearby', label: 'Proximité de services médicaux', type: 'boolean' }
+    { name: 'price', label: 'Budget max (€)', type: 'number', required: true},
+    { name: 'city', label: 'Ville', type: 'select', required: true},
+    { name: 'square', label: 'Surface habitable min (m²)', type: 'number', required: true},
+    { name: 'land_plot_surface', label: 'Surface terrain min (m²)', type: 'number', required: true},
+    { name: 'transport_exists_nearby', label: 'Proximité des transports', type: 'boolean', required: false},
+    { name: 'school_exists_nearby', label: 'Proximité d\'infrastructures scolaire', type: 'boolean', required: false },
+    { name: 'medical_service_exists_nearby', label: 'Proximité de services médicaux', type: 'boolean', required: false }
   ];
 
   // Définir les points d'arrêt pour les sliders
@@ -168,13 +172,6 @@ const MatchingProperties = ({ buyer }) => {
     { value: 3, label: '3' },
     { value: 4, label: '4' },
     { value: 5, label: '5' },
-    { value: 6, label: '6' },
-    { value: 7, label: '7' },
-    { value: 8, label: '8' },
-    { value: 9, label: '9' },
-    { value: 10, label: '10' },
-    { value: 11, label: '11' },
-    { value: 12, label: '12' }
   ];
 
   return (
@@ -199,29 +196,47 @@ const MatchingProperties = ({ buyer }) => {
             <Grid item xs={12} sm={6} md={4} key={field.name}>
               <Paper sx={{ padding: '16px', boxShadow: 3, borderRadius: '8px' }}>
               {field.type === 'boolean' ? (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={Boolean(criteria[field.name])}
-                        onChange={(e) =>
-                          setCriteria({ ...criteria, [field.name]: e.target.checked })
-                        }
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={Boolean(criteria[field.name])}
+                          onChange={(e) =>
+                            setCriteria({ ...criteria, [field.name]: e.target.checked })
+                          }
+                          name={field.name}
+                        />
+                      }
+                      label={field.label}
+                    />
+                  ) : field.type === 'select' && cities.length> 0 ? (
+                    <FormControl fullWidth sx={{ marginBottom: '16px' }}>
+                      <InputLabel id={`${field.name}-label`}>{field.label}</InputLabel>
+                      <Select
+                        labelId={`${field.name}-label`}
                         name={field.name}
-                      />
-                    }
-                    label={field.label}
-                  />
-                ) : (
-                  <TextField
-                    fullWidth
-                    name={field.name}
-                    label={field.label}
-                    type={field.type}
-                    value={criteria[field.name]}
-                    onChange={handleChange}
-                    variant="outlined"
-                    sx={{ marginBottom: '16px' }}
-                  />
+                        value={criteria[field.name] || ''}
+                        label={field.label}
+                        onChange={handleChange}
+                      >
+                        {cities.map((city) => (
+                          <MenuItem key={city.id} value={city.name}>
+                            {city.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  ) : (
+                    <TextField
+                      required={field.required}
+                      fullWidth
+                      name={field.name}
+                      label={field.label}
+                      type={field.type}
+                      value={criteria[field.name]}
+                      onChange={handleChange}
+                      variant="outlined"
+                      sx={{ marginBottom: '16px' }}
+                    />
                 )}
                 <Box sx={{ mt: 2 }}>
                   <Typography variant="caption" sx={{ color: '#555', marginBottom: '8px' }}>
@@ -229,6 +244,7 @@ const MatchingProperties = ({ buyer }) => {
                   </Typography>
                   <Slider
                     name={field.name}
+                    required={field.required}
                     value={weights[field.name]}
                     onChange={handleWeightSlider(field.name)}
                     min={0}
